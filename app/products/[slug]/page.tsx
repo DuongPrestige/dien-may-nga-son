@@ -17,6 +17,12 @@ import type {
   ProductCardData,
   ProductDetailData,
 } from "@/src/features/products/types/products.types";
+import {
+  BreadcrumbSchema,
+  FAQSchema,
+  ProductSchema,
+} from "@/src/lib/schema";
+import { buildMetadata } from "@/src/lib/seo";
 
 type ProductDetailPageProps = {
   params: Promise<{
@@ -43,30 +49,6 @@ const faqs = [
       "Có. Khách hàng có thể gọi trực tiếp, nhắn Zalo hoặc gửi form báo giá để được liên hệ lại.",
   },
 ] as const;
-
-function productToSchema(product: ProductDetailData): Record<string, unknown> {
-  const image = product.thumbnailUrl ?? product.images[0]?.imageUrl;
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: product.name,
-    image: image ? [image] : undefined,
-    description: product.shortDescription ?? product.description ?? product.name,
-    brand: {
-      "@type": "Brand",
-      name: product.brand.name,
-    },
-    category: product.category.name,
-    offers: {
-      "@type": "Offer",
-      priceCurrency: "VND",
-      price: product.salePrice?.toNumber() ?? product.price.toNumber(),
-      availability: "https://schema.org/InStock",
-      url: `/products/${product.slug}`,
-    },
-  };
-}
 
 async function getSafeProduct(
   slug: string,
@@ -117,19 +99,12 @@ export async function generateMetadata({
     product.shortDescription ??
     `Xem thông tin ${product.name}, giá tham khảo, thông số và gửi yêu cầu báo giá tại Điện Máy Nga Sơn.`;
 
-  return {
+  return buildMetadata({
     title,
     description,
-    alternates: {
-      canonical: `/products/${product.slug}`,
-    },
-    openGraph: {
-      title,
-      description,
-      type: "website",
-      images: product.thumbnailUrl ? [product.thumbnailUrl] : undefined,
-    },
-  };
+    path: `/products/${product.slug}`,
+    images: product.thumbnailUrl ? [product.thumbnailUrl] : undefined,
+  });
 }
 
 export default async function ProductDetailPage({
@@ -147,13 +122,35 @@ export default async function ProductDetailPage({
     ...product.images.map((image) => image.imageUrl),
   ].filter((image): image is string => Boolean(image));
   const relatedProducts = await getSafeRelatedProducts(product);
-  const productSchema = productToSchema(product);
+  const productSchema = ProductSchema({
+    name: product.name,
+    description: product.shortDescription ?? product.description ?? product.name,
+    image: galleryImages.length > 0 ? galleryImages : undefined,
+    brandName: product.brand.name,
+    category: product.category.name,
+    price: product.salePrice?.toNumber() ?? product.price.toNumber(),
+    url: `/products/${product.slug}`,
+  });
+  const faqSchema = FAQSchema([...faqs]);
+  const breadcrumbSchema = BreadcrumbSchema([
+    { name: "Trang chủ", url: "/" },
+    { name: "Sản phẩm", url: "/products" },
+    { name: product.name, url: `/products/${product.slug}` },
+  ]);
 
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <Section className="bg-[#F8FAFC] py-8 sm:py-12">
@@ -335,4 +332,3 @@ export default async function ProductDetailPage({
     </>
   );
 }
-

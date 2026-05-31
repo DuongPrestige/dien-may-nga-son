@@ -1,9 +1,18 @@
 import { LeadSourceType } from "@prisma/client";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Container } from "@/src/components/shared/container";
 import { Section } from "@/src/components/shared/section";
 import { LeadForm } from "@/src/features/leads/components/lead-form";
+import { buildMetadata } from "@/src/lib/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Điện Máy Nga Sơn | Điều hòa, điện máy Kinh Môn",
+  description:
+    "Điện Máy Nga Sơn tư vấn điều hòa, tivi, tủ lạnh, máy giặt, sửa chữa và bảo dưỡng điện lạnh tại Kinh Môn, Quang Thành, Hải Dương.",
+  path: "/",
+});
 
 const categories = [
   {

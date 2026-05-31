@@ -17,6 +17,7 @@ import type {
   ServiceCardData,
   ServiceDetailData,
 } from "@/src/features/services/types/services.types";
+import { buildMetadata } from "@/src/lib/seo";
 
 type ServiceDetailPageProps = {
   params: Promise<{
@@ -178,19 +179,12 @@ export async function generateMetadata({
     service.shortDescription ??
     `${localizedName} cho khách hàng tại Kinh Môn, Quang Thành, Hải Dương. Liên hệ Điện Máy Nga Sơn để được tư vấn dịch vụ phù hợp.`;
 
-  return {
+  return buildMetadata({
     title,
     description,
-    alternates: {
-      canonical: `/services/${service.slug}`,
-    },
-    openGraph: {
-      title,
-      description,
-      type: "website",
-      images: service.thumbnailUrl ? [service.thumbnailUrl] : undefined,
-    },
-  };
+    path: `/services/${service.slug}`,
+    images: service.thumbnailUrl ? [service.thumbnailUrl] : undefined,
+  });
 }
 
 export default async function ServiceDetailPage({

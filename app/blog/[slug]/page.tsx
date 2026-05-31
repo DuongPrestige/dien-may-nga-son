@@ -17,6 +17,7 @@ import type {
   BlogPostDetailData,
 } from "@/src/features/blog/types/blog.types";
 import { LeadForm } from "@/src/features/leads/components/lead-form";
+import { buildMetadata } from "@/src/lib/seo";
 
 type BlogDetailPageProps = {
   params: Promise<{
@@ -192,26 +193,14 @@ export async function generateMetadata({
     post.excerpt ??
     "Bài viết tư vấn điện máy từ Điện Máy Nga Sơn cho khách hàng tại Kinh Môn, Quang Thành, Hải Dương.";
 
-  return {
+  return buildMetadata({
     title,
     description,
-    alternates: {
-      canonical: `/blog/${post.slug}`,
-    },
-    openGraph: {
-      title,
-      description,
-      type: "article",
-      publishedTime: (post.publishedAt ?? post.createdAt).toISOString(),
-      images: post.thumbnailUrl ? [post.thumbnailUrl] : undefined,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: post.thumbnailUrl ? [post.thumbnailUrl] : undefined,
-    },
-  };
+    path: `/blog/${post.slug}`,
+    type: "article",
+    publishedTime: (post.publishedAt ?? post.createdAt).toISOString(),
+    images: post.thumbnailUrl ? [post.thumbnailUrl] : undefined,
+  });
 }
 
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
