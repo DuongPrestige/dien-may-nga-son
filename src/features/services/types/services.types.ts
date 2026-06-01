@@ -8,12 +8,19 @@ export type ServiceCardData = Pick<
   | "thumbnailUrl"
   | "shortDescription"
   | "isFeatured"
-> & {
-  status: ProductStatus;
-};
+>;
 
-export type ServiceDetailData = ServiceCardData &
-  Pick<Service, "content" | "seoTitle" | "seoDescription">;
+export type ServiceDetailData = Pick<
+  Service,
+  | "id"
+  | "name"
+  | "slug"
+  | "thumbnailUrl"
+  | "shortDescription"
+  | "content"
+  | "seoTitle"
+  | "seoDescription"
+>;
 
 export type AdminServiceFilters = {
   search?: string;

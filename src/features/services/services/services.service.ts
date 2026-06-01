@@ -13,7 +13,24 @@ import type { ServiceFormSchema } from "@/src/features/services/validators/servi
 import { prisma } from "@/src/lib/prisma";
 
 export const SERVICES_CACHE_TAG = "services";
+export const SERVICE_DETAIL_CACHE_TAG = "service-detail";
 const SERVICES_CACHE_REVALIDATE_SECONDS = 3600;
+
+function logServicesTiming(
+  label: string,
+  startedAt: number,
+  details?: Record<string, number | string | boolean | undefined>,
+) {
+  if (process.env.NODE_ENV !== "development") {
+    return;
+  }
+
+  const detailsText = details ? ` ${JSON.stringify(details)}` : "";
+
+  console.log(
+    `[perf:/services] ${label}: ${Date.now() - startedAt}ms${detailsText}`,
+  );
+}
 
 const serviceCardSelect = {
   id: true,
@@ -22,17 +39,34 @@ const serviceCardSelect = {
   thumbnailUrl: true,
   shortDescription: true,
   isFeatured: true,
-  status: true,
+} satisfies Prisma.ServiceSelect;
+
+const serviceDetailSelect = {
+  id: true,
+  name: true,
+  slug: true,
+  thumbnailUrl: true,
+  shortDescription: true,
+  content: true,
+  seoTitle: true,
+  seoDescription: true,
 } satisfies Prisma.ServiceSelect;
 
 async function fetchServices(): Promise<ServiceCardData[]> {
-  return prisma.service.findMany({
+  const startedAt = Date.now();
+  const services = await prisma.service.findMany({
     where: {
       status: ProductStatus.ACTIVE,
     },
     orderBy: [{ isFeatured: "desc" }, { createdAt: "desc" }],
     select: serviceCardSelect,
-  }) as Promise<ServiceCardData[]>;
+  });
+
+  logServicesTiming("getServices db query", startedAt, {
+    rows: services.length,
+  });
+
+  return services;
 }
 
 const getCachedServices = unstable_cache(fetchServices, ["public-services"], {
@@ -41,13 +75,21 @@ const getCachedServices = unstable_cache(fetchServices, ["public-services"], {
 });
 
 export const getServices = cache(async (): Promise<ServiceCardData[]> => {
-  return getCachedServices();
+  const startedAt = Date.now();
+  const services = await getCachedServices();
+
+  logServicesTiming("getServices", startedAt, {
+    rows: services.length,
+  });
+
+  return services;
 });
 
 async function fetchFeaturedServices(
   limit = 6,
 ): Promise<ServiceCardData[]> {
-  return prisma.service.findMany({
+  const startedAt = Date.now();
+  const services = await prisma.service.findMany({
     where: {
       status: ProductStatus.ACTIVE,
       isFeatured: true,
@@ -57,7 +99,14 @@ async function fetchFeaturedServices(
     },
     take: limit,
     select: serviceCardSelect,
-  }) as Promise<ServiceCardData[]>;
+  });
+
+  logServicesTiming("getFeaturedServices db query", startedAt, {
+    rows: services.length,
+    limit,
+  });
+
+  return services;
 }
 
 const getCachedFeaturedServices = unstable_cache(
@@ -71,25 +120,36 @@ const getCachedFeaturedServices = unstable_cache(
 
 export const getFeaturedServices = cache(
   async (limit = 6): Promise<ServiceCardData[]> => {
-    return getCachedFeaturedServices(limit);
+    const startedAt = Date.now();
+    const services = await getCachedFeaturedServices(limit);
+
+    logServicesTiming("getFeaturedServices", startedAt, {
+      rows: services.length,
+      limit,
+    });
+
+    return services;
   },
 );
 
 async function fetchServiceBySlug(
   slug: string,
 ): Promise<ServiceDetailData | null> {
-  return prisma.service.findFirst({
+  const startedAt = Date.now();
+  const service = await prisma.service.findFirst({
     where: {
       slug,
       status: ProductStatus.ACTIVE,
     },
-    select: {
-      ...serviceCardSelect,
-      content: true,
-      seoTitle: true,
-      seoDescription: true,
-    },
-  }) as Promise<ServiceDetailData | null>;
+    select: serviceDetailSelect,
+  });
+
+  logServicesTiming("getServiceBySlug db query", startedAt, {
+    found: Boolean(service),
+    slug,
+  });
+
+  return service;
 }
 
 const getCachedServiceBySlug = unstable_cache(
@@ -97,13 +157,21 @@ const getCachedServiceBySlug = unstable_cache(
   ["service-by-slug"],
   {
     revalidate: SERVICES_CACHE_REVALIDATE_SECONDS,
-    tags: [SERVICES_CACHE_TAG],
+    tags: [SERVICES_CACHE_TAG, SERVICE_DETAIL_CACHE_TAG],
   },
 );
 
 export const getServiceBySlug = cache(
   async (slug: string): Promise<ServiceDetailData | null> => {
-    return getCachedServiceBySlug(slug);
+    const startedAt = Date.now();
+    const service = await getCachedServiceBySlug(slug);
+
+    logServicesTiming("getServiceBySlug", startedAt, {
+      found: Boolean(service),
+      slug,
+    });
+
+    return service;
   },
 );
 
@@ -111,7 +179,8 @@ async function fetchRelatedServices(
   serviceId: string,
   limit = 3,
 ): Promise<ServiceCardData[]> {
-  return prisma.service.findMany({
+  const startedAt = Date.now();
+  const services = await prisma.service.findMany({
     where: {
       id: {
         not: serviceId,
@@ -121,7 +190,14 @@ async function fetchRelatedServices(
     orderBy: [{ isFeatured: "desc" }, { createdAt: "desc" }],
     take: limit,
     select: serviceCardSelect,
-  }) as Promise<ServiceCardData[]>;
+  });
+
+  logServicesTiming("getRelatedServices db query", startedAt, {
+    rows: services.length,
+    limit,
+  });
+
+  return services;
 }
 
 const getCachedRelatedServices = unstable_cache(
@@ -135,11 +211,20 @@ const getCachedRelatedServices = unstable_cache(
 
 export const getRelatedServices = cache(
   async (serviceId: string, limit = 3): Promise<ServiceCardData[]> => {
-    return getCachedRelatedServices(serviceId, limit);
+    const startedAt = Date.now();
+    const services = await getCachedRelatedServices(serviceId, limit);
+
+    logServicesTiming("getRelatedServices", startedAt, {
+      rows: services.length,
+      limit,
+    });
+
+    return services;
   },
 );
 
 async function fetchServiceSlugs(): Promise<string[]> {
+  const startedAt = Date.now();
   const services = await prisma.service.findMany({
     where: {
       status: ProductStatus.ACTIVE,
@@ -149,7 +234,13 @@ async function fetchServiceSlugs(): Promise<string[]> {
     },
   });
 
-  return services.map((service) => service.slug);
+  const slugs = services.map((service) => service.slug);
+
+  logServicesTiming("getServiceSlugs db query", startedAt, {
+    rows: slugs.length,
+  });
+
+  return slugs;
 }
 
 const getCachedServiceSlugs = unstable_cache(
@@ -162,7 +253,14 @@ const getCachedServiceSlugs = unstable_cache(
 );
 
 export const getServiceSlugs = cache(async (): Promise<string[]> => {
-  return getCachedServiceSlugs();
+  const startedAt = Date.now();
+  const slugs = await getCachedServiceSlugs();
+
+  logServicesTiming("getServiceSlugs", startedAt, {
+    rows: slugs.length,
+  });
+
+  return slugs;
 });
 
 function buildAdminServiceWhere(

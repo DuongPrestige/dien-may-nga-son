@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import {
+  SERVICE_DETAIL_CACHE_TAG,
   SERVICES_CACHE_TAG,
   createService,
   deleteService,
@@ -91,6 +92,7 @@ export async function createServiceAction(
   revalidatePath("/admin/services");
   revalidatePath("/services");
   updateTag(SERVICES_CACHE_TAG);
+  updateTag(SERVICE_DETAIL_CACHE_TAG);
   redirect("/admin/services");
 }
 
@@ -138,6 +140,7 @@ export async function updateServiceAction(
   revalidatePath(`/admin/services/${parsedId.data}/edit`);
   revalidatePath("/services");
   updateTag(SERVICES_CACHE_TAG);
+  updateTag(SERVICE_DETAIL_CACHE_TAG);
   redirect("/admin/services");
 }
 
@@ -159,4 +162,5 @@ export async function deleteServiceAction(formData: FormData) {
   revalidatePath("/admin/services");
   revalidatePath("/services");
   updateTag(SERVICES_CACHE_TAG);
+  updateTag(SERVICE_DETAIL_CACHE_TAG);
 }

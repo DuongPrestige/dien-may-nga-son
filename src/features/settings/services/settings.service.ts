@@ -39,7 +39,16 @@ function isStoreSettingKey(key: string): key is StoreSettingKey {
   return STORE_SETTING_KEYS.includes(key as StoreSettingKey);
 }
 
+function logSettingsTiming(label: string, startedAt: number) {
+  if (process.env.NODE_ENV !== "development") {
+    return;
+  }
+
+  console.log(`[perf:settings] ${label}: ${Date.now() - startedAt}ms`);
+}
+
 async function fetchSettings(): Promise<SettingsMap> {
+  const startedAt = Date.now();
   const records = await prisma.setting.findMany({
     where: {
       settingKey: {
@@ -51,6 +60,7 @@ async function fetchSettings(): Promise<SettingsMap> {
       settingValue: true,
     },
   });
+  logSettingsTiming("settings query", startedAt);
 
   return mapSettings(records);
 }
@@ -126,7 +136,9 @@ export async function updateSetting({
 }
 
 async function fetchStoreInfo(): Promise<StoreInfo> {
+  const startedAt = Date.now();
   const settings = await fetchSettings();
+  logSettingsTiming("store info loading", startedAt);
 
   return toStoreInfo(settings);
 }

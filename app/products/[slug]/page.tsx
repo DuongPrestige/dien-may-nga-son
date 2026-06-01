@@ -17,6 +17,7 @@ import type {
   ProductCardData,
   ProductDetailData,
 } from "@/src/features/products/types/products.types";
+import { toSafePriceNumber } from "@/src/features/products/utils/price";
 import {
   BreadcrumbSchema,
   FAQSchema,
@@ -124,13 +125,17 @@ export default async function ProductDetailPage({
     ...product.images.map((image) => image.imageUrl),
   ].filter((image): image is string => Boolean(image));
   const relatedProducts = await getSafeRelatedProducts(product);
+  const productSchemaPrice =
+    toSafePriceNumber(product.salePrice) ??
+    toSafePriceNumber(product.price) ??
+    undefined;
   const productSchema = ProductSchema({
     name: product.name,
     description: product.shortDescription ?? product.description ?? product.name,
     image: galleryImages.length > 0 ? galleryImages : undefined,
     brandName: product.brand.name,
     category: product.category.name,
-    price: product.salePrice?.toNumber() ?? product.price.toNumber(),
+    price: productSchemaPrice,
     url: `/products/${product.slug}`,
   });
   const faqSchema = FAQSchema([...faqs]);

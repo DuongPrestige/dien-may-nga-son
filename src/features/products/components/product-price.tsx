@@ -1,58 +1,17 @@
-type PriceValue =
-  | {
-      toNumber: () => number;
-    }
-  | number
-  | string
-  | null
-  | undefined;
+import {
+  formatPrice,
+  type PriceValue,
+  toSafePriceNumber,
+} from "@/src/features/products/utils/price";
 
 type ProductPriceProps = {
   price: PriceValue;
   salePrice?: PriceValue;
 };
 
-function toSafeNumber(value: PriceValue): number | null {
-  if (value === null || value === undefined) {
-    return null;
-  }
-
-  if (typeof value === "number") {
-    return Number.isFinite(value) ? value : null;
-  }
-
-  if (typeof value === "string") {
-    const trimmedValue = value.trim();
-
-    if (!trimmedValue) {
-      return null;
-    }
-
-    const parsedValue = Number(trimmedValue);
-
-    return Number.isFinite(parsedValue) ? parsedValue : null;
-  }
-
-  try {
-    const parsedValue = value.toNumber();
-
-    return Number.isFinite(parsedValue) ? parsedValue : null;
-  } catch {
-    return null;
-  }
-}
-
-function formatPrice(price: number): string {
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-    maximumFractionDigits: 0,
-  }).format(price);
-}
-
 export function ProductPrice({ price, salePrice }: ProductPriceProps) {
-  const normalPrice = toSafeNumber(price);
-  const discountedPrice = toSafeNumber(salePrice);
+  const normalPrice = toSafePriceNumber(price);
+  const discountedPrice = toSafePriceNumber(salePrice);
 
   if (normalPrice === null) {
     return <p className="text-lg font-bold text-[#F97316]">Liên hệ</p>;

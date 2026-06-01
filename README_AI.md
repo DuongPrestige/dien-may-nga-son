@@ -6,6 +6,8 @@ Project: Điện Máy Nga Sơn
 
 This file is the starting point for all AI coding agents.
 
+Before building or editing public routes, read .codex/SKILL_PERFORMANCE_NEXTJS.md.
+
 Read this file first.
 
 ---

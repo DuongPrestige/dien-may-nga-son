@@ -131,6 +131,22 @@ function buildBreadcrumbSchema(service: ServiceDetailData) {
   };
 }
 
+function logServiceDetailTiming(
+  label: string,
+  startedAt: number,
+  details?: Record<string, number | string | boolean | undefined>,
+) {
+  if (process.env.NODE_ENV !== "development") {
+    return;
+  }
+
+  const detailsText = details ? ` ${JSON.stringify(details)}` : "";
+
+  console.log(
+    `[perf:/services/[slug]] ${label}: ${Date.now() - startedAt}ms${detailsText}`,
+  );
+}
+
 async function getSafeService(
   slug: string,
 ): Promise<ServiceDetailData | null> {
@@ -153,7 +169,11 @@ async function getSafeRelatedServices(
 
 export async function generateStaticParams() {
   try {
+    const startedAt = Date.now();
     const slugs = await getServiceSlugs();
+    logServiceDetailTiming("generateStaticParams getServiceSlugs", startedAt, {
+      rows: slugs.length,
+    });
 
     return slugs.map((slug) => ({ slug }));
   } catch {

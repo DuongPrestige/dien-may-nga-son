@@ -18,6 +18,22 @@ import type { ProductFormSchema } from "@/src/features/products/validators/produ
 export const PRODUCTS_CACHE_TAG = "products";
 const PRODUCTS_CACHE_REVALIDATE_SECONDS = 300;
 
+function logProductsTiming(
+  label: string,
+  startedAt: number,
+  details?: Record<string, number | string | undefined>,
+) {
+  if (process.env.NODE_ENV !== "development") {
+    return;
+  }
+
+  const detailsText = details
+    ? ` ${JSON.stringify(details)}`
+    : "";
+
+  console.log(`[perf:/products] ${label}: ${Date.now() - startedAt}ms${detailsText}`);
+}
+
 const productCardSelect = {
   id: true,
   name: true,
@@ -94,6 +110,7 @@ async function fetchProducts(
   const limit = filters.limit ?? 12;
   const where = buildProductWhere(filters);
 
+  const productsStartedAt = Date.now();
   const products = await prisma.product.findMany({
     where,
     orderBy: buildProductOrderBy(filters.sort),
@@ -101,6 +118,17 @@ async function fetchProducts(
     take: limit,
     select: productCardSelect,
   });
+  logProductsTiming("product list query", productsStartedAt, {
+    rows: products.length,
+    page,
+    limit,
+  });
+
+  if (process.env.NODE_ENV === "development") {
+    console.log("[perf:/products] product count query: skipped");
+  }
+
+  const categoriesStartedAt = Date.now();
   const categories = await prisma.category.findMany({
     orderBy: {
       name: "asc",
@@ -110,6 +138,11 @@ async function fetchProducts(
       slug: true,
     },
   });
+  logProductsTiming("category options query", categoriesStartedAt, {
+    rows: categories.length,
+  });
+
+  const brandsStartedAt = Date.now();
   const brands = await prisma.brand.findMany({
     orderBy: {
       name: "asc",
@@ -118,6 +151,9 @@ async function fetchProducts(
       name: true,
       slug: true,
     },
+  });
+  logProductsTiming("brand options query", brandsStartedAt, {
+    rows: brands.length,
   });
 
   return {
