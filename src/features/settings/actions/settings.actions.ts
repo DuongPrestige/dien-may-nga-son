@@ -1,7 +1,12 @@
 "use server";
 
+import { updateTag } from "next/cache";
+
 import type { ActionResult } from "@/src/features/settings/types/settings.types";
-import { updateSetting } from "@/src/features/settings/services/settings.service";
+import {
+  SETTINGS_CACHE_TAG,
+  updateSetting,
+} from "@/src/features/settings/services/settings.service";
 import { updateSettingSchema } from "@/src/features/settings/validators/settings.validator";
 
 type UpdateSettingActionInput = {
@@ -23,6 +28,7 @@ export async function updateSettingAction(
 
   try {
     await updateSetting(parsedInput.data);
+    updateTag(SETTINGS_CACHE_TAG);
 
     return {
       success: true,
@@ -38,4 +44,3 @@ export async function updateSettingAction(
     };
   }
 }
-

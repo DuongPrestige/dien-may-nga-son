@@ -25,6 +25,8 @@ type ServiceDetailPageProps = {
   }>;
 };
 
+export const revalidate = 3600;
+
 const commonProblems = [
   "Thiết bị hoạt động yếu, làm lạnh chậm hoặc giặt không sạch.",
   "Máy phát tiếng ồn, rung mạnh hoặc có mùi bất thường.",

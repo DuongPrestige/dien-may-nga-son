@@ -25,6 +25,8 @@ type BlogDetailPageProps = {
   }>;
 };
 
+export const revalidate = 600;
+
 type TocItem = {
   id: string;
   title: string;

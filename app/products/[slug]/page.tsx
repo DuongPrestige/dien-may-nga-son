@@ -30,6 +30,8 @@ type ProductDetailPageProps = {
   }>;
 };
 
+export const revalidate = 300;
+
 const priceNote = "Liên hệ để nhận báo giá chính xác và giá tốt hơn.";
 
 const faqs = [

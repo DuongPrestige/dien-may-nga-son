@@ -14,6 +14,8 @@ export const metadata: Metadata = buildMetadata({
   path: "/",
 });
 
+export const revalidate = 3600;
+
 const categories = [
   {
     name: "Điều hòa",

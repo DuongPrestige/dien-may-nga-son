@@ -1,4 +1,6 @@
 import { ProductStatus, type Prisma } from "@prisma/client";
+import { unstable_cache } from "next/cache";
+import { cache } from "react";
 
 import { prisma } from "@/src/lib/prisma";
 import type {
@@ -12,6 +14,9 @@ import type {
   ProductListResult,
 } from "@/src/features/products/types/products.types";
 import type { ProductFormSchema } from "@/src/features/products/validators/product.validator";
+
+export const PRODUCTS_CACHE_TAG = "products";
+const PRODUCTS_CACHE_REVALIDATE_SECONDS = 300;
 
 const productCardSelect = {
   id: true,
@@ -82,40 +87,38 @@ function buildProductOrderBy(
   return { createdAt: "desc" };
 }
 
-export async function getProducts(
+async function fetchProducts(
   filters: ProductFilters = {},
 ): Promise<ProductListResult> {
   const page = filters.page ?? 1;
   const limit = filters.limit ?? 12;
   const where = buildProductWhere(filters);
 
-  const [products, categories, brands] = await Promise.all([
-    prisma.product.findMany({
-      where,
-      orderBy: buildProductOrderBy(filters.sort),
-      skip: (page - 1) * limit,
-      take: limit,
-      select: productCardSelect,
-    }),
-    prisma.category.findMany({
-      orderBy: {
-        name: "asc",
-      },
-      select: {
-        name: true,
-        slug: true,
-      },
-    }),
-    prisma.brand.findMany({
-      orderBy: {
-        name: "asc",
-      },
-      select: {
-        name: true,
-        slug: true,
-      },
-    }),
-  ]);
+  const products = await prisma.product.findMany({
+    where,
+    orderBy: buildProductOrderBy(filters.sort),
+    skip: (page - 1) * limit,
+    take: limit,
+    select: productCardSelect,
+  });
+  const categories = await prisma.category.findMany({
+    orderBy: {
+      name: "asc",
+    },
+    select: {
+      name: true,
+      slug: true,
+    },
+  });
+  const brands = await prisma.brand.findMany({
+    orderBy: {
+      name: "asc",
+    },
+    select: {
+      name: true,
+      slug: true,
+    },
+  });
 
   return {
     products: products as ProductCardData[],
@@ -124,7 +127,18 @@ export async function getProducts(
   };
 }
 
-export async function getFeaturedProducts(
+const getCachedProducts = unstable_cache(fetchProducts, ["public-products"], {
+  revalidate: PRODUCTS_CACHE_REVALIDATE_SECONDS,
+  tags: [PRODUCTS_CACHE_TAG],
+});
+
+export const getProducts = cache(
+  async (filters: ProductFilters = {}): Promise<ProductListResult> => {
+    return getCachedProducts(filters);
+  },
+);
+
+async function fetchFeaturedProducts(
   limit = 6,
 ): Promise<ProductCardData[]> {
   return prisma.product.findMany({
@@ -140,7 +154,22 @@ export async function getFeaturedProducts(
   }) as Promise<ProductCardData[]>;
 }
 
-export async function getProductBySlug(
+const getCachedFeaturedProducts = unstable_cache(
+  fetchFeaturedProducts,
+  ["featured-products"],
+  {
+    revalidate: PRODUCTS_CACHE_REVALIDATE_SECONDS,
+    tags: [PRODUCTS_CACHE_TAG],
+  },
+);
+
+export const getFeaturedProducts = cache(
+  async (limit = 6): Promise<ProductCardData[]> => {
+    return getCachedFeaturedProducts(limit);
+  },
+);
+
+async function fetchProductBySlug(
   slug: string,
 ): Promise<ProductDetailData | null> {
   return prisma.product.findFirst({
@@ -166,7 +195,22 @@ export async function getProductBySlug(
   }) as Promise<ProductDetailData | null>;
 }
 
-export async function getRelatedProducts(
+const getCachedProductBySlug = unstable_cache(
+  fetchProductBySlug,
+  ["product-by-slug"],
+  {
+    revalidate: PRODUCTS_CACHE_REVALIDATE_SECONDS,
+    tags: [PRODUCTS_CACHE_TAG],
+  },
+);
+
+export const getProductBySlug = cache(
+  async (slug: string): Promise<ProductDetailData | null> => {
+    return getCachedProductBySlug(slug);
+  },
+);
+
+async function fetchRelatedProducts(
   productId: string,
   categorySlug: string,
   limit = 4,
@@ -189,7 +233,26 @@ export async function getRelatedProducts(
   }) as Promise<ProductCardData[]>;
 }
 
-export async function getProductSlugs(): Promise<string[]> {
+const getCachedRelatedProducts = unstable_cache(
+  fetchRelatedProducts,
+  ["related-products"],
+  {
+    revalidate: PRODUCTS_CACHE_REVALIDATE_SECONDS,
+    tags: [PRODUCTS_CACHE_TAG],
+  },
+);
+
+export const getRelatedProducts = cache(
+  async (
+    productId: string,
+    categorySlug: string,
+    limit = 4,
+  ): Promise<ProductCardData[]> => {
+    return getCachedRelatedProducts(productId, categorySlug, limit);
+  },
+);
+
+async function fetchProductSlugs(): Promise<string[]> {
   const products = await prisma.product.findMany({
     where: {
       status: ProductStatus.ACTIVE,
@@ -201,6 +264,19 @@ export async function getProductSlugs(): Promise<string[]> {
 
   return products.map((product) => product.slug);
 }
+
+const getCachedProductSlugs = unstable_cache(
+  fetchProductSlugs,
+  ["product-slugs"],
+  {
+    revalidate: PRODUCTS_CACHE_REVALIDATE_SECONDS,
+    tags: [PRODUCTS_CACHE_TAG],
+  },
+);
+
+export const getProductSlugs = cache(async (): Promise<string[]> => {
+  return getCachedProductSlugs();
+});
 
 function buildAdminProductWhere(
   filters: AdminProductFilters,

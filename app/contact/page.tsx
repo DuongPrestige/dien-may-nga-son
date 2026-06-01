@@ -5,8 +5,8 @@ import { Container } from "@/src/components/shared/container";
 import { Section } from "@/src/components/shared/section";
 import { LeadForm } from "@/src/features/leads/components/lead-form";
 import {
-  getSettingByKey,
-  getStoreInfo,
+  getContactSettings,
+  type ContactSettings,
 } from "@/src/features/settings/services/settings.service";
 import type { StoreInfo } from "@/src/features/settings/types/settings.types";
 
@@ -31,8 +31,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 300;
 
 const fallbackStoreInfo: StoreInfo = {
   storeName: "Điện Máy Nga Sơn",
@@ -115,27 +114,19 @@ function buildLocalBusinessSchema(storeInfo: StoreInfo, mapSrc: string) {
   };
 }
 
-async function getSafeStoreInfo(): Promise<StoreInfo> {
+async function getSafeContactSettings(): Promise<ContactSettings> {
   try {
-    return await getStoreInfo();
+    return await getContactSettings();
   } catch {
-    return fallbackStoreInfo;
-  }
-}
-
-async function getSafeGoogleMapEmbed(): Promise<string> {
-  try {
-    return await getSettingByKey("google_map_embed");
-  } catch {
-    return "";
+    return {
+      storeInfo: fallbackStoreInfo,
+      googleMapEmbed: "",
+    };
   }
 }
 
 export default async function ContactPage() {
-  const [storeInfo, googleMapEmbed] = await Promise.all([
-    getSafeStoreInfo(),
-    getSafeGoogleMapEmbed(),
-  ]);
+  const { storeInfo, googleMapEmbed } = await getSafeContactSettings();
   const mapSrc = getMapSrc(googleMapEmbed);
   const phoneHref = getPhoneHref(storeInfo.phone);
   const zaloHref = getUrlHref(storeInfo.zaloUrl);

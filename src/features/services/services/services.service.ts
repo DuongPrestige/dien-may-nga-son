@@ -1,4 +1,6 @@
 import { ProductStatus, type Prisma } from "@prisma/client";
+import { unstable_cache } from "next/cache";
+import { cache } from "react";
 
 import type {
   ServiceCardData,
@@ -10,6 +12,9 @@ import type {
 import type { ServiceFormSchema } from "@/src/features/services/validators/service.validator";
 import { prisma } from "@/src/lib/prisma";
 
+export const SERVICES_CACHE_TAG = "services";
+const SERVICES_CACHE_REVALIDATE_SECONDS = 3600;
+
 const serviceCardSelect = {
   id: true,
   name: true,
@@ -20,7 +25,7 @@ const serviceCardSelect = {
   status: true,
 } satisfies Prisma.ServiceSelect;
 
-export async function getServices(): Promise<ServiceCardData[]> {
+async function fetchServices(): Promise<ServiceCardData[]> {
   return prisma.service.findMany({
     where: {
       status: ProductStatus.ACTIVE,
@@ -30,7 +35,16 @@ export async function getServices(): Promise<ServiceCardData[]> {
   }) as Promise<ServiceCardData[]>;
 }
 
-export async function getFeaturedServices(
+const getCachedServices = unstable_cache(fetchServices, ["public-services"], {
+  revalidate: SERVICES_CACHE_REVALIDATE_SECONDS,
+  tags: [SERVICES_CACHE_TAG],
+});
+
+export const getServices = cache(async (): Promise<ServiceCardData[]> => {
+  return getCachedServices();
+});
+
+async function fetchFeaturedServices(
   limit = 6,
 ): Promise<ServiceCardData[]> {
   return prisma.service.findMany({
@@ -46,7 +60,22 @@ export async function getFeaturedServices(
   }) as Promise<ServiceCardData[]>;
 }
 
-export async function getServiceBySlug(
+const getCachedFeaturedServices = unstable_cache(
+  fetchFeaturedServices,
+  ["featured-services"],
+  {
+    revalidate: SERVICES_CACHE_REVALIDATE_SECONDS,
+    tags: [SERVICES_CACHE_TAG],
+  },
+);
+
+export const getFeaturedServices = cache(
+  async (limit = 6): Promise<ServiceCardData[]> => {
+    return getCachedFeaturedServices(limit);
+  },
+);
+
+async function fetchServiceBySlug(
   slug: string,
 ): Promise<ServiceDetailData | null> {
   return prisma.service.findFirst({
@@ -63,7 +92,22 @@ export async function getServiceBySlug(
   }) as Promise<ServiceDetailData | null>;
 }
 
-export async function getRelatedServices(
+const getCachedServiceBySlug = unstable_cache(
+  fetchServiceBySlug,
+  ["service-by-slug"],
+  {
+    revalidate: SERVICES_CACHE_REVALIDATE_SECONDS,
+    tags: [SERVICES_CACHE_TAG],
+  },
+);
+
+export const getServiceBySlug = cache(
+  async (slug: string): Promise<ServiceDetailData | null> => {
+    return getCachedServiceBySlug(slug);
+  },
+);
+
+async function fetchRelatedServices(
   serviceId: string,
   limit = 3,
 ): Promise<ServiceCardData[]> {
@@ -80,7 +124,22 @@ export async function getRelatedServices(
   }) as Promise<ServiceCardData[]>;
 }
 
-export async function getServiceSlugs(): Promise<string[]> {
+const getCachedRelatedServices = unstable_cache(
+  fetchRelatedServices,
+  ["related-services"],
+  {
+    revalidate: SERVICES_CACHE_REVALIDATE_SECONDS,
+    tags: [SERVICES_CACHE_TAG],
+  },
+);
+
+export const getRelatedServices = cache(
+  async (serviceId: string, limit = 3): Promise<ServiceCardData[]> => {
+    return getCachedRelatedServices(serviceId, limit);
+  },
+);
+
+async function fetchServiceSlugs(): Promise<string[]> {
   const services = await prisma.service.findMany({
     where: {
       status: ProductStatus.ACTIVE,
@@ -92,6 +151,19 @@ export async function getServiceSlugs(): Promise<string[]> {
 
   return services.map((service) => service.slug);
 }
+
+const getCachedServiceSlugs = unstable_cache(
+  fetchServiceSlugs,
+  ["service-slugs"],
+  {
+    revalidate: SERVICES_CACHE_REVALIDATE_SECONDS,
+    tags: [SERVICES_CACHE_TAG],
+  },
+);
+
+export const getServiceSlugs = cache(async (): Promise<string[]> => {
+  return getCachedServiceSlugs();
+});
 
 function buildAdminServiceWhere(
   filters: AdminServiceFilters,

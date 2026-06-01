@@ -27,6 +27,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const revalidate = 3600;
+
 const fallbackStoreInfo: StoreInfo = {
   storeName: "Điện Máy Nga Sơn",
   phone: "",

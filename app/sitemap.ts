@@ -29,33 +29,31 @@ function createEntry(
 }
 
 async function getDynamicEntries(): Promise<SitemapEntry[]> {
-  const [products, services, posts] = await Promise.all([
-    prisma.product.findMany({
-      where: {
-        status: ProductStatus.ACTIVE,
-      },
-      select: {
-        slug: true,
-        updatedAt: true,
-      },
-    }),
-    prisma.service.findMany({
-      select: {
-        slug: true,
-        updatedAt: true,
-      },
-    }),
-    prisma.post.findMany({
-      where: {
-        isPublished: true,
-      },
-      select: {
-        slug: true,
-        updatedAt: true,
-        publishedAt: true,
-      },
-    }),
-  ]);
+  const products = await prisma.product.findMany({
+    where: {
+      status: ProductStatus.ACTIVE,
+    },
+    select: {
+      slug: true,
+      updatedAt: true,
+    },
+  });
+  const services = await prisma.service.findMany({
+    select: {
+      slug: true,
+      updatedAt: true,
+    },
+  });
+  const posts = await prisma.post.findMany({
+    where: {
+      isPublished: true,
+    },
+    select: {
+      slug: true,
+      updatedAt: true,
+      publishedAt: true,
+    },
+  });
 
   return [
     ...products.map((product) =>

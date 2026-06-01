@@ -1,4 +1,6 @@
 import type { Prisma } from "@prisma/client";
+import { unstable_cache } from "next/cache";
+import { cache } from "react";
 
 import type {
   BlogCategoryData,
@@ -7,6 +9,9 @@ import type {
   BlogPostFilters,
 } from "@/src/features/blog/types/blog.types";
 import { prisma } from "@/src/lib/prisma";
+
+export const BLOG_CACHE_TAG = "blog";
+const BLOG_CACHE_REVALIDATE_SECONDS = 600;
 
 const blogPostCardSelect = {
   id: true,
@@ -38,7 +43,7 @@ function buildPublishedPostWhere(
   };
 }
 
-export async function getPublishedPosts(
+async function fetchPublishedPosts(
   filters: BlogPostFilters = {},
 ): Promise<BlogPostCardData[]> {
   return prisma.post.findMany({
@@ -49,7 +54,22 @@ export async function getPublishedPosts(
   }) as Promise<BlogPostCardData[]>;
 }
 
-export async function getPostBySlug(
+const getCachedPublishedPosts = unstable_cache(
+  fetchPublishedPosts,
+  ["published-posts"],
+  {
+    revalidate: BLOG_CACHE_REVALIDATE_SECONDS,
+    tags: [BLOG_CACHE_TAG],
+  },
+);
+
+export const getPublishedPosts = cache(
+  async (filters: BlogPostFilters = {}): Promise<BlogPostCardData[]> => {
+    return getCachedPublishedPosts(filters);
+  },
+);
+
+async function fetchPostBySlug(
   slug: string,
 ): Promise<BlogPostDetailData | null> {
   return prisma.post.findFirst({
@@ -66,7 +86,22 @@ export async function getPostBySlug(
   }) as Promise<BlogPostDetailData | null>;
 }
 
-export async function getRelatedPosts(
+const getCachedPostBySlug = unstable_cache(
+  fetchPostBySlug,
+  ["post-by-slug"],
+  {
+    revalidate: BLOG_CACHE_REVALIDATE_SECONDS,
+    tags: [BLOG_CACHE_TAG],
+  },
+);
+
+export const getPostBySlug = cache(
+  async (slug: string): Promise<BlogPostDetailData | null> => {
+    return getCachedPostBySlug(slug);
+  },
+);
+
+async function fetchRelatedPosts(
   postId: string,
   categorySlug?: string,
   limit = 3,
@@ -89,7 +124,26 @@ export async function getRelatedPosts(
   }) as Promise<BlogPostCardData[]>;
 }
 
-export async function getPostCategories(): Promise<BlogCategoryData[]> {
+const getCachedRelatedPosts = unstable_cache(
+  fetchRelatedPosts,
+  ["related-posts"],
+  {
+    revalidate: BLOG_CACHE_REVALIDATE_SECONDS,
+    tags: [BLOG_CACHE_TAG],
+  },
+);
+
+export const getRelatedPosts = cache(
+  async (
+    postId: string,
+    categorySlug?: string,
+    limit = 3,
+  ): Promise<BlogPostCardData[]> => {
+    return getCachedRelatedPosts(postId, categorySlug, limit);
+  },
+);
+
+async function fetchPostCategories(): Promise<BlogCategoryData[]> {
   return prisma.postCategory.findMany({
     orderBy: {
       name: "asc",
@@ -102,7 +156,22 @@ export async function getPostCategories(): Promise<BlogCategoryData[]> {
   });
 }
 
-export async function getPostSlugs(): Promise<string[]> {
+const getCachedPostCategories = unstable_cache(
+  fetchPostCategories,
+  ["post-categories"],
+  {
+    revalidate: BLOG_CACHE_REVALIDATE_SECONDS,
+    tags: [BLOG_CACHE_TAG],
+  },
+);
+
+export const getPostCategories = cache(
+  async (): Promise<BlogCategoryData[]> => {
+    return getCachedPostCategories();
+  },
+);
+
+async function fetchPostSlugs(): Promise<string[]> {
   const posts = await prisma.post.findMany({
     where: {
       isPublished: true,
@@ -114,3 +183,12 @@ export async function getPostSlugs(): Promise<string[]> {
 
   return posts.map((post) => post.slug);
 }
+
+const getCachedPostSlugs = unstable_cache(fetchPostSlugs, ["post-slugs"], {
+  revalidate: BLOG_CACHE_REVALIDATE_SECONDS,
+  tags: [BLOG_CACHE_TAG],
+});
+
+export const getPostSlugs = cache(async (): Promise<string[]> => {
+  return getCachedPostSlugs();
+});

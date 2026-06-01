@@ -35,6 +35,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const revalidate = 600;
+
 type BlogPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
@@ -62,10 +64,8 @@ async function getSafeBlogPageData(
   filters: BlogPostFilters,
 ): Promise<BlogPageData> {
   try {
-    const [posts, categories] = await Promise.all([
-      getPublishedPosts(filters),
-      getPostCategories(),
-    ]);
+    const posts = await getPublishedPosts(filters);
+    const categories = await getPostCategories();
 
     return { posts, categories };
   } catch {

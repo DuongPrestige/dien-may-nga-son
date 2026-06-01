@@ -1,10 +1,11 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import {
+  SERVICES_CACHE_TAG,
   createService,
   deleteService,
   updateService,
@@ -89,6 +90,7 @@ export async function createServiceAction(
 
   revalidatePath("/admin/services");
   revalidatePath("/services");
+  updateTag(SERVICES_CACHE_TAG);
   redirect("/admin/services");
 }
 
@@ -135,6 +137,7 @@ export async function updateServiceAction(
   revalidatePath("/admin/services");
   revalidatePath(`/admin/services/${parsedId.data}/edit`);
   revalidatePath("/services");
+  updateTag(SERVICES_CACHE_TAG);
   redirect("/admin/services");
 }
 
@@ -155,4 +158,5 @@ export async function deleteServiceAction(formData: FormData) {
 
   revalidatePath("/admin/services");
   revalidatePath("/services");
+  updateTag(SERVICES_CACHE_TAG);
 }

@@ -1,10 +1,11 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import {
+  PRODUCTS_CACHE_TAG,
   createProduct,
   deleteProduct,
   updateProduct,
@@ -105,6 +106,7 @@ export async function createProductAction(
 
   revalidatePath("/admin/products");
   revalidatePath("/products");
+  updateTag(PRODUCTS_CACHE_TAG);
   redirect("/admin/products");
 }
 
@@ -151,6 +153,7 @@ export async function updateProductAction(
   revalidatePath("/admin/products");
   revalidatePath(`/admin/products/${parsedId.data}/edit`);
   revalidatePath("/products");
+  updateTag(PRODUCTS_CACHE_TAG);
   redirect("/admin/products");
 }
 
@@ -171,4 +174,5 @@ export async function deleteProductAction(formData: FormData) {
 
   revalidatePath("/admin/products");
   revalidatePath("/products");
+  updateTag(PRODUCTS_CACHE_TAG);
 }

@@ -1,3 +1,6 @@
+import { unstable_cache } from "next/cache";
+import { cache } from "react";
+
 import { prisma } from "@/src/lib/prisma";
 import {
   EMPTY_SETTINGS,
@@ -10,6 +13,15 @@ import type {
   StoreInfo,
   UpdateSettingInput,
 } from "@/src/features/settings/types/settings.types";
+
+export const SETTINGS_CACHE_TAG = "settings";
+const SETTINGS_CACHE_REVALIDATE_SECONDS = 3600;
+const CONTACT_SETTINGS_CACHE_REVALIDATE_SECONDS = 300;
+
+export type ContactSettings = {
+  storeInfo: StoreInfo;
+  googleMapEmbed: string;
+};
 
 function mapSettings(records: SettingRecord[]): SettingsMap {
   const settings = { ...EMPTY_SETTINGS };
@@ -27,7 +39,7 @@ function isStoreSettingKey(key: string): key is StoreSettingKey {
   return STORE_SETTING_KEYS.includes(key as StoreSettingKey);
 }
 
-export async function getSettings(): Promise<SettingsMap> {
+async function fetchSettings(): Promise<SettingsMap> {
   const records = await prisma.setting.findMany({
     where: {
       settingKey: {
@@ -43,9 +55,27 @@ export async function getSettings(): Promise<SettingsMap> {
   return mapSettings(records);
 }
 
-export async function getSettingByKey(
-  key: StoreSettingKey,
-): Promise<string> {
+function toStoreInfo(settings: SettingsMap): StoreInfo {
+  return {
+    storeName: settings.store_name,
+    phone: settings.phone,
+    zaloUrl: settings.zalo_url,
+    facebookUrl: settings.facebook_url,
+    address: settings.address,
+    workingHours: settings.working_hours,
+  };
+}
+
+const getCachedSettings = unstable_cache(fetchSettings, ["store-settings"], {
+  revalidate: SETTINGS_CACHE_REVALIDATE_SECONDS,
+  tags: [SETTINGS_CACHE_TAG],
+});
+
+export const getSettings = cache(async (): Promise<SettingsMap> => {
+  return getCachedSettings();
+});
+
+async function fetchSettingByKey(key: StoreSettingKey): Promise<string> {
   const setting = await prisma.setting.findUnique({
     where: {
       settingKey: key,
@@ -57,6 +87,21 @@ export async function getSettingByKey(
 
   return setting?.settingValue ?? "";
 }
+
+const getCachedSettingByKey = unstable_cache(
+  fetchSettingByKey,
+  ["store-setting-by-key"],
+  {
+    revalidate: SETTINGS_CACHE_REVALIDATE_SECONDS,
+    tags: [SETTINGS_CACHE_TAG],
+  },
+);
+
+export const getSettingByKey = cache(
+  async (key: StoreSettingKey): Promise<string> => {
+    return getCachedSettingByKey(key);
+  },
+);
 
 export async function updateSetting({
   key,
@@ -80,16 +125,41 @@ export async function updateSetting({
   });
 }
 
-export async function getStoreInfo(): Promise<StoreInfo> {
-  const settings = await getSettings();
+async function fetchStoreInfo(): Promise<StoreInfo> {
+  const settings = await fetchSettings();
+
+  return toStoreInfo(settings);
+}
+
+const getCachedStoreInfo = unstable_cache(fetchStoreInfo, ["store-info"], {
+  revalidate: SETTINGS_CACHE_REVALIDATE_SECONDS,
+  tags: [SETTINGS_CACHE_TAG],
+});
+
+export const getStoreInfo = cache(async (): Promise<StoreInfo> => {
+  return getCachedStoreInfo();
+});
+
+async function fetchContactSettings(): Promise<ContactSettings> {
+  const settings = await fetchSettings();
 
   return {
-    storeName: settings.store_name,
-    phone: settings.phone,
-    zaloUrl: settings.zalo_url,
-    facebookUrl: settings.facebook_url,
-    address: settings.address,
-    workingHours: settings.working_hours,
+    storeInfo: toStoreInfo(settings),
+    googleMapEmbed: settings.google_map_embed,
   };
 }
 
+const getCachedContactSettings = unstable_cache(
+  fetchContactSettings,
+  ["contact-settings"],
+  {
+    revalidate: CONTACT_SETTINGS_CACHE_REVALIDATE_SECONDS,
+    tags: [SETTINGS_CACHE_TAG],
+  },
+);
+
+export const getContactSettings = cache(
+  async (): Promise<ContactSettings> => {
+    return getCachedContactSettings();
+  },
+);

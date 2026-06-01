@@ -22,6 +22,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const revalidate = 3600;
+
 async function getSafeServices(): Promise<ServiceCardData[]> {
   try {
     return await getServices();
