@@ -1,4 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, UserRole } from "@prisma/client";
+import { hash } from "bcryptjs";
 
 const prisma = new PrismaClient();
 
@@ -103,12 +104,49 @@ async function seedPostCategories() {
   }
 }
 
+async function seedSuperAdmin() {
+  const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  const password = process.env.ADMIN_PASSWORD;
+  const fullName = process.env.ADMIN_FULL_NAME?.trim() || "Admin";
+
+  if (!email || !password) {
+    console.log(
+      "Skipping SUPER_ADMIN seed: ADMIN_EMAIL and ADMIN_PASSWORD are required.",
+    );
+    return;
+  }
+
+  const passwordHash = await hash(password, 12);
+
+  await prisma.user.upsert({
+    where: {
+      email,
+    },
+    update: {
+      passwordHash,
+      role: UserRole.SUPER_ADMIN,
+      fullName,
+      isActive: true,
+    },
+    create: {
+      email,
+      passwordHash,
+      role: UserRole.SUPER_ADMIN,
+      fullName,
+      isActive: true,
+    },
+  });
+
+  console.log(`SUPER_ADMIN user seeded for ${email}.`);
+}
+
 async function main() {
   await seedSettings();
   await seedCategories();
   await seedBrands();
   await seedServices();
   await seedPostCategories();
+  await seedSuperAdmin();
 }
 
 main()

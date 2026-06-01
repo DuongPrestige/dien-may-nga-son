@@ -133,20 +133,22 @@ model ProductSpec {
 }
 
 model Service {
-  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name             String   @db.VarChar(255)
-  slug             String   @unique @db.VarChar(255)
-  thumbnailUrl     String?  @map("thumbnail_url")
-  shortDescription String?  @map("short_description")
+  id               String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name             String        @db.VarChar(255)
+  slug             String        @unique @db.VarChar(255)
+  thumbnailUrl     String?       @map("thumbnail_url")
+  shortDescription String?       @map("short_description")
   content          String?
-  isFeatured       Boolean  @default(false) @map("is_featured")
-  seoTitle         String?  @map("seo_title") @db.VarChar(255)
-  seoDescription   String?  @map("seo_description")
-  createdAt        DateTime @default(now()) @map("created_at")
-  updatedAt        DateTime @updatedAt @map("updated_at")
+  isFeatured       Boolean       @default(false) @map("is_featured")
+  status           ProductStatus @default(ACTIVE)
+  seoTitle         String?       @map("seo_title") @db.VarChar(255)
+  seoDescription   String?       @map("seo_description")
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
   leads            Lead[]
 
   @@index([slug], map: "idx_services_slug")
+  @@index([status], map: "idx_services_status")
   @@map("services")
 }
 
