@@ -11,6 +11,8 @@ const settings = [
   ["facebook_url", ""],
   ["working_hours", ""],
   ["google_map_embed", ""],
+  ["default_seo_title", ""],
+  ["default_seo_description", ""],
 ] as const;
 
 const categories = [
@@ -56,11 +58,31 @@ const postCategories = [
 
 async function seedSettings() {
   for (const [settingKey, settingValue] of settings) {
-    await prisma.setting.upsert({
+    const existingSetting = await prisma.setting.findUnique({
       where: { settingKey },
-      update: { settingValue },
-      create: { settingKey, settingValue },
+      select: {
+        settingValue: true,
+      },
     });
+
+    if (!existingSetting) {
+      await prisma.setting.create({
+        data: { settingKey, settingValue },
+      });
+      console.log(`Created setting: ${settingKey}`);
+      continue;
+    }
+
+    if (!existingSetting.settingValue?.trim()) {
+      await prisma.setting.update({
+        where: { settingKey },
+        data: { settingValue },
+      });
+      console.log(`Filled empty setting: ${settingKey}`);
+      continue;
+    }
+
+    console.log(`Preserved existing setting: ${settingKey}`);
   }
 }
 
