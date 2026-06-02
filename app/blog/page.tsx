@@ -64,8 +64,10 @@ async function getSafeBlogPageData(
   filters: BlogPostFilters,
 ): Promise<BlogPageData> {
   try {
-    const posts = await getPublishedPosts(filters);
-    const categories = await getPostCategories();
+    const [posts, categories] = await Promise.all([
+      getPublishedPosts(filters),
+      getPostCategories(),
+    ]);
 
     return { posts, categories };
   } catch {

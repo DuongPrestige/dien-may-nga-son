@@ -110,50 +110,28 @@ async function fetchProducts(
   const limit = filters.limit ?? 12;
   const where = buildProductWhere(filters);
 
-  const productsStartedAt = Date.now();
-  const products = await prisma.product.findMany({
-    where,
-    orderBy: buildProductOrderBy(filters.sort),
-    skip: (page - 1) * limit,
-    take: limit,
-    select: productCardSelect,
-  });
-  logProductsTiming("product list query", productsStartedAt, {
+  const startedAt = Date.now();
+  const [products, categories, brands] = await Promise.all([
+    prisma.product.findMany({
+      where,
+      orderBy: buildProductOrderBy(filters.sort),
+      skip: (page - 1) * limit,
+      take: limit,
+      select: productCardSelect,
+    }),
+    prisma.category.findMany({
+      orderBy: { name: "asc" },
+      select: { name: true, slug: true },
+    }),
+    prisma.brand.findMany({
+      orderBy: { name: "asc" },
+      select: { name: true, slug: true },
+    }),
+  ]);
+  logProductsTiming("parallel fetch (products + categories + brands)", startedAt, {
     rows: products.length,
     page,
     limit,
-  });
-
-  if (process.env.NODE_ENV === "development") {
-    console.log("[perf:/products] product count query: skipped");
-  }
-
-  const categoriesStartedAt = Date.now();
-  const categories = await prisma.category.findMany({
-    orderBy: {
-      name: "asc",
-    },
-    select: {
-      name: true,
-      slug: true,
-    },
-  });
-  logProductsTiming("category options query", categoriesStartedAt, {
-    rows: categories.length,
-  });
-
-  const brandsStartedAt = Date.now();
-  const brands = await prisma.brand.findMany({
-    orderBy: {
-      name: "asc",
-    },
-    select: {
-      name: true,
-      slug: true,
-    },
-  });
-  logProductsTiming("brand options query", brandsStartedAt, {
-    rows: brands.length,
   });
 
   return {
@@ -334,14 +312,16 @@ export async function getProductAdminOptions(): Promise<{
   categories: AdminProductOption[];
   brands: AdminProductOption[];
 }> {
-  const categories = await prisma.category.findMany({
-    orderBy: { name: "asc" },
-    select: { id: true, name: true },
-  });
-  const brands = await prisma.brand.findMany({
-    orderBy: { name: "asc" },
-    select: { id: true, name: true },
-  });
+  const [categories, brands] = await Promise.all([
+    prisma.category.findMany({
+      orderBy: { name: "asc" },
+      select: { id: true, name: true },
+    }),
+    prisma.brand.findMany({
+      orderBy: { name: "asc" },
+      select: { id: true, name: true },
+    }),
+  ]);
 
   return { categories, brands };
 }
@@ -353,27 +333,29 @@ export async function getAdminProducts(
   const limit = filters.limit ?? 10;
   const where = buildAdminProductWhere(filters);
 
-  const products = await prisma.product.findMany({
-    where,
-    orderBy: { updatedAt: "desc" },
-    skip: (page - 1) * limit,
-    take: limit,
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-      sku: true,
-      price: true,
-      salePrice: true,
-      isFeatured: true,
-      status: true,
-      updatedAt: true,
-      category: { select: { id: true, name: true } },
-      brand: { select: { id: true, name: true } },
-    },
-  });
-  const total = await prisma.product.count({ where });
-  const options = await getProductAdminOptions();
+  const [products, total, options] = await Promise.all([
+    prisma.product.findMany({
+      where,
+      orderBy: { updatedAt: "desc" },
+      skip: (page - 1) * limit,
+      take: limit,
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        sku: true,
+        price: true,
+        salePrice: true,
+        isFeatured: true,
+        status: true,
+        updatedAt: true,
+        category: { select: { id: true, name: true } },
+        brand: { select: { id: true, name: true } },
+      },
+    }),
+    prisma.product.count({ where }),
+    getProductAdminOptions(),
+  ]);
 
   return {
     products,

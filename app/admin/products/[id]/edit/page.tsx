@@ -23,8 +23,10 @@ type EditProductPageProps = {
 
 export default async function EditProductPage({ params }: EditProductPageProps) {
   const { id } = await params;
-  const product = await getAdminProductById(id);
-  const options = await getProductAdminOptions();
+  const [product, options] = await Promise.all([
+    getAdminProductById(id),
+    getProductAdminOptions(),
+  ]);
 
   if (!product) {
     notFound();
