@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { isValidImageSrc } from "@/src/lib/image-src";
+
 const optionalText = z.preprocess(
   (value) =>
     typeof value === "string" && value.trim() === "" ? undefined : value,
@@ -12,7 +14,10 @@ const optionalUrl = z.preprocess(
   z
     .string()
     .trim()
-    .url("Featured image must be a valid URL")
+    .refine(
+      isValidImageSrc,
+      "Featured image must be an HTTP/HTTPS URL or a relative path starting with /",
+    )
     .optional(),
 );
 

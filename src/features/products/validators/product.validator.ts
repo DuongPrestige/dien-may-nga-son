@@ -1,14 +1,49 @@
 import { ProductStatus } from "@prisma/client";
 import { z } from "zod";
 
+import { isValidImageSrc } from "@/src/lib/image-src";
+
 const optionalText = z.preprocess(
   (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
   z.string().trim().optional(),
 );
 
-const optionalUrl = z.preprocess(
-  (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
-  z.string().trim().url("URL không hợp lệ").optional(),
+const optionalImageSrc = z.preprocess(
+  (value) =>
+    typeof value === "string" && value.trim() === "" ? undefined : value,
+  z
+    .string()
+    .trim()
+    .refine(
+      isValidImageSrc,
+      "Ảnh phải là URL http/https hoặc đường dẫn tương đối bắt đầu bằng /",
+    )
+    .optional(),
+);
+
+const galleryTextSchema = z.preprocess(
+  (value) =>
+    typeof value === "string" && value.trim() === "" ? undefined : value,
+  z
+    .string()
+    .transform((value) =>
+      value
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean),
+    )
+    .superRefine((lines, context) => {
+      lines.forEach((line, index) => {
+        if (!isValidImageSrc(line)) {
+          context.addIssue({
+            code: "custom",
+            message: `Dòng ảnh ${index + 1} phải là URL http/https hoặc đường dẫn bắt đầu bằng /`,
+          });
+        }
+      });
+    })
+    .transform((lines) => lines.join("\n"))
+    .optional(),
 );
 
 const priceSchema = z.preprocess(
@@ -49,7 +84,7 @@ export const productFormSchema = z.object({
   sku: optionalText,
   price: priceSchema,
   salePrice: optionalPriceSchema,
-  thumbnailUrl: optionalUrl,
+  thumbnailUrl: optionalImageSrc,
   shortDescription: optionalText,
   description: optionalText,
   isFeatured: z.preprocess((value) => value === "on" || value === true, z.boolean()),
@@ -57,7 +92,7 @@ export const productFormSchema = z.object({
   seoTitle: optionalText,
   seoDescription: optionalText,
   specsText: optionalText,
-  galleryText: optionalText,
+  galleryText: galleryTextSchema,
 });
 
 export const productIdSchema = z.string().uuid("Mã sản phẩm không hợp lệ");

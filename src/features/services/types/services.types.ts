@@ -46,6 +46,7 @@ export type AdminServiceDetail = Pick<
   | "id"
   | "name"
   | "slug"
+  | "thumbnailUrl"
   | "shortDescription"
   | "content"
   | "isFeatured"
@@ -69,6 +70,7 @@ export type ServiceActionState = {
   fieldErrors: {
     name?: string;
     slug?: string;
+    thumbnailUrl?: string;
     shortDescription?: string;
     content?: string;
     status?: string;

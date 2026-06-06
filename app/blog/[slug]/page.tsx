@@ -18,6 +18,10 @@ import type {
 } from "@/src/features/blog/types/blog.types";
 import { LeadForm } from "@/src/features/leads/components/lead-form";
 import { buildMetadata } from "@/src/lib/seo";
+import {
+  getSafeImageSrc,
+  shouldUseUnoptimizedImage,
+} from "@/src/lib/image-src";
 
 type BlogDetailPageProps = {
   params: Promise<{
@@ -98,13 +102,14 @@ function getBaseUrl(): string {
 function buildArticleSchema(post: BlogPostDetailData) {
   const baseUrl = getBaseUrl();
   const publishedDate = post.publishedAt ?? post.createdAt;
+  const thumbnailSrc = getSafeImageSrc(post.thumbnailUrl);
 
   return {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
     description: post.excerpt ?? post.seoDescription ?? post.title,
-    image: post.thumbnailUrl ? [post.thumbnailUrl] : undefined,
+    image: thumbnailSrc ? [thumbnailSrc] : undefined,
     datePublished: publishedDate.toISOString(),
     dateModified: publishedDate.toISOString(),
     author: {
@@ -194,6 +199,7 @@ export async function generateMetadata({
     post.seoDescription ??
     post.excerpt ??
     "Bài viết tư vấn điện máy từ Điện Máy Nga Sơn cho khách hàng tại Kinh Môn, Quang Thành, Hải Dương.";
+  const thumbnailSrc = getSafeImageSrc(post.thumbnailUrl);
 
   return buildMetadata({
     title,
@@ -201,7 +207,7 @@ export async function generateMetadata({
     path: `/blog/${post.slug}`,
     type: "article",
     publishedTime: (post.publishedAt ?? post.createdAt).toISOString(),
-    images: post.thumbnailUrl ? [post.thumbnailUrl] : undefined,
+    images: thumbnailSrc ? [thumbnailSrc] : undefined,
   });
 }
 
@@ -215,6 +221,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
 
   const relatedPosts = await getSafeRelatedPosts(post);
   const { blocks, tocItems } = parseContent(post.content);
+  const thumbnailSrc = getSafeImageSrc(post.thumbnailUrl);
   const articleSchema = buildArticleSchema(post);
   const breadcrumbSchema = buildBreadcrumbSchema(post);
 
@@ -263,18 +270,27 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               </div>
             </div>
 
-            {post.thumbnailUrl ? (
+            {thumbnailSrc ? (
               <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-lg bg-[#E0F2FE]">
                 <Image
-                  src={post.thumbnailUrl}
+                  src={thumbnailSrc}
                   alt={post.title}
                   fill
                   priority
+                  unoptimized={shouldUseUnoptimizedImage(thumbnailSrc)}
                   sizes="(min-width: 1024px) 896px, 100vw"
                   className="object-cover"
                 />
               </div>
-            ) : null}
+            ) : (
+              <div
+                role="img"
+                aria-label={`${post.title} image unavailable`}
+                className="mt-8 flex aspect-[16/9] items-center justify-center rounded-lg bg-[#E0F2FE] px-5 text-center text-sm font-bold text-[#0369A1]"
+              >
+                Hình ảnh bài viết đang cập nhật
+              </div>
+            )}
           </article>
         </Container>
       </Section>

@@ -11,6 +11,12 @@ export type UpdateSettingInput = {
   value: string;
 };
 
+export type SettingsActionState = {
+  success: boolean;
+  message: string;
+  fieldErrors: Partial<Record<StoreSettingKey, string>>;
+};
+
 export type StoreInfo = {
   storeName: string;
   phone: string;

@@ -24,6 +24,7 @@ import {
   ProductSchema,
 } from "@/src/lib/schema";
 import { buildMetadata } from "@/src/lib/seo";
+import { getSafeImageSrc } from "@/src/lib/image-src";
 
 type ProductDetailPageProps = {
   params: Promise<{
@@ -101,12 +102,13 @@ export async function generateMetadata({
     product.seoDescription ??
     product.shortDescription ??
     `Xem thông tin ${product.name}, giá tham khảo, thông số và gửi yêu cầu báo giá tại Điện Máy Nga Sơn.`;
+  const thumbnailSrc = getSafeImageSrc(product.thumbnailUrl);
 
   return buildMetadata({
     title,
     description,
     path: `/products/${product.slug}`,
-    images: product.thumbnailUrl ? [product.thumbnailUrl] : undefined,
+    images: thumbnailSrc ? [thumbnailSrc] : undefined,
   });
 }
 
@@ -123,7 +125,9 @@ export default async function ProductDetailPage({
   const galleryImages = [
     product.thumbnailUrl,
     ...product.images.map((image) => image.imageUrl),
-  ].filter((image): image is string => Boolean(image));
+  ]
+    .map(getSafeImageSrc)
+    .filter((image): image is string => image !== null);
   const relatedProducts = await getSafeRelatedProducts(product);
   const productSchemaPrice =
     toSafePriceNumber(product.salePrice) ??

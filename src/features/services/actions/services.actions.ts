@@ -35,6 +35,7 @@ function formDataToServiceInput(formData: FormData) {
   return {
     name: formData.get("name"),
     slug: formData.get("slug"),
+    thumbnailUrl: formData.get("thumbnailUrl"),
     shortDescription: formData.get("shortDescription"),
     content: formData.get("content"),
     isFeatured: formData.get("isFeatured"),
@@ -52,6 +53,7 @@ function getServiceFieldErrors(error: {
   return {
     name: fieldErrors.name?.[0],
     slug: fieldErrors.slug?.[0],
+    thumbnailUrl: fieldErrors.thumbnailUrl?.[0],
     shortDescription: fieldErrors.shortDescription?.[0],
     content: fieldErrors.content?.[0],
     status: fieldErrors.status?.[0],

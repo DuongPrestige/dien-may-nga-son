@@ -10,6 +10,7 @@ import type {
   AdminServiceDetail,
   ServiceActionState,
 } from "@/src/features/services/types/services.types";
+import { ImageUploadField } from "@/src/features/uploads/components/image-upload-field";
 
 type ServiceFormProps = {
   service?: AdminServiceDetail;
@@ -55,6 +56,23 @@ export function ServiceForm({ service }: ServiceFormProps) {
           disabled={isPending}
         />
         <div className="hidden lg:block" />
+        <Field
+          label="Thumbnail URL"
+          name="thumbnailUrl"
+          defaultValue={service?.thumbnailUrl ?? ""}
+          error={state.fieldErrors.thumbnailUrl}
+          disabled={isPending}
+          className="lg:col-span-2"
+        />
+        <div className="lg:col-span-2">
+          <ImageUploadField
+            targetName="thumbnailUrl"
+            folder="services"
+            initialUrl={service?.thumbnailUrl ?? ""}
+            disabled={isPending}
+            label="Upload service thumbnail"
+          />
+        </div>
         <TextareaField
           label="Short description"
           name="shortDescription"

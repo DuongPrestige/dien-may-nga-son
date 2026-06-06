@@ -11,6 +11,7 @@ import type {
   AdminProductOption,
   ProductActionState,
 } from "@/src/features/products/types/products.types";
+import { ImageUploadField } from "@/src/features/uploads/components/image-upload-field";
 
 type ProductFormProps = {
   product?: AdminProductDetail;
@@ -129,6 +130,15 @@ export function ProductForm({ product, categories, brands }: ProductFormProps) {
           disabled={isPending}
           className="lg:col-span-2"
         />
+        <div className="lg:col-span-2">
+          <ImageUploadField
+            targetName="thumbnailUrl"
+            folder="products"
+            initialUrl={product?.thumbnailUrl ?? ""}
+            disabled={isPending}
+            label="Upload product thumbnail"
+          />
+        </div>
         <TextareaField
           label="Short description"
           name="shortDescription"
@@ -164,6 +174,13 @@ export function ProductForm({ product, categories, brands }: ProductFormProps) {
           error={state.fieldErrors.galleryText}
           disabled={isPending}
           helpText="One image URL per line"
+        />
+        <ImageUploadField
+          targetName="galleryText"
+          folder="products"
+          append
+          disabled={isPending}
+          label="Upload gallery image"
         />
         <Field
           label="SEO title"

@@ -2,20 +2,27 @@ import Image from "next/image";
 import Link from "next/link";
 
 import type { ServiceCardData } from "@/src/features/services/types/services.types";
+import {
+  getSafeImageSrc,
+  shouldUseUnoptimizedImage,
+} from "@/src/lib/image-src";
 
 type ServiceCardProps = {
   service: ServiceCardData;
 };
 
 export function ServiceCard({ service }: ServiceCardProps) {
+  const thumbnailSrc = getSafeImageSrc(service.thumbnailUrl);
+
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-lg border border-[#E5E7EB] bg-white transition-colors hover:border-[#0EA5E9]">
       <div className="relative aspect-[4/3] bg-[#E0F2FE]">
-        {service.thumbnailUrl ? (
+        {thumbnailSrc ? (
           <Image
-            src={service.thumbnailUrl}
+            src={thumbnailSrc}
             alt={service.name}
             fill
+            unoptimized={shouldUseUnoptimizedImage(thumbnailSrc)}
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             className="object-cover"
           />

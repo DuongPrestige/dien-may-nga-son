@@ -11,6 +11,7 @@ import type {
   BlogCategoryData,
   BlogPostActionState,
 } from "@/src/features/blog/types/blog.types";
+import { ImageUploadField } from "@/src/features/uploads/components/image-upload-field";
 
 type BlogPostFormProps = {
   post?: AdminBlogPostDetail;
@@ -66,6 +67,15 @@ export function BlogPostForm({
           error={state.fieldErrors.thumbnailUrl}
           disabled={isPending}
         />
+        <div className="lg:col-span-2">
+          <ImageUploadField
+            targetName="thumbnailUrl"
+            folder="blog"
+            initialUrl={post?.thumbnailUrl ?? ""}
+            disabled={isPending}
+            label="Upload featured image"
+          />
+        </div>
         <TextareaField
           label="Excerpt"
           name="excerpt"

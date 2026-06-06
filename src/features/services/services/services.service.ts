@@ -319,6 +319,7 @@ export async function getAdminServiceById(
       id: true,
       name: true,
       slug: true,
+      thumbnailUrl: true,
       shortDescription: true,
       content: true,
       isFeatured: true,
@@ -333,6 +334,7 @@ function toServiceData(input: ServiceFormSchema) {
   return {
     name: input.name,
     slug: input.slug,
+    thumbnailUrl: input.thumbnailUrl,
     shortDescription: input.shortDescription,
     content: input.content,
     isFeatured: input.isFeatured,

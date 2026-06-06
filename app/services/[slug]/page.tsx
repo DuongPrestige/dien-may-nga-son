@@ -18,6 +18,10 @@ import type {
   ServiceDetailData,
 } from "@/src/features/services/types/services.types";
 import { buildMetadata } from "@/src/lib/seo";
+import {
+  getSafeImageSrc,
+  shouldUseUnoptimizedImage,
+} from "@/src/lib/image-src";
 
 type ServiceDetailPageProps = {
   params: Promise<{
@@ -200,12 +204,13 @@ export async function generateMetadata({
     service.seoDescription ??
     service.shortDescription ??
     `${localizedName} cho khách hàng tại Kinh Môn, Quang Thành, Hải Dương. Liên hệ Điện Máy Nga Sơn để được tư vấn dịch vụ phù hợp.`;
+  const thumbnailSrc = getSafeImageSrc(service.thumbnailUrl);
 
   return buildMetadata({
     title,
     description,
     path: `/services/${service.slug}`,
-    images: service.thumbnailUrl ? [service.thumbnailUrl] : undefined,
+    images: thumbnailSrc ? [thumbnailSrc] : undefined,
   });
 }
 
@@ -220,6 +225,7 @@ export default async function ServiceDetailPage({
   }
 
   const localizedName = getLocalizedServiceName(service.name);
+  const thumbnailSrc = getSafeImageSrc(service.thumbnailUrl);
   const relatedServices = await getSafeRelatedServices(service);
   const faqSchema = buildFaqSchema();
   const breadcrumbSchema = buildBreadcrumbSchema(service);
@@ -273,12 +279,13 @@ export default async function ServiceDetailPage({
 
             <div className="overflow-hidden rounded-lg border border-[#E5E7EB] bg-white">
               <div className="relative aspect-[4/3] bg-[#E0F2FE]">
-                {service.thumbnailUrl ? (
+                {thumbnailSrc ? (
                   <Image
-                    src={service.thumbnailUrl}
+                    src={thumbnailSrc}
                     alt={service.name}
                     fill
                     priority
+                    unoptimized={shouldUseUnoptimizedImage(thumbnailSrc)}
                     sizes="(min-width: 1024px) 45vw, 100vw"
                     className="object-cover"
                   />

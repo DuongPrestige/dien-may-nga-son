@@ -2,6 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 import type { BlogPostCardData } from "@/src/features/blog/types/blog.types";
+import {
+  getSafeImageSrc,
+  shouldUseUnoptimizedImage,
+} from "@/src/lib/image-src";
 
 type BlogPostCardProps = {
   post: BlogPostCardData;
@@ -20,14 +24,17 @@ function formatPostDate(date: Date | null): string {
 }
 
 export function BlogPostCard({ post }: BlogPostCardProps) {
+  const thumbnailSrc = getSafeImageSrc(post.thumbnailUrl);
+
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-lg border border-[#E5E7EB] bg-white transition-colors hover:border-[#0EA5E9]">
       <div className="relative aspect-[16/10] bg-[#E0F2FE]">
-        {post.thumbnailUrl ? (
+        {thumbnailSrc ? (
           <Image
-            src={post.thumbnailUrl}
+            src={thumbnailSrc}
             alt={post.title}
             fill
+            unoptimized={shouldUseUnoptimizedImage(thumbnailSrc)}
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             className="object-cover"
           />

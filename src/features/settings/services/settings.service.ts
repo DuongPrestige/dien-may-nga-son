@@ -135,9 +135,33 @@ export async function updateSetting({
   });
 }
 
+export async function updateSettings(
+  settings: SettingsMap,
+): Promise<void> {
+  await prisma.$transaction(
+    STORE_SETTING_KEYS.map((key) =>
+      prisma.setting.upsert({
+        where: {
+          settingKey: key,
+        },
+        update: {
+          settingValue: settings[key],
+        },
+        create: {
+          settingKey: key,
+          settingValue: settings[key],
+        },
+        select: {
+          id: true,
+        },
+      }),
+    ),
+  );
+}
+
 async function fetchStoreInfo(): Promise<StoreInfo> {
   const startedAt = Date.now();
-  const settings = await fetchSettings();
+  const settings = await getCachedSettings();
   logSettingsTiming("store info loading", startedAt);
 
   return toStoreInfo(settings);
@@ -153,7 +177,7 @@ export const getStoreInfo = cache(async (): Promise<StoreInfo> => {
 });
 
 async function fetchContactSettings(): Promise<ContactSettings> {
-  const settings = await fetchSettings();
+  const settings = await getCachedSettings();
 
   return {
     storeInfo: toStoreInfo(settings),

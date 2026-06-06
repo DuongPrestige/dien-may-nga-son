@@ -1,10 +1,25 @@
 import { ProductStatus } from "@prisma/client";
 import { z } from "zod";
 
+import { isValidImageSrc } from "@/src/lib/image-src";
+
 const optionalText = z.preprocess(
   (value) =>
     typeof value === "string" && value.trim() === "" ? undefined : value,
   z.string().trim().optional(),
+);
+
+const optionalUrl = z.preprocess(
+  (value) =>
+    typeof value === "string" && value.trim() === "" ? undefined : value,
+  z
+    .string()
+    .trim()
+    .refine(
+      isValidImageSrc,
+      "Thumbnail must be an HTTP/HTTPS URL or a relative path starting with /",
+    )
+    .optional(),
 );
 
 export const serviceStatusSchema = z.enum([
@@ -22,6 +37,7 @@ export const serviceFormSchema = z.object({
       /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
       "Slug can only use lowercase letters, numbers, and hyphens",
     ),
+  thumbnailUrl: optionalUrl,
   shortDescription: optionalText,
   content: optionalText,
   isFeatured: z.preprocess(
