@@ -96,11 +96,25 @@ Example local PostgreSQL connection strings:
 ```env
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/dien_may_nga_son_dev"
 DIRECT_URL="postgresql://postgres:postgres@localhost:5432/dien_may_nga_son_dev"
+NEXTAUTH_URL="http://localhost:3001"
+NEXT_PUBLIC_SITE_URL="http://localhost:3001"
 ```
 
 For local PostgreSQL, `DATABASE_URL` and `DIRECT_URL` can usually be the same direct connection string.
 
 Keep production Supabase values in Vercel environment variables, not in `.env.local`.
+
+Start the application with:
+
+```bash
+npm run dev
+```
+
+Open the local website at:
+
+```text
+http://localhost:3001
+```
 
 ---
 
