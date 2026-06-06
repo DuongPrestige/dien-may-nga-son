@@ -4,7 +4,7 @@ const adminMenuItems = [
   { label: "Dashboard", href: "/admin" },
   { label: "Products", href: "/admin/products" },
   { label: "Services", href: "/admin/services" },
-  { label: "Posts", href: "/admin/posts" },
+  { label: "Blog", href: "/admin/blog" },
   { label: "Leads", href: "/admin/leads" },
   { label: "Settings", href: "/admin/settings" },
 ] as const;

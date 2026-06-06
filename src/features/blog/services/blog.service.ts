@@ -3,14 +3,19 @@ import { unstable_cache } from "next/cache";
 import { cache } from "react";
 
 import type {
+  AdminBlogPostDetail,
+  AdminBlogPostFilters,
+  AdminBlogPostListResult,
   BlogCategoryData,
   BlogPostCardData,
   BlogPostDetailData,
   BlogPostFilters,
 } from "@/src/features/blog/types/blog.types";
+import type { BlogPostFormSchema } from "@/src/features/blog/validators/blog.validator";
 import { prisma } from "@/src/lib/prisma";
 
 export const BLOG_CACHE_TAG = "blog";
+export const BLOG_DETAIL_CACHE_TAG = "blog-detail";
 const BLOG_CACHE_REVALIDATE_SECONDS = 600;
 
 const blogPostCardSelect = {
@@ -91,7 +96,7 @@ const getCachedPostBySlug = unstable_cache(
   ["post-by-slug"],
   {
     revalidate: BLOG_CACHE_REVALIDATE_SECONDS,
-    tags: [BLOG_CACHE_TAG],
+    tags: [BLOG_CACHE_TAG, BLOG_DETAIL_CACHE_TAG],
   },
 );
 
@@ -129,7 +134,7 @@ const getCachedRelatedPosts = unstable_cache(
   ["related-posts"],
   {
     revalidate: BLOG_CACHE_REVALIDATE_SECONDS,
-    tags: [BLOG_CACHE_TAG],
+    tags: [BLOG_CACHE_TAG, BLOG_DETAIL_CACHE_TAG],
   },
 );
 
@@ -192,3 +197,180 @@ const getCachedPostSlugs = unstable_cache(fetchPostSlugs, ["post-slugs"], {
 export const getPostSlugs = cache(async (): Promise<string[]> => {
   return getCachedPostSlugs();
 });
+
+function buildAdminBlogPostWhere(
+  filters: AdminBlogPostFilters,
+): Prisma.PostWhereInput {
+  return {
+    OR: filters.search
+      ? [
+          {
+            title: {
+              contains: filters.search,
+              mode: "insensitive",
+            },
+          },
+          {
+            slug: {
+              contains: filters.search,
+              mode: "insensitive",
+            },
+          },
+        ]
+      : undefined,
+    isPublished:
+      filters.status === "published"
+        ? true
+        : filters.status === "draft"
+          ? false
+          : undefined,
+    categoryId: filters.categoryId,
+  };
+}
+
+export async function getAdminBlogPosts(
+  filters: AdminBlogPostFilters = {},
+): Promise<AdminBlogPostListResult> {
+  const page = filters.page ?? 1;
+  const limit = filters.limit ?? 10;
+  const where = buildAdminBlogPostWhere(filters);
+
+  const [posts, total, categories] = await Promise.all([
+    prisma.post.findMany({
+      where,
+      orderBy: { updatedAt: "desc" },
+      skip: (page - 1) * limit,
+      take: limit,
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        isPublished: true,
+        publishedAt: true,
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    }),
+    prisma.post.count({ where }),
+    prisma.postCategory.findMany({
+      orderBy: { name: "asc" },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+      },
+    }),
+  ]);
+
+  return {
+    posts,
+    categories,
+    total,
+    page,
+    limit,
+    totalPages: Math.max(1, Math.ceil(total / limit)),
+  };
+}
+
+export async function getAdminBlogPostById(
+  id: string,
+): Promise<AdminBlogPostDetail | null> {
+  return prisma.post.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      categoryId: true,
+      title: true,
+      slug: true,
+      thumbnailUrl: true,
+      excerpt: true,
+      content: true,
+      isPublished: true,
+      seoTitle: true,
+      seoDescription: true,
+    },
+  });
+}
+
+export async function getAdminBlogCategories(): Promise<BlogCategoryData[]> {
+  return prisma.postCategory.findMany({
+    orderBy: { name: "asc" },
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+    },
+  });
+}
+
+function toBlogPostData(input: BlogPostFormSchema) {
+  return {
+    categoryId: input.categoryId,
+    title: input.title,
+    slug: input.slug,
+    thumbnailUrl: input.thumbnailUrl,
+    excerpt: input.excerpt,
+    content: input.content,
+    isPublished: input.isPublished,
+    seoTitle: input.seoTitle,
+    seoDescription: input.seoDescription,
+  };
+}
+
+export async function createBlogPost(input: BlogPostFormSchema) {
+  return prisma.post.create({
+    data: {
+      ...toBlogPostData(input),
+      publishedAt: input.isPublished ? new Date() : null,
+    },
+    select: {
+      slug: true,
+    },
+  });
+}
+
+export async function updateBlogPost(
+  id: string,
+  input: BlogPostFormSchema,
+) {
+  return prisma.$transaction(async (tx) => {
+    const existingPost = await tx.post.findUniqueOrThrow({
+      where: { id },
+      select: {
+        slug: true,
+        publishedAt: true,
+      },
+    });
+    const post = await tx.post.update({
+      where: { id },
+      data: {
+        ...toBlogPostData(input),
+        publishedAt: input.isPublished
+          ? existingPost.publishedAt ?? new Date()
+          : null,
+      },
+      select: {
+        slug: true,
+      },
+    });
+
+    return {
+      previousSlug: existingPost.slug,
+      slug: post.slug,
+    };
+  });
+}
+
+export async function deleteBlogPost(id: string) {
+  return prisma.post.delete({
+    where: { id },
+    select: {
+      slug: true,
+    },
+  });
+}

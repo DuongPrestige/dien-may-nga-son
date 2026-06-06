@@ -21,8 +21,9 @@ enum ProductStatus {
 enum LeadStatus {
   NEW
   CONTACTED
-  CONVERTED
+  QUALIFIED
   CLOSED
+  LOST
 }
 
 enum LeadSourceType {

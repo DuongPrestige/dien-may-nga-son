@@ -2,6 +2,7 @@ import type { LeadStatus, Prisma } from "@prisma/client";
 
 import { prisma } from "@/src/lib/prisma";
 import type {
+  AdminLeadFilters,
   CreateLeadInput,
   GetLeadsInput,
   LeadListItem,
@@ -58,7 +59,15 @@ export async function getLeadById(id: string) {
     where: {
       id,
     },
-    include: {
+    select: {
+      id: true,
+      name: true,
+      phone: true,
+      message: true,
+      sourceType: true,
+      sourceUrl: true,
+      status: true,
+      createdAt: true,
       product: {
         select: {
           id: true,
@@ -77,6 +86,69 @@ export async function getLeadById(id: string) {
   });
 }
 
+export async function getAdminLeads({
+  search,
+  status,
+  page = 1,
+  limit = 20,
+}: AdminLeadFilters = {}) {
+  const where: Prisma.LeadWhereInput = {
+    status,
+    ...(search
+      ? {
+          OR: [
+            {
+              name: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
+            {
+              phone: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
+            {
+              message: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
+          ],
+        }
+      : {}),
+  };
+
+  const [leads, total] = await Promise.all([
+    prisma.lead.findMany({
+      where,
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        sourceType: true,
+        status: true,
+        createdAt: true,
+      },
+    }),
+    prisma.lead.count({ where }),
+  ]);
+
+  return {
+    leads,
+    total,
+    page,
+    limit,
+    totalPages: Math.max(1, Math.ceil(total / limit)),
+  };
+}
+
 export async function updateLeadStatus({
   id,
   status,
@@ -87,6 +159,9 @@ export async function updateLeadStatus({
     },
     data: {
       status,
+    },
+    select: {
+      id: true,
     },
   });
 }
@@ -100,6 +175,8 @@ export async function deleteLead(id: string) {
 }
 
 export function isLeadStatus(value: string): value is LeadStatus {
-  return ["NEW", "CONTACTED", "CONVERTED", "CLOSED"].includes(value);
+  return ["NEW", "CONTACTED", "QUALIFIED", "CLOSED", "LOST"].includes(
+    value,
+  );
 }
 

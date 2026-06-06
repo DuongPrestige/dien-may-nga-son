@@ -17,6 +17,13 @@ export type GetLeadsInput = {
   limit?: number;
 };
 
+export type AdminLeadFilters = {
+  search?: string;
+  status?: LeadStatus;
+  page?: number;
+  limit?: number;
+};
+
 export type UpdateLeadStatusInput = {
   id: string;
   status: LeadStatus;
@@ -40,6 +47,14 @@ export type LeadFormState = {
   success: boolean;
   message: string;
   fieldErrors: FieldErrors;
+};
+
+export type LeadStatusActionState = {
+  success: boolean;
+  message: string;
+  fieldErrors: {
+    status?: string;
+  };
 };
 
 export type ActionResult<TData = undefined> =

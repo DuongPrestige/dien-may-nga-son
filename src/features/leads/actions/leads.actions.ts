@@ -1,14 +1,16 @@
 "use server";
 
-import type { LeadStatus } from "@prisma/client";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
+import { auth } from "@/auth";
 import {
   createLead,
   updateLeadStatus,
 } from "@/src/features/leads/services/leads.service";
 import type {
-  ActionResult,
   LeadFormState,
+  LeadStatusActionState,
 } from "@/src/features/leads/types/leads.types";
 import {
   createLeadSchema,
@@ -22,6 +24,14 @@ function getStringValue(formData: FormData, key: string): string {
   const value = formData.get(key);
 
   return typeof value === "string" ? value : "";
+}
+
+async function requireAdminSession() {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/admin/login");
+  }
 }
 
 export async function createLeadAction(
@@ -79,11 +89,18 @@ export async function createLeadAction(
   }
 }
 
-export async function updateLeadStatusAction(input: {
-  id: string;
-  status: LeadStatus;
-}): Promise<ActionResult> {
-  const parsedInput = updateLeadStatusSchema.safeParse(input);
+export async function updateLeadStatusAction(
+  id: string,
+  _previousState: LeadStatusActionState,
+  formData: FormData,
+): Promise<LeadStatusActionState> {
+  void _previousState;
+  await requireAdminSession();
+
+  const parsedInput = updateLeadStatusSchema.safeParse({
+    id,
+    status: getStringValue(formData, "status"),
+  });
 
   if (!parsedInput.success) {
     return {
@@ -91,16 +108,21 @@ export async function updateLeadStatusAction(input: {
       message:
         parsedInput.error.issues[0]?.message ??
         "Trạng thái khách hàng tiềm năng không hợp lệ",
+      fieldErrors: {
+        status: parsedInput.error.flatten().fieldErrors.status?.[0],
+      },
     };
   }
 
   try {
     await updateLeadStatus(parsedInput.data);
+    revalidatePath("/admin/leads");
+    revalidatePath(`/admin/leads/${parsedInput.data.id}`);
 
     return {
       success: true,
       message: "Cập nhật trạng thái thành công",
-      data: undefined,
+      fieldErrors: {},
     };
   } catch (error) {
     console.error("Failed to update lead status", error);
@@ -108,6 +130,7 @@ export async function updateLeadStatusAction(input: {
     return {
       success: false,
       message: "Không thể cập nhật trạng thái",
+      fieldErrors: {},
     };
   }
 }

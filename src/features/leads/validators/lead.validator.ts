@@ -20,8 +20,9 @@ export const leadSourceTypeSchema = z.enum([
 export const leadStatusSchema = z.enum([
   LeadStatus.NEW,
   LeadStatus.CONTACTED,
-  LeadStatus.CONVERTED,
+  LeadStatus.QUALIFIED,
   LeadStatus.CLOSED,
+  LeadStatus.LOST,
 ]);
 
 export const createLeadSchema = z.object({
