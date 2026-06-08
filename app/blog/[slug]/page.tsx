@@ -7,6 +7,12 @@ import { notFound } from "next/navigation";
 import { Container } from "@/src/components/shared/container";
 import { Section } from "@/src/components/shared/section";
 import { BlogPostCard } from "@/src/features/blog/components/blog-post-card";
+import { prepareBlogContent } from "@/src/features/blog/lib/blog-content";
+import {
+  formatBlogDate,
+  getBlogDateIso,
+  parseBlogDate,
+} from "@/src/features/blog/lib/blog-date";
 import {
   getPostBySlug,
   getPostSlugs,
@@ -31,77 +37,13 @@ type BlogDetailPageProps = {
 
 export const revalidate = 600;
 
-type TocItem = {
-  id: string;
-  title: string;
-};
-
-type ContentBlock =
-  | {
-      type: "heading";
-      id: string;
-      text: string;
-    }
-  | {
-      type: "paragraph";
-      text: string;
-    };
-
-function formatPostDate(date: Date | null): string {
-  if (!date) {
-    return "Đang cập nhật";
-  }
-
-  return new Intl.DateTimeFormat("vi-VN", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(date);
-}
-
-function createAnchorId(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/đ/g, "d")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
-function parseContent(content: string): {
-  blocks: ContentBlock[];
-  tocItems: TocItem[];
-} {
-  const blocks: ContentBlock[] = [];
-  const tocItems: TocItem[] = [];
-  const sections = content
-    .split(/\n{2,}/)
-    .map((section) => section.trim())
-    .filter(Boolean);
-
-  for (const section of sections) {
-    if (section.startsWith("## ")) {
-      const title = section.replace(/^##\s+/, "").trim();
-      const id = createAnchorId(title);
-
-      blocks.push({ type: "heading", id, text: title });
-      tocItems.push({ id, title });
-    } else {
-      blocks.push({ type: "paragraph", text: section });
-    }
-  }
-
-  return { blocks, tocItems };
-}
-
 function getBaseUrl(): string {
   return process.env.NEXTAUTH_URL ?? "http://localhost:3000";
 }
 
 function buildArticleSchema(post: BlogPostDetailData) {
   const baseUrl = getBaseUrl();
-  const publishedDate = post.publishedAt ?? post.createdAt;
+  const publishedDate = getBlogDateIso(post.publishedAt ?? post.createdAt);
   const thumbnailSrc = getSafeImageSrc(post.thumbnailUrl);
 
   return {
@@ -110,8 +52,8 @@ function buildArticleSchema(post: BlogPostDetailData) {
     headline: post.title,
     description: post.excerpt ?? post.seoDescription ?? post.title,
     image: thumbnailSrc ? [thumbnailSrc] : undefined,
-    datePublished: publishedDate.toISOString(),
-    dateModified: publishedDate.toISOString(),
+    datePublished: publishedDate,
+    dateModified: publishedDate,
     author: {
       "@type": "Organization",
       name: "Điện Máy Nga Sơn",
@@ -200,13 +142,16 @@ export async function generateMetadata({
     post.excerpt ??
     "Bài viết tư vấn điện máy từ Điện Máy Nga Sơn cho khách hàng tại Kinh Môn, Quang Thành, Hải Dương.";
   const thumbnailSrc = getSafeImageSrc(post.thumbnailUrl);
+  const publishedTime = getBlogDateIso(
+    post.publishedAt ?? post.createdAt,
+  );
 
   return buildMetadata({
     title,
     description,
     path: `/blog/${post.slug}`,
     type: "article",
-    publishedTime: (post.publishedAt ?? post.createdAt).toISOString(),
+    publishedTime,
     images: thumbnailSrc ? [thumbnailSrc] : undefined,
   });
 }
@@ -220,8 +165,11 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   }
 
   const relatedPosts = await getSafeRelatedPosts(post);
-  const { blocks, tocItems } = parseContent(post.content);
+  const { html: contentHtml, headings: tocItems } = prepareBlogContent(
+    post.content,
+  );
   const thumbnailSrc = getSafeImageSrc(post.thumbnailUrl);
+  const postDate = parseBlogDate(post.publishedAt ?? post.createdAt);
   const articleSchema = buildArticleSchema(post);
   const breadcrumbSchema = buildBreadcrumbSchema(post);
 
@@ -242,8 +190,8 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             <div className="space-y-4">
               <div className="flex flex-wrap gap-2 text-sm font-semibold text-[#0284C7]">
                 {post.category ? <span>{post.category.name}</span> : null}
-                <time dateTime={(post.publishedAt ?? post.createdAt).toISOString()}>
-                  {formatPostDate(post.publishedAt ?? post.createdAt)}
+                <time dateTime={postDate?.toISOString()}>
+                  {formatBlogDate(postDate)}
                 </time>
               </div>
               <h1 className="text-3xl font-bold leading-tight text-[#111827] sm:text-5xl">
@@ -306,7 +254,10 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                 <h2 className="text-lg font-bold text-[#111827]">Mục lục</h2>
                 <ol className="mt-3 space-y-2 text-sm leading-6 text-[#374151]">
                   {tocItems.map((item) => (
-                    <li key={item.id}>
+                    <li
+                      key={item.id}
+                      className={item.level === 3 ? "pl-4" : undefined}
+                    >
                       <a href={`#${item.id}`} className="hover:text-[#0284C7]">
                         {item.title}
                       </a>
@@ -316,23 +267,10 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               </nav>
             ) : null}
 
-            <div className="space-y-6 text-base leading-8 text-[#374151]">
-              {blocks.map((block) =>
-                block.type === "heading" ? (
-                  <h2
-                    key={block.id}
-                    id={block.id}
-                    className="scroll-mt-24 pt-2 text-2xl font-bold leading-tight text-[#111827]"
-                  >
-                    {block.text}
-                  </h2>
-                ) : (
-                  <p key={block.text} className="whitespace-pre-line">
-                    {block.text}
-                  </p>
-                ),
-              )}
-            </div>
+            <div
+              className="text-base leading-8 text-[#374151] [&_a]:font-semibold [&_a]:text-[#0284C7] [&_a]:underline [&_a]:underline-offset-2 [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-[#BAE6FD] [&_blockquote]:bg-[#F8FAFC] [&_blockquote]:py-3 [&_blockquote]:pl-5 [&_h2]:mb-4 [&_h2]:mt-8 [&_h2]:scroll-mt-24 [&_h2]:pt-2 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:leading-tight [&_h2]:text-[#111827] [&_h3]:mb-3 [&_h3]:mt-7 [&_h3]:scroll-mt-24 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:leading-tight [&_h3]:text-[#111827] [&_img]:my-7 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-lg [&_ol]:my-5 [&_ol]:list-decimal [&_ol]:space-y-2 [&_ol]:pl-6 [&_p]:my-5 [&_ul]:my-5 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-6"
+              dangerouslySetInnerHTML={{ __html: contentHtml }}
+            />
 
             <div className="mt-10 rounded-lg border border-[#FED7AA] bg-[#FFF7ED] p-5 sm:p-6">
               <h2 className="text-2xl font-bold text-[#111827]">

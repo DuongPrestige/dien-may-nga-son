@@ -10,6 +10,7 @@ import type {
   AdminServiceListResult,
 } from "@/src/features/services/types/services.types";
 import type { ServiceFormSchema } from "@/src/features/services/validators/service.validator";
+import { syncSlugRedirect } from "@/src/features/redirects/services/redirects.service";
 import { prisma } from "@/src/lib/prisma";
 
 export const SERVICES_CACHE_TAG = "services";
@@ -351,9 +352,27 @@ export async function createService(input: ServiceFormSchema) {
 }
 
 export async function updateService(id: string, input: ServiceFormSchema) {
-  return prisma.service.update({
-    where: { id },
-    data: toServiceData(input),
+  return prisma.$transaction(async (tx) => {
+    const existingService = await tx.service.findUniqueOrThrow({
+      where: { id },
+      select: { slug: true },
+    });
+    const service = await tx.service.update({
+      where: { id },
+      data: toServiceData(input),
+      select: { slug: true },
+    });
+
+    await syncSlugRedirect(
+      tx,
+      `/services/${existingService.slug}`,
+      `/services/${service.slug}`,
+    );
+
+    return {
+      previousSlug: existingService.slug,
+      slug: service.slug,
+    };
   });
 }
 

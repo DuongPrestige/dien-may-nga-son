@@ -3,8 +3,11 @@ import Link from "next/link";
 const adminMenuItems = [
   { label: "Dashboard", href: "/admin" },
   { label: "Products", href: "/admin/products" },
+  { label: "Categories", href: "/admin/categories" },
+  { label: "Brands", href: "/admin/brands" },
   { label: "Services", href: "/admin/services" },
   { label: "Blog", href: "/admin/blog" },
+  { label: "Redirects", href: "/admin/redirects" },
   { label: "Leads", href: "/admin/leads" },
   { label: "Settings", href: "/admin/settings" },
 ] as const;

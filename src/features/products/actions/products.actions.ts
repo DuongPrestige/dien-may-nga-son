@@ -15,6 +15,7 @@ import {
   productFormSchema,
   productIdSchema,
 } from "@/src/features/products/validators/product.validator";
+import { REDIRECTS_CACHE_TAG } from "@/src/features/redirects/services/redirects.service";
 
 const defaultProductActionState: ProductActionState = {
   success: false,
@@ -140,8 +141,10 @@ export async function updateProductAction(
     };
   }
 
+  let updatedProduct: Awaited<ReturnType<typeof updateProduct>>;
+
   try {
-    await updateProduct(parsedId.data, parsedInput.data);
+    updatedProduct = await updateProduct(parsedId.data, parsedInput.data);
   } catch {
     return {
       success: false,
@@ -153,7 +156,10 @@ export async function updateProductAction(
   revalidatePath("/admin/products");
   revalidatePath(`/admin/products/${parsedId.data}/edit`);
   revalidatePath("/products");
+  revalidatePath(`/products/${updatedProduct.previousSlug}`);
+  revalidatePath(`/products/${updatedProduct.slug}`);
   updateTag(PRODUCTS_CACHE_TAG);
+  updateTag(REDIRECTS_CACHE_TAG);
   redirect("/admin/products");
 }
 

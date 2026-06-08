@@ -11,11 +11,16 @@ import {
   deleteBlogPost,
   updateBlogPost,
 } from "@/src/features/blog/services/blog.service";
+import {
+  hasMeaningfulBlogContent,
+  sanitizeBlogContent,
+} from "@/src/features/blog/lib/blog-content";
 import type { BlogPostActionState } from "@/src/features/blog/types/blog.types";
 import {
   blogPostFormSchema,
   blogPostIdSchema,
 } from "@/src/features/blog/validators/blog.validator";
+import { REDIRECTS_CACHE_TAG } from "@/src/features/redirects/services/redirects.service";
 
 const defaultBlogPostActionState: BlogPostActionState = {
   success: false,
@@ -94,10 +99,25 @@ export async function createBlogPostAction(
     };
   }
 
+  const sanitizedContent = sanitizeBlogContent(parsedInput.data.content);
+
+  if (!hasMeaningfulBlogContent(sanitizedContent)) {
+    return {
+      success: false,
+      message: "Please check the blog post information.",
+      fieldErrors: {
+        content: "Content must include text or an image.",
+      },
+    };
+  }
+
   let createdPost: Awaited<ReturnType<typeof createBlogPost>>;
 
   try {
-    createdPost = await createBlogPost(parsedInput.data);
+    createdPost = await createBlogPost({
+      ...parsedInput.data,
+      content: sanitizedContent,
+    });
   } catch {
     return {
       success: false,
@@ -141,10 +161,25 @@ export async function updateBlogPostAction(
     };
   }
 
+  const sanitizedContent = sanitizeBlogContent(parsedInput.data.content);
+
+  if (!hasMeaningfulBlogContent(sanitizedContent)) {
+    return {
+      success: false,
+      message: "Please check the blog post information.",
+      fieldErrors: {
+        content: "Content must include text or an image.",
+      },
+    };
+  }
+
   let updatedPost: Awaited<ReturnType<typeof updateBlogPost>>;
 
   try {
-    updatedPost = await updateBlogPost(parsedId.data, parsedInput.data);
+    updatedPost = await updateBlogPost(parsedId.data, {
+      ...parsedInput.data,
+      content: sanitizedContent,
+    });
   } catch {
     return {
       success: false,
@@ -156,6 +191,7 @@ export async function updateBlogPostAction(
 
   revalidatePath(`/admin/blog/${parsedId.data}/edit`);
   invalidateBlogCaches([updatedPost.previousSlug, updatedPost.slug]);
+  updateTag(REDIRECTS_CACHE_TAG);
   redirect("/admin/blog");
 }
 

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { formatBlogDate } from "@/src/features/blog/lib/blog-date";
 import type { BlogPostCardData } from "@/src/features/blog/types/blog.types";
 import {
   getSafeImageSrc,
@@ -10,18 +11,6 @@ import {
 type BlogPostCardProps = {
   post: BlogPostCardData;
 };
-
-function formatPostDate(date: Date | null): string {
-  if (!date) {
-    return "Đang cập nhật";
-  }
-
-  return new Intl.DateTimeFormat("vi-VN", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(date);
-}
 
 export function BlogPostCard({ post }: BlogPostCardProps) {
   const thumbnailSrc = getSafeImageSrc(post.thumbnailUrl);
@@ -49,7 +38,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
       <div className="flex flex-1 flex-col p-4">
         <div className="flex flex-wrap gap-2 text-xs font-semibold text-[#0284C7]">
           {post.category ? <span>{post.category.name}</span> : null}
-          <span>{formatPostDate(post.publishedAt)}</span>
+          <span>{formatBlogDate(post.publishedAt ?? post.createdAt)}</span>
         </div>
         <h2 className="mt-2 text-lg font-bold leading-7 text-[#111827]">
           <Link href={`/blog/${post.slug}`}>{post.title}</Link>

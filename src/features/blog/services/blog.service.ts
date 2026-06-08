@@ -11,7 +11,9 @@ import type {
   BlogPostDetailData,
   BlogPostFilters,
 } from "@/src/features/blog/types/blog.types";
+import { sanitizeBlogContent } from "@/src/features/blog/lib/blog-content";
 import type { BlogPostFormSchema } from "@/src/features/blog/validators/blog.validator";
+import { syncSlugRedirect } from "@/src/features/redirects/services/redirects.service";
 import { prisma } from "@/src/lib/prisma";
 
 export const BLOG_CACHE_TAG = "blog";
@@ -280,7 +282,7 @@ export async function getAdminBlogPosts(
 export async function getAdminBlogPostById(
   id: string,
 ): Promise<AdminBlogPostDetail | null> {
-  return prisma.post.findUnique({
+  const post = await prisma.post.findUnique({
     where: { id },
     select: {
       id: true,
@@ -295,6 +297,13 @@ export async function getAdminBlogPostById(
       seoDescription: true,
     },
   });
+
+  return post
+    ? {
+        ...post,
+        content: sanitizeBlogContent(post.content),
+      }
+    : null;
 }
 
 export async function getAdminBlogCategories(): Promise<BlogCategoryData[]> {
@@ -315,7 +324,7 @@ function toBlogPostData(input: BlogPostFormSchema) {
     slug: input.slug,
     thumbnailUrl: input.thumbnailUrl,
     excerpt: input.excerpt,
-    content: input.content,
+    content: sanitizeBlogContent(input.content),
     isPublished: input.isPublished,
     seoTitle: input.seoTitle,
     seoDescription: input.seoDescription,
@@ -358,6 +367,12 @@ export async function updateBlogPost(
         slug: true,
       },
     });
+
+    await syncSlugRedirect(
+      tx,
+      `/blog/${existingPost.slug}`,
+      `/blog/${post.slug}`,
+    );
 
     return {
       previousSlug: existingPost.slug,

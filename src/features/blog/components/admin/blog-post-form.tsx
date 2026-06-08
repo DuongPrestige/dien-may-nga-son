@@ -6,6 +6,7 @@ import {
   createBlogPostAction,
   updateBlogPostAction,
 } from "@/src/features/blog/actions/blog.actions";
+import { BlogContentField } from "@/src/features/blog/components/admin/blog-content-field";
 import type {
   AdminBlogPostDetail,
   BlogCategoryData,
@@ -85,15 +86,10 @@ export function BlogPostForm({
           disabled={isPending}
           className="lg:col-span-2"
         />
-        <TextareaField
-          label="Content"
-          name="content"
-          rows={16}
+        <BlogContentField
           defaultValue={post?.content ?? ""}
           error={state.fieldErrors.content}
           disabled={isPending}
-          required
-          className="lg:col-span-2"
         />
         <Field
           label="SEO title"

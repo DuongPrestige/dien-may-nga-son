@@ -1,6 +1,8 @@
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
 
+import { getRedirectDestination } from "@/src/features/redirects/services/redirects.service";
+
 const adminLoginPath = "/admin/login";
 
 function withPathnameHeader(request: NextRequest): NextResponse {
@@ -16,26 +18,46 @@ function withPathnameHeader(request: NextRequest): NextResponse {
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const token = await getToken({
-    req: request,
-    secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
-  });
 
-  if (pathname === adminLoginPath) {
-    if (token) {
-      return NextResponse.redirect(new URL("/admin", request.url));
+  if (pathname.startsWith("/admin")) {
+    const token = await getToken({
+      req: request,
+      secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
+    });
+
+    if (pathname === adminLoginPath) {
+      if (token) {
+        return NextResponse.redirect(new URL("/admin", request.url));
+      }
+
+      return withPathnameHeader(request);
+    }
+
+    if (!token) {
+      return NextResponse.redirect(new URL(adminLoginPath, request.url));
     }
 
     return withPathnameHeader(request);
   }
 
-  if (!token) {
-    return NextResponse.redirect(new URL(adminLoginPath, request.url));
+  try {
+    const destinationPath = await getRedirectDestination(pathname);
+
+    if (destinationPath && destinationPath !== pathname) {
+      const destinationUrl = new URL(destinationPath, request.url);
+      destinationUrl.search = request.nextUrl.search;
+
+      return NextResponse.redirect(destinationUrl, 301);
+    }
+  } catch {
+    // Redirect storage must never make a public page unavailable.
   }
 
-  return withPathnameHeader(request);
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|manifest.webmanifest|robots.txt|sitemap.xml|.*\\..*).*)",
+  ],
 };

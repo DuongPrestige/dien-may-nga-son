@@ -14,6 +14,7 @@ import type {
   ProductListResult,
 } from "@/src/features/products/types/products.types";
 import type { ProductFormSchema } from "@/src/features/products/validators/product.validator";
+import { syncSlugRedirect } from "@/src/features/redirects/services/redirects.service";
 
 export const PRODUCTS_CACHE_TAG = "products";
 const PRODUCTS_CACHE_REVALIDATE_SECONDS = 300;
@@ -482,9 +483,14 @@ export async function updateProduct(id: string, input: ProductFormSchema) {
   const images = parseGalleryText(input.galleryText);
 
   return prisma.$transaction(async (tx) => {
+    const existingProduct = await tx.product.findUniqueOrThrow({
+      where: { id },
+      select: { slug: true },
+    });
     const product = await tx.product.update({
       where: { id },
       data: toProductData(input),
+      select: { slug: true },
     });
 
     await tx.productSpec.deleteMany({ where: { productId: id } });
@@ -508,7 +514,16 @@ export async function updateProduct(id: string, input: ProductFormSchema) {
       });
     }
 
-    return product;
+    await syncSlugRedirect(
+      tx,
+      `/products/${existingProduct.slug}`,
+      `/products/${product.slug}`,
+    );
+
+    return {
+      previousSlug: existingProduct.slug,
+      slug: product.slug,
+    };
   });
 }
 

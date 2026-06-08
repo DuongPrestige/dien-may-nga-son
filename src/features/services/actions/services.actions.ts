@@ -16,6 +16,7 @@ import {
   serviceFormSchema,
   serviceIdSchema,
 } from "@/src/features/services/validators/service.validator";
+import { REDIRECTS_CACHE_TAG } from "@/src/features/redirects/services/redirects.service";
 
 const defaultServiceActionState: ServiceActionState = {
   success: false,
@@ -128,8 +129,10 @@ export async function updateServiceAction(
     };
   }
 
+  let updatedService: Awaited<ReturnType<typeof updateService>>;
+
   try {
-    await updateService(parsedId.data, parsedInput.data);
+    updatedService = await updateService(parsedId.data, parsedInput.data);
   } catch {
     return {
       success: false,
@@ -141,8 +144,11 @@ export async function updateServiceAction(
   revalidatePath("/admin/services");
   revalidatePath(`/admin/services/${parsedId.data}/edit`);
   revalidatePath("/services");
+  revalidatePath(`/services/${updatedService.previousSlug}`);
+  revalidatePath(`/services/${updatedService.slug}`);
   updateTag(SERVICES_CACHE_TAG);
   updateTag(SERVICE_DETAIL_CACHE_TAG);
+  updateTag(REDIRECTS_CACHE_TAG);
   redirect("/admin/services");
 }
 

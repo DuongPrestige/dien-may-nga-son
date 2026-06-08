@@ -1,17 +1,15 @@
 import type { Post, PostCategory } from "@prisma/client";
 
+import type { BlogDateValue } from "@/src/features/blog/lib/blog-date";
+
 export type BlogCategoryData = Pick<PostCategory, "id" | "name" | "slug">;
 
 export type BlogPostCardData = Pick<
   Post,
-  | "id"
-  | "title"
-  | "slug"
-  | "thumbnailUrl"
-  | "excerpt"
-  | "publishedAt"
-  | "createdAt"
+  "id" | "title" | "slug" | "thumbnailUrl" | "excerpt"
 > & {
+  publishedAt: BlogDateValue;
+  createdAt: BlogDateValue;
   category: BlogCategoryData | null;
 };
 
