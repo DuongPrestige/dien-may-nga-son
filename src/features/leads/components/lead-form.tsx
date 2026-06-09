@@ -45,6 +45,7 @@ export function LeadForm({
       ref={formRef}
       action={formAction}
       className={cn("space-y-4", className)}
+      aria-busy={isPending}
       noValidate
     >
       <input type="hidden" name="sourceType" value={sourceType} />
@@ -61,6 +62,7 @@ export function LeadForm({
           name="name"
           type="text"
           autoComplete="name"
+          required
           className="w-full rounded-md border border-[#E5E7EB] px-3 py-2 text-sm outline-none transition-colors focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
           aria-invalid={Boolean(state.fieldErrors.name)}
           aria-describedby={
@@ -69,7 +71,11 @@ export function LeadForm({
           disabled={isPending}
         />
         {state.fieldErrors.name ? (
-          <p id="lead-name-error" className="text-sm text-red-600">
+          <p
+            id="lead-name-error"
+            role="alert"
+            className="text-sm text-red-600"
+          >
             {state.fieldErrors.name}
           </p>
         ) : null}
@@ -84,6 +90,8 @@ export function LeadForm({
           name="phone"
           type="tel"
           autoComplete="tel"
+          required
+          inputMode="tel"
           className="w-full rounded-md border border-[#E5E7EB] px-3 py-2 text-sm outline-none transition-colors focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
           aria-invalid={Boolean(state.fieldErrors.phone)}
           aria-describedby={
@@ -92,7 +100,11 @@ export function LeadForm({
           disabled={isPending}
         />
         {state.fieldErrors.phone ? (
-          <p id="lead-phone-error" className="text-sm text-red-600">
+          <p
+            id="lead-phone-error"
+            role="alert"
+            className="text-sm text-red-600"
+          >
             {state.fieldErrors.phone}
           </p>
         ) : null}
@@ -114,7 +126,11 @@ export function LeadForm({
           disabled={isPending}
         />
         {state.fieldErrors.message ? (
-          <p id="lead-message-error" className="text-sm text-red-600">
+          <p
+            id="lead-message-error"
+            role="alert"
+            className="text-sm text-red-600"
+          >
             {state.fieldErrors.message}
           </p>
         ) : null}
@@ -128,7 +144,8 @@ export function LeadForm({
               ? "bg-green-50 text-green-700"
               : "bg-red-50 text-red-700",
           )}
-          role="status"
+          role={state.success ? "status" : "alert"}
+          aria-live="polite"
         >
           {state.message}
         </p>
@@ -136,7 +153,7 @@ export function LeadForm({
 
       <button
         type="submit"
-        className="w-full rounded-md bg-[#F97316] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#ea580c] disabled:cursor-not-allowed disabled:opacity-70"
+        className="min-h-11 w-full rounded-md bg-[#F97316] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#ea580c] disabled:cursor-not-allowed disabled:opacity-70"
         disabled={isPending}
       >
         {isPending ? "Đang gửi..." : "Gửi yêu cầu tư vấn"}

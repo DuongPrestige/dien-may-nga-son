@@ -10,18 +10,15 @@ import type {
   ProductListResult,
   ProductSort,
 } from "@/src/features/products/types/products.types";
+import { getStoreContactLinks } from "@/src/features/settings/services/settings.service";
+import { buildMetadata } from "@/src/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "Sản phẩm điện máy | Điện Máy Nga Sơn",
   description:
     "Danh mục điều hòa, tivi, tủ lạnh, máy giặt tại Điện Máy Nga Sơn. Tư vấn nhanh cho khách hàng Kinh Môn, Hải Dương.",
-  openGraph: {
-    title: "Sản phẩm điện máy | Điện Máy Nga Sơn",
-    description:
-      "Xem danh mục sản phẩm điện máy và gửi yêu cầu báo giá tại Điện Máy Nga Sơn.",
-    type: "website",
-  },
-};
+  path: "/products",
+});
 
 export const revalidate = 300;
 
@@ -83,7 +80,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     page: 1,
     limit: 12,
   };
-  const { products, categories, brands } = await getSafeProducts(filters);
+  const [{ products, categories, brands }, contactLinks] = await Promise.all([
+    getSafeProducts(filters),
+    getStoreContactLinks(),
+  ]);
 
   return (
     <>
@@ -183,7 +183,11 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           {products.length > 0 ? (
             <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  contactLinks={contactLinks}
+                />
               ))}
             </div>
           ) : (
@@ -198,7 +202,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               </p>
               <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
                 <a
-                  href="tel:#"
+                  href={contactLinks.phoneHref}
                   className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
                 >
                   Gọi ngay
@@ -227,13 +231,13 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             </p>
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <a
-                href="tel:#"
+                href={contactLinks.phoneHref}
                 className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
               >
                 Gọi ngay
               </a>
               <a
-                href="#"
+                href={contactLinks.zaloHref}
                 className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-5 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
               >
                 Nhắn Zalo

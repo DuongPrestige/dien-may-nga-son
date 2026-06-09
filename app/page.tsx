@@ -4,7 +4,10 @@ import Link from "next/link";
 
 import { Container } from "@/src/components/shared/container";
 import { Section } from "@/src/components/shared/section";
+import { BlogPostCard } from "@/src/features/blog/components/blog-post-card";
+import { getHomepagePosts } from "@/src/features/blog/services/blog.service";
 import { LeadForm } from "@/src/features/leads/components/lead-form";
+import { getStoreContactLinks } from "@/src/features/settings/services/settings.service";
 import { buildMetadata } from "@/src/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -80,13 +83,12 @@ const reasons = [
   "Hỗ trợ nhanh tại Kinh Môn và khu vực lân cận",
 ] as const;
 
-const blogPlaceholders = [
-  "Cách chọn công suất điều hòa theo diện tích phòng",
-  "Khi nào nên bảo dưỡng điều hòa tại nhà",
-  "Các lỗi điều hòa thường gặp vào mùa nóng",
-] as const;
+export default async function Home() {
+  const [latestPosts, contactLinks] = await Promise.all([
+    getHomepagePosts().catch(() => []),
+    getStoreContactLinks(),
+  ]);
 
-export default function Home() {
   return (
     <>
       <Section className="bg-[#F8FAFC] py-10 sm:py-14 lg:py-20">
@@ -107,13 +109,13 @@ export default function Home() {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <a
-                href="tel:#"
+                href={contactLinks.phoneHref}
                 className="inline-flex min-h-12 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white transition-colors hover:bg-[#ea580c]"
               >
                 Gọi ngay
               </a>
               <a
-                href="#"
+                href={contactLinks.zaloHref}
                 className="inline-flex min-h-12 items-center justify-center rounded-md border border-[#0EA5E9] bg-white px-5 text-sm font-bold text-[#0284C7] transition-colors hover:bg-[#E0F2FE]"
               >
                 Nhắn Zalo
@@ -243,7 +245,7 @@ export default function Home() {
                   {service.detail}
                 </p>
                 <a
-                  href="tel:#"
+                  href={contactLinks.phoneHref}
                   className="mt-4 inline-flex text-sm font-bold text-[#F97316]"
                 >
                   Gọi ngay
@@ -307,26 +309,16 @@ export default function Home() {
         <Container>
           <div className="mb-6 space-y-2">
             <h2 className="text-2xl font-bold text-[#111827] sm:text-3xl">
-              Kinh nghiệm điện máy sắp cập nhật
+              Kinh nghiệm điện máy mới nhất
             </h2>
             <p className="max-w-2xl text-sm leading-6 text-[#6B7280]">
-              Khu vực bài viết sẽ dùng cho nội dung tư vấn mua điều hòa, bảo
-              dưỡng và xử lý lỗi thường gặp.
+              Nội dung tư vấn mới nhất về chọn mua, sử dụng và bảo dưỡng thiết
+              bị điện máy cho gia đình.
             </p>
           </div>
           <div className="grid gap-4 md:grid-cols-3">
-            {blogPlaceholders.map((title) => (
-              <article
-                key={title}
-                className="rounded-lg border border-[#E5E7EB] bg-white p-5"
-              >
-                <span className="text-xs font-semibold text-[#0284C7]">
-                  Bài viết dự kiến
-                </span>
-                <h3 className="mt-3 text-lg font-bold leading-7 text-[#111827]">
-                  {title}
-                </h3>
-              </article>
+            {latestPosts.map((post) => (
+              <BlogPostCard key={post.id} post={post} />
             ))}
           </div>
         </Container>
@@ -344,13 +336,13 @@ export default function Home() {
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
               <a
-                href="tel:#"
+                href={contactLinks.phoneHref}
                 className="inline-flex min-h-12 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white transition-colors hover:bg-[#ea580c]"
               >
                 Gọi ngay
               </a>
               <a
-                href="#"
+                href={contactLinks.zaloHref}
                 className="inline-flex min-h-12 items-center justify-center rounded-md border border-[#0EA5E9] px-5 text-sm font-bold text-[#0284C7] transition-colors hover:bg-[#E0F2FE]"
               >
                 Nhắn Zalo

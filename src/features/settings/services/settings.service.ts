@@ -7,6 +7,10 @@ import {
   STORE_SETTING_KEYS,
   type StoreSettingKey,
 } from "@/src/features/settings/constants";
+import {
+  getStoreContactLinks as buildStoreContactLinks,
+  type StoreContactLinks,
+} from "@/src/features/settings/lib/store-contact";
 import type {
   SettingRecord,
   SettingsMap,
@@ -175,6 +179,20 @@ const getCachedStoreInfo = unstable_cache(fetchStoreInfo, ["store-info"], {
 export const getStoreInfo = cache(async (): Promise<StoreInfo> => {
   return getCachedStoreInfo();
 });
+
+export const getSafeStoreInfo = cache(async (): Promise<StoreInfo> => {
+  try {
+    return await getStoreInfo();
+  } catch {
+    return toStoreInfo(EMPTY_SETTINGS);
+  }
+});
+
+export const getStoreContactLinks = cache(
+  async (): Promise<StoreContactLinks> => {
+    return buildStoreContactLinks(await getSafeStoreInfo());
+  },
+);
 
 async function fetchContactSettings(): Promise<ContactSettings> {
   const settings = await getCachedSettings();

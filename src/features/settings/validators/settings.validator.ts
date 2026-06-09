@@ -1,6 +1,10 @@
 import { z } from "zod";
 
 import { STORE_SETTING_KEYS } from "@/src/features/settings/constants";
+import {
+  isGoogleMapsEmbedUrl,
+  isGoogleMapsShareUrl,
+} from "@/src/features/settings/lib/google-map";
 
 export const settingKeySchema = z.enum(STORE_SETTING_KEYS);
 
@@ -47,7 +51,18 @@ export const updateSettingsSchema = z.object({
     .max(255, "Working hours must be 255 characters or fewer"),
   zalo_url: optionalHttpUrlSchema,
   facebook_url: optionalHttpUrlSchema,
-  google_map_embed: optionalHttpUrlSchema,
+  google_map_embed: optionalHttpUrlSchema.superRefine((value, context) => {
+    if (!value || isGoogleMapsEmbedUrl(value)) {
+      return;
+    }
+
+    context.addIssue({
+      code: "custom",
+      message: isGoogleMapsShareUrl(value)
+        ? "Google Maps share links cannot be embedded. Paste the URL from Share > Embed a map."
+        : "Enter a valid Google Maps embed URL.",
+    });
+  }),
   default_seo_title: z
     .string()
     .trim()

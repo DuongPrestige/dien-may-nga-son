@@ -19,6 +19,7 @@ import { prisma } from "@/src/lib/prisma";
 export const BLOG_CACHE_TAG = "blog";
 export const BLOG_DETAIL_CACHE_TAG = "blog-detail";
 const BLOG_CACHE_REVALIDATE_SECONDS = 600;
+const HOMEPAGE_BLOG_CACHE_REVALIDATE_SECONDS = 3600;
 
 const blogPostCardSelect = {
   id: true,
@@ -73,6 +74,25 @@ const getCachedPublishedPosts = unstable_cache(
 export const getPublishedPosts = cache(
   async (filters: BlogPostFilters = {}): Promise<BlogPostCardData[]> => {
     return getCachedPublishedPosts(filters);
+  },
+);
+
+async function fetchHomepagePosts(): Promise<BlogPostCardData[]> {
+  return fetchPublishedPosts({ limit: 3 });
+}
+
+const getCachedHomepagePosts = unstable_cache(
+  fetchHomepagePosts,
+  ["homepage-posts"],
+  {
+    revalidate: HOMEPAGE_BLOG_CACHE_REVALIDATE_SECONDS,
+    tags: [BLOG_CACHE_TAG],
+  },
+);
+
+export const getHomepagePosts = cache(
+  async (): Promise<BlogPostCardData[]> => {
+    return getCachedHomepagePosts();
   },
 );
 

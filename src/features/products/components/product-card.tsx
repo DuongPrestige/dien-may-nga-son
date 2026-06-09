@@ -3,12 +3,14 @@ import Link from "next/link";
 import { ProductImage } from "@/src/features/products/components/product-image";
 import { ProductPrice } from "@/src/features/products/components/product-price";
 import type { ProductCardData } from "@/src/features/products/types/products.types";
+import type { StoreContactLinks } from "@/src/features/settings/lib/store-contact";
 
 type ProductCardProps = {
   product: ProductCardData;
+  contactLinks: StoreContactLinks;
 };
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, contactLinks }: ProductCardProps) {
   return (
     <article className="flex h-full flex-col rounded-lg border border-[#E5E7EB] bg-white p-4 transition-colors hover:border-[#0EA5E9]">
       <ProductImage src={product.thumbnailUrl} alt={product.name} />
@@ -39,13 +41,13 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
         <div className="mt-5 grid gap-2 sm:grid-cols-3">
           <a
-            href="tel:#"
+            href={contactLinks.phoneHref}
             className="inline-flex min-h-10 items-center justify-center rounded-md bg-[#F97316] px-3 text-sm font-bold text-white hover:bg-[#ea580c]"
           >
             Gọi
           </a>
           <a
-            href="#"
+            href={contactLinks.zaloHref}
             className="inline-flex min-h-10 items-center justify-center rounded-md border border-[#0EA5E9] px-3 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
           >
             Zalo

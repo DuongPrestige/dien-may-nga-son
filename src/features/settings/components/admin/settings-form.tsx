@@ -95,7 +95,7 @@ export function SettingsForm({ settings }: SettingsFormProps) {
 
       <SettingsSection
         title="Google Map"
-        description="Use the HTTPS URL from the Google Maps embed code."
+        description="In Google Maps, use Share > Embed a map and paste the iframe URL."
       >
         <TextareaField
           label="Google Maps embed URL"

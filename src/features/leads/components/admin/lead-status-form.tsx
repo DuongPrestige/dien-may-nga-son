@@ -46,14 +46,17 @@ export function LeadStatusForm({
 }: LeadStatusFormProps) {
   const updateAction = updateLeadStatusAction.bind(null, leadId);
   const [state, formAction] = useActionState(updateAction, initialState);
+  const savedStatus = state.savedStatus ?? currentStatus;
 
   return (
     <form action={formAction} className="space-y-3">
       <label className="block space-y-2 text-sm font-semibold text-[#111827]">
         Status
         <select
+          key={savedStatus}
           name="status"
-          defaultValue={currentStatus}
+          defaultValue={savedStatus}
+          aria-invalid={Boolean(state.fieldErrors.status)}
           aria-describedby="lead-status-message"
           className="w-full rounded-md border border-[#E5E7EB] bg-white px-3 py-2 text-sm font-normal"
         >

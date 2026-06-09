@@ -13,6 +13,7 @@ import type {
   BlogPostCardData,
   BlogPostFilters,
 } from "@/src/features/blog/types/blog.types";
+import { getStoreContactLinks } from "@/src/features/settings/services/settings.service";
 
 export const metadata: Metadata = {
   title: "Kinh nghiệm điện máy | Điện Máy Nga Sơn",
@@ -80,7 +81,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const filters: BlogPostFilters = {
     category: getSearchValue(resolvedSearchParams, "category"),
   };
-  const { posts, categories } = await getSafeBlogPageData(filters);
+  const [{ posts, categories }, contactLinks] = await Promise.all([
+    getSafeBlogPageData(filters),
+    getStoreContactLinks(),
+  ]);
 
   return (
     <>
@@ -152,7 +156,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               </p>
               <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
                 <a
-                  href="tel:#"
+                  href={contactLinks.phoneHref}
                   className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
                 >
                   Gọi tư vấn
@@ -182,13 +186,13 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             </p>
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <a
-                href="tel:#"
+                href={contactLinks.phoneHref}
                 className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
               >
                 Gọi ngay
               </a>
               <a
-                href="#"
+                href={contactLinks.zaloHref}
                 className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-5 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
               >
                 Nhắn Zalo

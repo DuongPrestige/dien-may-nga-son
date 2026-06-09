@@ -52,6 +52,7 @@ export type LeadFormState = {
 export type LeadStatusActionState = {
   success: boolean;
   message: string;
+  savedStatus?: LeadStatus;
   fieldErrors: {
     status?: string;
   };

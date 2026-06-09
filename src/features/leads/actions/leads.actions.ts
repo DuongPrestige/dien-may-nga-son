@@ -122,6 +122,7 @@ export async function updateLeadStatusAction(
     return {
       success: true,
       message: "Cập nhật trạng thái thành công",
+      savedStatus: parsedInput.data.status,
       fieldErrors: {},
     };
   } catch (error) {

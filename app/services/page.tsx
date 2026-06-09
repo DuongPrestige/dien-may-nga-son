@@ -6,6 +6,7 @@ import { Section } from "@/src/components/shared/section";
 import { ServiceCard } from "@/src/features/services/components/service-card";
 import { getServices } from "@/src/features/services/services/services.service";
 import type { ServiceCardData } from "@/src/features/services/types/services.types";
+import { getStoreContactLinks } from "@/src/features/settings/services/settings.service";
 
 export const metadata: Metadata = {
   title: "Dịch vụ sửa chữa điện lạnh Kinh Môn | Điện Máy Nga Sơn",
@@ -33,7 +34,10 @@ async function getSafeServices(): Promise<ServiceCardData[]> {
 }
 
 export default async function ServicesPage() {
-  const services = await getSafeServices();
+  const [services, contactLinks] = await Promise.all([
+    getSafeServices(),
+    getStoreContactLinks(),
+  ]);
 
   return (
     <>
@@ -53,7 +57,7 @@ export default async function ServicesPage() {
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
               <a
-                href="tel:#"
+                href={contactLinks.phoneHref}
                 className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
               >
                 Gọi tư vấn dịch vụ
@@ -86,7 +90,11 @@ export default async function ServicesPage() {
           {services.length > 0 ? (
             <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {services.map((service) => (
-                <ServiceCard key={service.id} service={service} />
+                <ServiceCard
+                  key={service.id}
+                  service={service}
+                  contactLinks={contactLinks}
+                />
               ))}
             </div>
           ) : (
@@ -101,7 +109,7 @@ export default async function ServicesPage() {
               </p>
               <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
                 <a
-                  href="tel:#"
+                  href={contactLinks.phoneHref}
                   className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
                 >
                   Gọi ngay
@@ -130,13 +138,13 @@ export default async function ServicesPage() {
             </p>
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <a
-                href="tel:#"
+                href={contactLinks.phoneHref}
                 className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
               >
                 Gọi ngay
               </a>
               <a
-                href="#"
+                href={contactLinks.zaloHref}
                 className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-5 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
               >
                 Nhắn Zalo

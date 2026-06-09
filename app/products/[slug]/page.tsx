@@ -18,6 +18,7 @@ import type {
   ProductDetailData,
 } from "@/src/features/products/types/products.types";
 import { toSafePriceNumber } from "@/src/features/products/utils/price";
+import { getStoreContactLinks } from "@/src/features/settings/services/settings.service";
 import {
   BreadcrumbSchema,
   FAQSchema,
@@ -116,7 +117,10 @@ export default async function ProductDetailPage({
   params,
 }: ProductDetailPageProps) {
   const { slug } = await params;
-  const product = await getSafeProduct(slug);
+  const [product, contactLinks] = await Promise.all([
+    getSafeProduct(slug),
+    getStoreContactLinks(),
+  ]);
 
   if (!product) {
     notFound();
@@ -209,13 +213,13 @@ export default async function ProductDetailPage({
               </div>
               <div className="mt-5 grid gap-3 sm:grid-cols-3">
                 <a
-                  href="tel:#"
+                  href={contactLinks.phoneHref}
                   className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-4 text-sm font-bold text-white hover:bg-[#ea580c]"
                 >
                   Gọi ngay
                 </a>
                 <a
-                  href="#"
+                  href={contactLinks.zaloHref}
                   className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-4 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
                 >
                   Nhắn Zalo
@@ -334,6 +338,7 @@ export default async function ProductDetailPage({
                 <ProductCard
                   key={relatedProduct.id}
                   product={relatedProduct}
+                  contactLinks={contactLinks}
                 />
               ))}
             </div>

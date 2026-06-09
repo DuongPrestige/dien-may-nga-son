@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import { Container } from "@/src/components/shared/container";
 import { Section } from "@/src/components/shared/section";
 import { LeadForm } from "@/src/features/leads/components/lead-form";
+import { getGoogleMapsEmbedUrl } from "@/src/features/settings/lib/google-map";
+import { getStoreContactLinks } from "@/src/features/settings/lib/store-contact";
 import {
   getContactSettings,
   type ContactSettings,
@@ -46,14 +48,6 @@ function getDisplayValue(value: string, fallback = "Đang cập nhật"): string
   return value.trim() || fallback;
 }
 
-function getPhoneHref(phone: string): string {
-  return phone.trim() ? `tel:${phone.trim()}` : "#";
-}
-
-function getUrlHref(url: string): string {
-  return url.trim() || "#";
-}
-
 function isHttpUrl(value: string): boolean {
   try {
     const url = new URL(value);
@@ -62,23 +56,6 @@ function isHttpUrl(value: string): boolean {
   } catch {
     return false;
   }
-}
-
-function getMapSrc(mapSetting: string): string {
-  const trimmed = mapSetting.trim();
-
-  if (!trimmed) {
-    return "";
-  }
-
-  if (isHttpUrl(trimmed)) {
-    return trimmed;
-  }
-
-  const srcMatch = trimmed.match(/src=["']([^"']+)["']/i);
-  const src = srcMatch?.[1] ?? "";
-
-  return isHttpUrl(src) ? src : "";
 }
 
 function getBaseUrl(): string {
@@ -94,6 +71,7 @@ function buildLocalBusinessSchema(storeInfo: StoreInfo, mapSrc: string) {
   return {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
+    "@id": `${baseUrl}/contact#local-business`,
     name: getDisplayValue(storeInfo.storeName, fallbackStoreInfo.storeName),
     url: `${baseUrl}/contact`,
     telephone: storeInfo.phone || undefined,
@@ -127,10 +105,9 @@ async function getSafeContactSettings(): Promise<ContactSettings> {
 
 export default async function ContactPage() {
   const { storeInfo, googleMapEmbed } = await getSafeContactSettings();
-  const mapSrc = getMapSrc(googleMapEmbed);
-  const phoneHref = getPhoneHref(storeInfo.phone);
-  const zaloHref = getUrlHref(storeInfo.zaloUrl);
-  const facebookHref = getUrlHref(storeInfo.facebookUrl);
+  const mapSrc = getGoogleMapsEmbedUrl(googleMapEmbed, storeInfo.address);
+  const { phoneHref, zaloHref, facebookHref } =
+    getStoreContactLinks(storeInfo);
   const localBusinessSchema = buildLocalBusinessSchema(storeInfo, mapSrc);
 
   const contactRows = [

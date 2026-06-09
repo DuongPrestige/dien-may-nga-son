@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import type { ServiceCardData } from "@/src/features/services/types/services.types";
+import type { StoreContactLinks } from "@/src/features/settings/lib/store-contact";
 import {
   getSafeImageSrc,
   shouldUseUnoptimizedImage,
@@ -9,9 +10,10 @@ import {
 
 type ServiceCardProps = {
   service: ServiceCardData;
+  contactLinks: StoreContactLinks;
 };
 
-export function ServiceCard({ service }: ServiceCardProps) {
+export function ServiceCard({ service, contactLinks }: ServiceCardProps) {
   const thumbnailSrc = getSafeImageSrc(service.thumbnailUrl);
 
   return (
@@ -49,13 +51,13 @@ export function ServiceCard({ service }: ServiceCardProps) {
         </p>
         <div className="mt-5 grid gap-2 sm:grid-cols-3">
           <a
-            href="tel:#"
+            href={contactLinks.phoneHref}
             className="inline-flex min-h-10 items-center justify-center rounded-md bg-[#F97316] px-3 text-sm font-bold text-white hover:bg-[#ea580c]"
           >
             Gọi
           </a>
           <a
-            href="#"
+            href={contactLinks.zaloHref}
             className="inline-flex min-h-10 items-center justify-center rounded-md border border-[#0EA5E9] px-3 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
           >
             Zalo

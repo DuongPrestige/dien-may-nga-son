@@ -17,6 +17,9 @@ import type {
   ServiceCardData,
   ServiceDetailData,
 } from "@/src/features/services/types/services.types";
+import { getStoreContactLinks } from "@/src/features/settings/lib/store-contact";
+import { getSafeStoreInfo } from "@/src/features/settings/services/settings.service";
+import type { StoreInfo } from "@/src/features/settings/types/settings.types";
 import { buildMetadata } from "@/src/lib/seo";
 import {
   getSafeImageSrc,
@@ -31,13 +34,63 @@ type ServiceDetailPageProps = {
 
 export const revalidate = 3600;
 
-const commonProblems = [
-  "Thiết bị hoạt động yếu, làm lạnh chậm hoặc giặt không sạch.",
-  "Máy phát tiếng ồn, rung mạnh hoặc có mùi bất thường.",
-  "Thiết bị chảy nước, báo lỗi hoặc ngắt liên tục khi sử dụng.",
-  "Tiền điện tăng cao do thiết bị vận hành kém hiệu quả.",
-  "Cần kiểm tra, vệ sinh hoặc lắp đặt đúng kỹ thuật trước mùa cao điểm.",
-] as const;
+const serviceProblemGroups = {
+  airConditioner: [
+    "Điều hòa làm lạnh chậm, không đạt nhiệt độ cài đặt hoặc gió thổi yếu.",
+    "Dàn lạnh chảy nước, đóng tuyết hoặc xuất hiện mùi ẩm mốc.",
+    "Máy phát tiếng ồn, rung mạnh hoặc liên tục bật tắt bất thường.",
+    "Điều hòa báo lỗi, không nhận điều khiển hoặc không khởi động.",
+    "Tiền điện tăng cao do dàn nóng, dàn lạnh vận hành kém hiệu quả.",
+  ],
+  washingMachine: [
+    "Máy giặt không cấp nước, không xả nước hoặc không vắt.",
+    "Lồng giặt rung mạnh, phát tiếng ồn hoặc máy bị dịch chuyển.",
+    "Quần áo giặt không sạch, còn mùi hoặc còn nhiều cặn bột giặt.",
+    "Máy báo lỗi, dừng giữa chu trình hoặc cửa không đóng được.",
+    "Đường nước rò rỉ hoặc máy giặt bị mất nguồn.",
+  ],
+  refrigerator: [
+    "Tủ lạnh kém lạnh, ngăn đá không đông hoặc nhiệt độ không ổn định.",
+    "Tủ phát tiếng ồn lớn, chạy liên tục hoặc đóng tuyết bất thường.",
+    "Nước rò rỉ trong tủ hoặc chảy ra sàn.",
+    "Tủ có mùi khó chịu dù thực phẩm đã được sắp xếp và vệ sinh.",
+    "Tủ mất nguồn, đèn không sáng hoặc bảng điều khiển báo lỗi.",
+  ],
+  general: [
+    "Thiết bị hoạt động yếu hoặc không đạt hiệu quả như bình thường.",
+    "Máy phát tiếng ồn, rung mạnh hoặc có mùi bất thường.",
+    "Thiết bị chảy nước, báo lỗi hoặc ngắt liên tục khi sử dụng.",
+    "Tiền điện tăng cao do thiết bị vận hành kém hiệu quả.",
+    "Cần kiểm tra, vệ sinh hoặc lắp đặt đúng kỹ thuật trước mùa cao điểm.",
+  ],
+} as const;
+
+function getCommonProblems(service: ServiceDetailData): readonly string[] {
+  const searchableText = `${service.name} ${service.slug}`.toLowerCase();
+
+  if (
+    searchableText.includes("máy giặt") ||
+    searchableText.includes("may-giat")
+  ) {
+    return serviceProblemGroups.washingMachine;
+  }
+
+  if (
+    searchableText.includes("tủ lạnh") ||
+    searchableText.includes("tu-lanh")
+  ) {
+    return serviceProblemGroups.refrigerator;
+  }
+
+  if (
+    searchableText.includes("điều hòa") ||
+    searchableText.includes("dieu-hoa")
+  ) {
+    return serviceProblemGroups.airConditioner;
+  }
+
+  return serviceProblemGroups.general;
+}
 
 const processSteps = [
   "Tiếp nhận thông tin thiết bị và khu vực cần hỗ trợ.",
@@ -135,6 +188,34 @@ function buildBreadcrumbSchema(service: ServiceDetailData) {
   };
 }
 
+function buildServiceSchema(
+  service: ServiceDetailData,
+  storeInfo: StoreInfo,
+) {
+  const baseUrl = getBaseUrl();
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: getLocalizedServiceName(service.name),
+    description:
+      service.shortDescription ??
+      service.seoDescription ??
+      getLocalizedServiceName(service.name),
+    url: `${baseUrl}/services/${service.slug}`,
+    image: getSafeImageSrc(service.thumbnailUrl) ?? undefined,
+    areaServed: ["Kinh Môn", "Quang Thành", "Hải Dương"],
+    provider: {
+      "@type": "LocalBusiness",
+      "@id": `${baseUrl}/contact#local-business`,
+      name: storeInfo.storeName || "Điện Máy Nga Sơn",
+      telephone: storeInfo.phone || undefined,
+      address: storeInfo.address || undefined,
+      url: `${baseUrl}/contact`,
+    },
+  };
+}
+
 function logServiceDetailTiming(
   label: string,
   startedAt: number,
@@ -218,7 +299,10 @@ export default async function ServiceDetailPage({
   params,
 }: ServiceDetailPageProps) {
   const { slug } = await params;
-  const service = await getSafeService(slug);
+  const [service, storeInfo] = await Promise.all([
+    getSafeService(slug),
+    getSafeStoreInfo(),
+  ]);
 
   if (!service) {
     notFound();
@@ -227,11 +311,18 @@ export default async function ServiceDetailPage({
   const localizedName = getLocalizedServiceName(service.name);
   const thumbnailSrc = getSafeImageSrc(service.thumbnailUrl);
   const relatedServices = await getSafeRelatedServices(service);
+  const contactLinks = getStoreContactLinks(storeInfo);
+  const commonProblems = getCommonProblems(service);
+  const serviceSchema = buildServiceSchema(service, storeInfo);
   const faqSchema = buildFaqSchema();
   const breadcrumbSchema = buildBreadcrumbSchema(service);
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -257,13 +348,13 @@ export default async function ServiceDetailPage({
               </p>
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
                 <a
-                  href="tel:#"
+                  href={contactLinks.phoneHref}
                   className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-4 text-sm font-bold text-white hover:bg-[#ea580c]"
                 >
                   Gọi ngay
                 </a>
                 <a
-                  href="#"
+                  href={contactLinks.zaloHref}
                   className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-4 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
                 >
                   Nhắn Zalo
@@ -360,7 +451,7 @@ export default async function ServiceDetailPage({
               </p>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                 <a
-                  href="tel:#"
+                  href={contactLinks.phoneHref}
                   className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
                 >
                   Gọi hỏi chi phí
@@ -452,13 +543,13 @@ export default async function ServiceDetailPage({
               </p>
               <div className="mt-4 grid gap-3">
                 <a
-                  href="tel:#"
+                  href={contactLinks.phoneHref}
                   className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
                 >
                   Gọi ngay
                 </a>
                 <a
-                  href="#"
+                  href={contactLinks.zaloHref}
                   className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] bg-white px-5 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
                 >
                   Nhắn Zalo
@@ -477,7 +568,11 @@ export default async function ServiceDetailPage({
             </h2>
             <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {relatedServices.map((relatedService) => (
-                <ServiceCard key={relatedService.id} service={relatedService} />
+                <ServiceCard
+                  key={relatedService.id}
+                  service={relatedService}
+                  contactLinks={contactLinks}
+                />
               ))}
             </div>
           </Container>
@@ -496,7 +591,7 @@ export default async function ServiceDetailPage({
             </p>
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <a
-                href="tel:#"
+                href={contactLinks.phoneHref}
                 className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
               >
                 Gọi ngay

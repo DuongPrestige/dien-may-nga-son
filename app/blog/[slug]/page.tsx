@@ -23,6 +23,7 @@ import type {
   BlogPostDetailData,
 } from "@/src/features/blog/types/blog.types";
 import { LeadForm } from "@/src/features/leads/components/lead-form";
+import { getStoreContactLinks } from "@/src/features/settings/services/settings.service";
 import { buildMetadata } from "@/src/lib/seo";
 import {
   getSafeImageSrc,
@@ -158,7 +159,10 @@ export async function generateMetadata({
 
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   const { slug } = await params;
-  const post = await getSafePost(slug);
+  const [post, contactLinks] = await Promise.all([
+    getSafePost(slug),
+    getStoreContactLinks(),
+  ]);
 
   if (!post) {
     notFound();
@@ -204,7 +208,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               ) : null}
               <div className="flex flex-col gap-3 sm:flex-row">
                 <a
-                  href="tel:#"
+                  href={contactLinks.phoneHref}
                   className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
                 >
                   Gọi tư vấn
@@ -283,7 +287,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               </p>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                 <a
-                  href="tel:#"
+                  href={contactLinks.phoneHref}
                   className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
                 >
                   Gọi ngay
