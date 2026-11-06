@@ -189,7 +189,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbSchema) }}
       />
 
-      <Section className="bg-[#F8FAFC] py-8 sm:py-12">
+      <Section padding="none" className="bg-[#F8FAFC] py-8 sm:py-12">
         <Container>
           <article className="mx-auto max-w-4xl">
             <div className="space-y-4">

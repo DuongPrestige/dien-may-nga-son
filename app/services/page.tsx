@@ -41,7 +41,7 @@ export default async function ServicesPage() {
 
   return (
     <>
-      <Section className="bg-[#F8FAFC] py-10 sm:py-14">
+      <Section padding="none" className="bg-[#F8FAFC] py-10 sm:py-14">
         <Container>
           <div className="max-w-3xl space-y-4">
             <p className="text-sm font-bold uppercase text-[#0284C7]">

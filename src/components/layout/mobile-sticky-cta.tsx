@@ -1,55 +1,74 @@
-import { ANALYTICS_EVENTS } from "@/src/features/analytics/lib/analytics-events";
-import { getStoreInfo } from "@/src/features/settings/services/settings.service";
-import type { StoreInfo } from "@/src/features/settings/types/settings.types";
+import {
+  FileText,
+  MessageCircle,
+  MessagesSquare,
+  Phone,
+  type LucideIcon,
+} from "lucide-react";
 
-const fallbackStoreInfo: StoreInfo = {
-  storeName: "Điện Máy Nga Sơn",
-  phone: "",
-  zaloUrl: "",
-  facebookUrl: "",
-  address: "",
-  workingHours: "",
+import { ANALYTICS_EVENTS } from "@/src/features/analytics/lib/analytics-events";
+import { getStoreContactLinks } from "@/src/features/settings/services/settings.service";
+
+type CtaItem = {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+  isPrimary: boolean;
+  analyticsEvent?: string;
 };
 
-async function getSafeStoreInfo(): Promise<StoreInfo> {
-  try {
-    return await getStoreInfo();
-  } catch {
-    return fallbackStoreInfo;
-  }
-}
-
-function getPhoneHref(phone: string): string {
-  return phone ? `tel:${phone}` : "#";
-}
-
 export async function MobileStickyCTA() {
-  const storeInfo = await getSafeStoreInfo();
-  const mobileCtaItems = [
-    { href: getPhoneHref(storeInfo.phone), label: "Call", event: undefined },
-    { href: storeInfo.zaloUrl || "#", label: "Zalo", event: undefined },
+  const contactLinks = await getStoreContactLinks();
+  const items: CtaItem[] = [
     {
-      href: storeInfo.facebookUrl || "#",
-      label: "Facebook",
-      event: undefined,
+      href: contactLinks.phoneHref,
+      label: "Gọi ngay",
+      icon: Phone,
+      isPrimary: true,
     },
-    { href: "/contact", label: "Quote", event: ANALYTICS_EVENTS.quoteClick },
-  ] as const;
+    {
+      href: contactLinks.zaloHref,
+      label: "Zalo",
+      icon: MessageCircle,
+      isPrimary: false,
+    },
+    {
+      href: contactLinks.facebookHref,
+      label: "Messenger",
+      icon: MessagesSquare,
+      isPrimary: false,
+    },
+    {
+      href: "/contact#bao-gia",
+      label: "Báo giá",
+      icon: FileText,
+      isPrimary: false,
+      analyticsEvent: ANALYTICS_EVENTS.quoteClick,
+    },
+  ];
 
   return (
     <nav
       aria-label="Liên hệ nhanh"
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-[#E5E7EB] bg-white shadow-[0_-8px_24px_rgba(17,24,39,0.08)] md:hidden"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-[#E5E7EB] bg-white pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_rgba(17,24,39,0.08)] md:hidden"
     >
       <div className="grid h-16 grid-cols-4">
-        {mobileCtaItems.map((item) => (
+        {items.map(({ href, label, icon: Icon, isPrimary, analyticsEvent }) => (
           <a
-            key={item.label}
-            href={item.href}
-            data-analytics-event={item.event}
-            className="flex items-center justify-center border-r border-[#E5E7EB] px-1 text-center text-xs font-semibold text-[#111827] last:border-r-0 hover:bg-[#F8FAFC]"
+            key={label}
+            href={href}
+            data-analytics-event={analyticsEvent}
+            className={`flex flex-col items-center justify-center gap-1 px-1 text-center text-xs font-bold transition-colors ${
+              isPrimary
+                ? "bg-[#F97316] text-white hover:bg-[#ea580c]"
+                : "border-l border-[#E5E7EB] text-[#111827] hover:bg-[#F8FAFC]"
+            }`}
           >
-            {item.label}
+            <Icon
+              aria-hidden="true"
+              className={`h-5 w-5 ${isPrimary ? "" : "text-[#0284C7]"}`}
+            />
+            {label}
           </a>
         ))}
       </div>

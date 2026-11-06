@@ -169,7 +169,7 @@ export default async function ProductDetailPage({
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbSchema) }}
       />
 
-      <Section className="bg-[#F8FAFC] py-8 sm:py-12">
+      <Section padding="none" className="bg-[#F8FAFC] py-8 sm:py-12">
         <Container>
           <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
             <div className="space-y-3">
@@ -334,12 +334,13 @@ export default async function ProductDetailPage({
             <h2 className="text-2xl font-bold text-[#111827]">
               Sản phẩm liên quan
             </h2>
-            <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
               {relatedProducts.map((relatedProduct) => (
                 <ProductCard
                   key={relatedProduct.id}
                   product={relatedProduct}
                   contactLinks={contactLinks}
+                  headingLevel="h3"
                 />
               ))}
             </div>

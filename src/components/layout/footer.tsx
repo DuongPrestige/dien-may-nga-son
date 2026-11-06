@@ -1,78 +1,121 @@
+import { Clock, MapPin, MessageCircle, Phone } from "lucide-react";
 import Link from "next/link";
 
+import { MAIN_NAVIGATION_ITEMS } from "@/src/components/layout/navigation";
 import { Container } from "@/src/components/shared/container";
-import { getStoreInfo } from "@/src/features/settings/services/settings.service";
-import type { StoreInfo } from "@/src/features/settings/types/settings.types";
-
-const footerLinks = [
-  { href: "/products", label: "Sản phẩm" },
-  { href: "/services", label: "Dịch vụ" },
-  { href: "/blog", label: "Bài viết" },
-  { href: "/contact", label: "Liên hệ" },
-] as const;
-
-const fallbackStoreInfo: StoreInfo = {
-  storeName: "Điện Máy Nga Sơn",
-  phone: "",
-  zaloUrl: "",
-  facebookUrl: "",
-  address: "",
-  workingHours: "",
-};
-
-async function getSafeStoreInfo(): Promise<StoreInfo> {
-  try {
-    return await getStoreInfo();
-  } catch {
-    return fallbackStoreInfo;
-  }
-}
-
-function getPhoneHref(phone: string): string {
-  return phone ? `tel:${phone}` : "#";
-}
+import {
+  DEFAULT_STORE_NAME,
+  formatPhoneDisplay,
+} from "@/src/features/settings/lib/store-contact";
+import {
+  getSafeStoreInfo,
+  getStoreContactLinks,
+} from "@/src/features/settings/services/settings.service";
+import { SERVICE_AREAS } from "@/src/lib/service-areas";
 
 export async function Footer() {
-  const storeInfo = await getSafeStoreInfo();
-  const storeName = storeInfo.storeName || fallbackStoreInfo.storeName;
-  const phoneHref = getPhoneHref(storeInfo.phone);
-  const zaloHref = storeInfo.zaloUrl || "#";
-  const facebookHref = storeInfo.facebookUrl || "#";
+  const [storeInfo, contactLinks] = await Promise.all([
+    getSafeStoreInfo(),
+    getStoreContactLinks(),
+  ]);
+  const storeName = storeInfo.storeName || DEFAULT_STORE_NAME;
+  const phoneDisplay = formatPhoneDisplay(storeInfo.phone);
 
   return (
-    <footer className="border-t border-[#E5E7EB] bg-[#F8FAFC] pb-20 md:pb-0">
-      <Container className="grid gap-8 py-10 md:grid-cols-[1.3fr_1fr]">
-        <div className="space-y-3">
-          <p className="text-lg font-bold text-[#111827]">{storeName}</p>
-          <div className="max-w-xl space-y-1 text-sm leading-6 text-[#6B7280]">
-            {storeInfo.address ? <p>{storeInfo.address}</p> : null}
-            {storeInfo.workingHours ? <p>{storeInfo.workingHours}</p> : null}
-            <div className="flex flex-wrap gap-x-4 gap-y-1">
-              <a href={phoneHref} className="hover:text-[#0284C7]">
-                Điện thoại
+    <footer className="border-t border-[#E5E7EB] bg-[#F8FAFC] pb-24 md:pb-0">
+      <Container className="grid gap-8 py-10 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div className="space-y-4">
+          <div>
+            <p className="text-lg font-bold text-[#111827]">{storeName}</p>
+            <p className="mt-1 text-sm text-[#6B7280]">
+              Điều hòa, điện máy và dịch vụ điện lạnh tại Kinh Môn, Hải Dương.
+            </p>
+          </div>
+          <ul className="space-y-2 text-sm text-[#374151]">
+            {phoneDisplay ? (
+              <li>
+                <a
+                  href={contactLinks.phoneHref}
+                  className="inline-flex items-center gap-2 font-bold text-[#111827] hover:text-[#0284C7]"
+                >
+                  <Phone aria-hidden="true" className="h-4 w-4 text-[#F97316]" />
+                  {phoneDisplay}
+                </a>
+              </li>
+            ) : null}
+            <li>
+              <a
+                href={contactLinks.zaloHref}
+                className="inline-flex items-center gap-2 hover:text-[#0284C7]"
+              >
+                <MessageCircle
+                  aria-hidden="true"
+                  className="h-4 w-4 text-[#0284C7]"
+                />
+                Nhắn Zalo
               </a>
-              <a href={zaloHref} className="hover:text-[#0284C7]">
-                Zalo
-              </a>
-              <a href={facebookHref} className="hover:text-[#0284C7]">
+              <span className="mx-2 text-[#CBD5E1]">·</span>
+              <a
+                href={contactLinks.facebookHref}
+                className="hover:text-[#0284C7]"
+              >
                 Facebook
               </a>
-            </div>
-          </div>
+            </li>
+            {storeInfo.address ? (
+              <li className="flex items-start gap-2">
+                <MapPin
+                  aria-hidden="true"
+                  className="mt-0.5 h-4 w-4 shrink-0 text-[#0284C7]"
+                />
+                {storeInfo.address}
+              </li>
+            ) : null}
+            {storeInfo.workingHours ? (
+              <li className="flex items-center gap-2">
+                <Clock aria-hidden="true" className="h-4 w-4 text-[#0284C7]" />
+                {storeInfo.workingHours}
+              </li>
+            ) : null}
+          </ul>
         </div>
 
-        <nav aria-label="Liên kết chân trang" className="grid grid-cols-2 gap-3">
-          {footerLinks.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-sm font-medium text-[#111827] transition-colors hover:text-[#0284C7]"
-            >
-              {item.label}
-            </Link>
-          ))}
+        <nav aria-label="Liên kết chân trang">
+          <p className="text-sm font-bold text-[#111827]">Danh mục</p>
+          <ul className="mt-3 space-y-1">
+            {MAIN_NAVIGATION_ITEMS.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className="inline-flex min-h-9 items-center text-sm text-[#374151] transition-colors hover:text-[#0284C7]"
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </nav>
+
+        <div>
+          <p className="text-sm font-bold text-[#111827]">Khu vực phục vụ</p>
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {SERVICE_AREAS.map((area) => (
+              <li
+                key={area}
+                className="rounded-md border border-[#E5E7EB] bg-white px-3 py-1.5 text-sm text-[#374151]"
+              >
+                {area}
+              </li>
+            ))}
+          </ul>
+        </div>
       </Container>
+      <div className="border-t border-[#E5E7EB]">
+        <Container className="py-4 text-xs text-[#6B7280]">
+          © {new Date().getFullYear()} {storeName}. Điện máy và điện lạnh
+          Kinh Môn, Hải Dương.
+        </Container>
+      </div>
     </footer>
   );
 }

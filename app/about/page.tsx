@@ -175,7 +175,7 @@ export default async function AboutPage() {
         }}
       />
 
-      <Section className="bg-[#F8FAFC] py-10 sm:py-14">
+      <Section padding="none" className="bg-[#F8FAFC] py-10 sm:py-14">
         <Container>
           <div className="grid gap-8 lg:grid-cols-[1fr_0.82fr] lg:items-center">
             <div className="space-y-5">

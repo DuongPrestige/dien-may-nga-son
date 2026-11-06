@@ -40,7 +40,7 @@ export default async function NotFound() {
   const contactLinks = await getStoreContactLinks();
 
   return (
-    <Section className="bg-[#F8FAFC] py-12 sm:py-16 lg:py-20">
+    <Section padding="none" className="bg-[#F8FAFC] py-12 sm:py-16 lg:py-20">
       <Container className="max-w-4xl">
         <div className="space-y-5 text-center">
           <p className="text-sm font-bold uppercase tracking-wide text-[#0284C7]">

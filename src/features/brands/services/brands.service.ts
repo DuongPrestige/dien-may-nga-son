@@ -1,4 +1,6 @@
 import { Prisma, type Prisma as PrismaTypes } from "@prisma/client";
+import { unstable_cache } from "next/cache";
+import { cache } from "react";
 
 import { prisma } from "@/src/lib/prisma";
 import type {
@@ -7,6 +9,7 @@ import type {
   AdminBrandListResult,
 } from "@/src/features/brands/types/brands.types";
 import type { BrandFormSchema } from "@/src/features/brands/validators/brand.validator";
+import { PRODUCTS_CACHE_TAG } from "@/src/features/products/services/products.service";
 
 function buildAdminBrandWhere(
   filters: AdminBrandFilters,
@@ -120,3 +123,31 @@ export async function deleteBrand(id: string): Promise<boolean> {
     throw error;
   }
 }
+
+export type PublicBrand = {
+  name: string;
+  slug: string;
+  logoUrl: string | null;
+};
+
+const PUBLIC_BRANDS_REVALIDATE_SECONDS = 3600;
+
+const getCachedPublicBrands = unstable_cache(
+  async (): Promise<PublicBrand[]> => {
+    return prisma.brand.findMany({
+      where: {
+        products: { some: { status: "ACTIVE" } },
+      },
+      orderBy: { name: "asc" },
+      select: { name: true, slug: true, logoUrl: true },
+    });
+  },
+  ["public-brands"],
+  {
+    revalidate: PUBLIC_BRANDS_REVALIDATE_SECONDS,
+    tags: [PRODUCTS_CACHE_TAG],
+  },
+);
+
+/** Brands that currently have at least one active product. */
+export const getPublicBrands = cache(getCachedPublicBrands);

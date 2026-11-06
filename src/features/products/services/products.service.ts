@@ -15,6 +15,10 @@ import type {
 } from "@/src/features/products/types/products.types";
 import type { ProductFormSchema } from "@/src/features/products/validators/product.validator";
 import { syncSlugRedirect } from "@/src/features/redirects/services/redirects.service";
+import {
+  CAPACITY_SPEC_NAME,
+  CARD_SPEC_NAMES,
+} from "@/src/features/products/lib/product-highlights";
 
 export const PRODUCTS_CACHE_TAG = "products";
 const PRODUCTS_CACHE_REVALIDATE_SECONDS = 300;
@@ -56,10 +60,12 @@ const productCardSelect = {
     },
   },
   specs: {
+    where: {
+      specName: { in: [...CARD_SPEC_NAMES] },
+    },
     orderBy: {
       sortOrder: "asc",
     },
-    take: 3,
     select: {
       specName: true,
       specValue: true,
@@ -67,8 +73,41 @@ const productCardSelect = {
   },
 } satisfies Prisma.ProductSelect;
 
-function buildProductWhere(filters: ProductFilters): Prisma.ProductWhereInput {
+function buildCapacityWhere(
+  capacity: number | undefined,
+): Prisma.ProductWhereInput | undefined {
+  if (!capacity) {
+    return undefined;
+  }
+
+  const compact = String(capacity);
+  const grouped = capacity.toLocaleString("de-DE");
+
   return {
+    OR: [
+      { name: { contains: `${compact}BTU`, mode: "insensitive" } },
+      { name: { contains: `${compact} BTU`, mode: "insensitive" } },
+      { name: { contains: `${grouped} BTU`, mode: "insensitive" } },
+      {
+        specs: {
+          some: {
+            specName: CAPACITY_SPEC_NAME,
+            OR: [
+              { specValue: { startsWith: compact } },
+              { specValue: { startsWith: grouped } },
+            ],
+          },
+        },
+      },
+    ],
+  };
+}
+
+function buildProductWhere(filters: ProductFilters): Prisma.ProductWhereInput {
+  const capacityWhere = buildCapacityWhere(filters.capacity);
+
+  return {
+    ...(capacityWhere ? { AND: [capacityWhere] } : {}),
     status: ProductStatus.ACTIVE,
     category: filters.category
       ? {
@@ -194,6 +233,15 @@ async function fetchProductBySlug(
     },
     select: {
       ...productCardSelect,
+      specs: {
+        orderBy: {
+          sortOrder: "asc",
+        },
+        select: {
+          specName: true,
+          specValue: true,
+        },
+      },
       description: true,
       seoTitle: true,
       seoDescription: true,

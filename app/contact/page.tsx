@@ -147,10 +147,10 @@ export default async function ContactPage() {
         }}
       />
 
-      <Section className="bg-[#F8FAFC] py-10 sm:py-14">
+      <Section padding="none" className="bg-[#F8FAFC] py-10 sm:py-14">
         <Container>
           <div className="grid gap-8 lg:grid-cols-[1fr_0.82fr] lg:items-center">
-            <div className="space-y-5">
+            <div className="min-w-0 space-y-5">
               <p className="text-sm font-bold uppercase text-[#0284C7]">
                 Liên hệ cửa hàng
               </p>
@@ -190,7 +190,7 @@ export default async function ContactPage() {
               </div>
             </div>
 
-            <div className="rounded-lg border border-[#E5E7EB] bg-white p-5 shadow-[0_18px_50px_rgba(17,24,39,0.08)]">
+            <div className="min-w-0 rounded-lg border border-[#E5E7EB] bg-white p-5 shadow-[0_18px_50px_rgba(17,24,39,0.08)]">
               <h2 className="text-xl font-bold text-[#111827]">
                 Thông tin cửa hàng
               </h2>
@@ -203,7 +203,7 @@ export default async function ContactPage() {
                     <dt className="text-sm font-semibold text-[#6B7280]">
                       {row.label}
                     </dt>
-                    <dd className="text-base font-bold leading-7 text-[#111827]">
+                    <dd className="text-base font-bold leading-7 text-[#111827] [overflow-wrap:anywhere]">
                       {row.value}
                     </dd>
                   </div>

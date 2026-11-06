@@ -9,16 +9,25 @@ type ProductImageProps = {
   src: string | null | undefined;
   alt: string;
   priority?: boolean;
+  sizes?: string;
 };
 
-export function ProductImage({ src, alt, priority = false }: ProductImageProps) {
+const DEFAULT_SIZES =
+  "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw";
+
+export function ProductImage({
+  src,
+  alt,
+  priority = false,
+  sizes = DEFAULT_SIZES,
+}: ProductImageProps) {
   const safeSrc = getSafeImageSrc(src);
 
   if (!safeSrc) {
     return (
       <div
         role="img"
-        aria-label={`${alt} image unavailable`}
+        aria-label={alt ? `${alt} - chưa có hình ảnh` : "Chưa có hình ảnh"}
         className="flex aspect-[4/3] w-full items-center justify-center rounded-md bg-[#E0F2FE] px-4 text-center text-sm font-semibold text-[#0284C7]"
       >
         Hình ảnh đang cập nhật
@@ -34,7 +43,7 @@ export function ProductImage({ src, alt, priority = false }: ProductImageProps) 
         fill
         priority={priority}
         unoptimized={shouldUseUnoptimizedImage(safeSrc)}
-        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+        sizes={sizes}
         className="object-contain p-3"
       />
     </div>

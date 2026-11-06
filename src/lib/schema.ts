@@ -1,4 +1,5 @@
 import { SITE_NAME, SITE_URL, buildCanonicalUrl } from "@/src/lib/seo";
+import { SERVICE_AREAS } from "@/src/lib/service-areas";
 
 type SchemaValue =
   | string
@@ -69,7 +70,7 @@ export function LocalBusinessSchema({
   openingHours,
   hasMap,
   sameAs,
-  areaServed = ["Quang Thành", "Kinh Môn", "Hải Dương"],
+  areaServed = [...SERVICE_AREAS],
   makesOffer,
 }: LocalBusinessSchemaInput = {}): SchemaObject {
   return {

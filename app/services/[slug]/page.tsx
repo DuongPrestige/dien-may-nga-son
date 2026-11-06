@@ -333,7 +333,7 @@ export default async function ServiceDetailPage({
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbSchema) }}
       />
 
-      <Section className="bg-[#F8FAFC] py-8 sm:py-12">
+      <Section padding="none" className="bg-[#F8FAFC] py-8 sm:py-12">
         <Container>
           <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div>

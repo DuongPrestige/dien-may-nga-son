@@ -11,6 +11,7 @@ export type ProductSort = "latest" | "price_asc" | "price_desc";
 export type ProductFilters = {
   category?: string;
   brand?: string;
+  capacity?: number;
   minPrice?: number;
   maxPrice?: number;
   sort?: ProductSort;
