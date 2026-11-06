@@ -161,7 +161,7 @@ export function LeadForm({
 
       <button
         type="submit"
-        className="min-h-11 w-full rounded-md bg-[#C2410C] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#9A3412] disabled:cursor-not-allowed disabled:opacity-70"
+        className="min-h-11 w-full rounded-md bg-[#EA580C] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#C2410C] disabled:cursor-not-allowed disabled:opacity-70"
         disabled={isPending}
       >
         {isPending ? "Đang gửi..." : "Gửi yêu cầu tư vấn"}

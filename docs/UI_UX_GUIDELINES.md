@@ -104,9 +104,13 @@ Secondary:
 
 #2563EB
 
-CTA Orange (buttons with white text, price text — 5.2:1 on white):
+CTA Orange (button backgrounds with bold white text — 3.6:1, chosen for a brighter CTA; owner decision 2026-11-06):
 
-#C2410C (hover #9A3412)
+#EA580C (hover #C2410C)
+
+Orange Text (prices and orange text on white — 5.2:1):
+
+#C2410C
 
 CTA Orange Light (decorative only, never behind white text):
 
@@ -116,7 +120,7 @@ Discount badge:
 
 #DC2626
 
-Contrast rule (WCAG AA): text and white-on-color buttons need ≥ 4.5:1. Do not put text in #0EA5E9 / #F97316 / #0284C7.
+Contrast rule (WCAG AA): text needs ≥ 4.5:1; the orange CTA button is the one deliberate exception (bold label, 3.6:1). Do not put text in #0EA5E9 / #F97316 / #0284C7.
 
 Success:
 

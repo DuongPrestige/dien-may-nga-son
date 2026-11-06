@@ -194,7 +194,7 @@ export default async function GalleryPage({ searchParams }: GalleryPageProps) {
               </p>
               <a
                 href={contactLinks.phoneHref}
-                className="mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[#C2410C] px-5 text-sm font-bold text-white hover:bg-[#9A3412]"
+                className="mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[#EA580C] px-5 text-sm font-bold text-white hover:bg-[#C2410C]"
               >
                 <Phone aria-hidden="true" className="h-4 w-4" />
                 Gọi ngay

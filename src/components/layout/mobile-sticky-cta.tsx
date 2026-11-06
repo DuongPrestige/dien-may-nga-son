@@ -60,7 +60,7 @@ export async function MobileStickyCTA() {
             data-analytics-event={analyticsEvent}
             className={`flex flex-col items-center justify-center gap-1 px-1 text-center text-xs font-bold transition-colors ${
               isPrimary
-                ? "bg-[#C2410C] text-white hover:bg-[#9A3412]"
+                ? "bg-[#EA580C] text-white hover:bg-[#C2410C]"
                 : "border-l border-[#E5E7EB] text-[#111827] hover:bg-[#F8FAFC]"
             }`}
           >

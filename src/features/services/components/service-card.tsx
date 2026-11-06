@@ -52,7 +52,7 @@ export function ServiceCard({ service, contactLinks }: ServiceCardProps) {
         <div className="mt-5 grid gap-2 sm:grid-cols-3">
           <a
             href={contactLinks.phoneHref}
-            className="inline-flex min-h-10 items-center justify-center rounded-md bg-[#C2410C] px-3 text-sm font-bold text-white hover:bg-[#9A3412]"
+            className="inline-flex min-h-10 items-center justify-center rounded-md bg-[#EA580C] px-3 text-sm font-bold text-white hover:bg-[#C2410C]"
           >
             Gọi
           </a>

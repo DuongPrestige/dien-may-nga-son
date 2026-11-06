@@ -183,7 +183,7 @@ export default async function ServiceAreaPage({
             <div className="mt-6 grid grid-cols-2 gap-3 sm:flex">
               <a
                 href={contactLinks.phoneHref}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-[#C2410C] px-5 text-sm font-bold text-white transition-colors hover:bg-[#9A3412]"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-[#EA580C] px-5 text-sm font-bold text-white transition-colors hover:bg-[#C2410C]"
               >
                 <Phone aria-hidden="true" className="h-4 w-4" />
                 Gọi ngay
