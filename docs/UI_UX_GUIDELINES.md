@@ -104,9 +104,9 @@ Secondary:
 
 #2563EB
 
-CTA Orange (button backgrounds with bold white text — 3.6:1, chosen for a brighter CTA; owner decision 2026-11-06):
+CTA Orange (owner decision 2026-11-06: light, vivid orange to drive action):
 
-#EA580C (hover #C2410C)
+Use the `cta-orange` utility (app/globals.css): gradient #FB923C → #F97316, hover #F97316 → #EA580C, soft orange shadow, thin dark text shadow so the bold white label stays legible. Do not hand-roll orange button colors.
 
 Orange Text (prices and orange text on white — 5.2:1):
 
@@ -120,7 +120,7 @@ Discount badge:
 
 #DC2626
 
-Contrast rule (WCAG AA): text needs ≥ 4.5:1; the orange CTA button is the one deliberate exception (bold label, 3.6:1). Do not put text in #0EA5E9 / #F97316 / #0284C7.
+Contrast rule (WCAG AA): text needs ≥ 4.5:1; the light orange CTA button is the one deliberate exception (bold white label with text shadow). Do not put text in #0EA5E9 / #F97316 / #0284C7.
 
 Success:
 

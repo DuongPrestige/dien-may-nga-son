@@ -63,7 +63,7 @@ export default async function NotFound() {
             </Link>
             <a
               href={contactLinks.phoneHref}
-              className="inline-flex min-h-12 items-center justify-center rounded-md bg-[#EA580C] px-5 text-sm font-bold text-white transition-colors hover:bg-[#C2410C]"
+              className="inline-flex min-h-12 items-center justify-center rounded-md cta-orange px-5 text-sm font-bold text-white"
             >
               Gọi ngay
             </a>

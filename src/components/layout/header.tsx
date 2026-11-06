@@ -49,7 +49,7 @@ export async function Header() {
             />
           ) : null}
           <span className="flex min-w-0 flex-col">
-            <span className="truncate text-base font-bold leading-5 max-[374px]:text-[15px] sm:text-lg">
+            <span className="truncate text-base font-bold leading-5 max-[359px]:text-[15px] sm:text-lg">
               {storeName}
             </span>
             <span className="hidden text-xs font-medium text-[#6B7280] sm:block">
@@ -83,10 +83,10 @@ export async function Header() {
           </Link>
           <a
             href={contactLinks.phoneHref}
-            className="inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-md bg-[#EA580C] px-3 text-sm font-bold text-white transition-colors hover:bg-[#C2410C]"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-md cta-orange px-3 text-sm font-bold text-white"
           >
             <Phone aria-hidden="true" className="h-4 w-4" />
-            <span className="max-[374px]:sr-only lg:hidden">Gọi ngay</span>
+            <span className="max-[419px]:sr-only lg:hidden">Gọi ngay</span>
             <span className="hidden lg:inline">
               {phoneDisplay || "Gọi ngay"}
             </span>

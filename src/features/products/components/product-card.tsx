@@ -79,7 +79,7 @@ export function ProductCard({
         <div className="mt-3 flex gap-2">
           <a
             href={contactLinks.phoneHref}
-            className="inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-md bg-[#EA580C] px-2 text-sm font-bold text-white transition-colors hover:bg-[#C2410C]"
+            className="inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-md cta-orange px-2 text-sm font-bold text-white"
           >
             <Phone aria-hidden="true" className="h-4 w-4" />
             Gọi

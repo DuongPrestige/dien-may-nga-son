@@ -355,7 +355,7 @@ export default async function ServiceDetailPage({
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
                 <a
                   href={contactLinks.phoneHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#EA580C] px-4 text-sm font-bold text-white hover:bg-[#C2410C]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md cta-orange px-4 text-sm font-bold text-white"
                 >
                   Gọi ngay
                 </a>
@@ -486,13 +486,13 @@ export default async function ServiceDetailPage({
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                 <a
                   href={contactLinks.phoneHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#EA580C] px-5 text-sm font-bold text-white hover:bg-[#C2410C]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md cta-orange px-5 text-sm font-bold text-white"
                 >
                   Gọi hỏi chi phí
                 </a>
                 <a
                   href="#bao-gia"
-                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#EA580C] px-5 text-sm font-bold text-[#C2410C] hover:bg-white"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#F97316] px-5 text-sm font-bold text-[#C2410C] hover:bg-white"
                 >
                   Gửi tình trạng thiết bị
                 </a>
@@ -577,7 +577,7 @@ export default async function ServiceDetailPage({
               <div className="mt-4 grid gap-3">
                 <a
                   href={contactLinks.phoneHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#EA580C] px-5 text-sm font-bold text-white hover:bg-[#C2410C]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md cta-orange px-5 text-sm font-bold text-white"
                 >
                   Gọi ngay
                 </a>
@@ -625,7 +625,7 @@ export default async function ServiceDetailPage({
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <a
                 href={contactLinks.phoneHref}
-                className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#EA580C] px-5 text-sm font-bold text-white hover:bg-[#C2410C]"
+                className="inline-flex min-h-11 items-center justify-center rounded-md cta-orange px-5 text-sm font-bold text-white"
               >
                 Gọi ngay
               </a>

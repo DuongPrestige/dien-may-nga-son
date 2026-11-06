@@ -165,7 +165,7 @@ export default async function ContactPage() {
               <div className="grid gap-3 sm:grid-cols-2">
                 <a
                   href={phoneHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#EA580C] px-5 text-sm font-bold text-white hover:bg-[#C2410C]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md cta-orange px-5 text-sm font-bold text-white"
                 >
                   Gọi ngay
                 </a>

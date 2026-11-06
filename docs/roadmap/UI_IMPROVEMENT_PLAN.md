@@ -95,7 +95,7 @@ Kết quả kiểm tra:
 * Lighthouse mobile trang chủ (localhost): Accessibility 96, SEO 100. Best Practices 81 chỉ do chạy HTTP localhost.
 * LCP lab (Slow 4G + CPU 4x, localhost): trang chủ 3,1s, trang giới thiệu 2,5s. ~1,2s là CSS chặn render (chung toàn site). Cần đo lại trên Vercel sau deploy.
 
-Độ tương phản màu (đã xử lý 2026-11-06): nút cam `#F97316` → `#EA580C` (3,6:1, chủ cửa hàng chọn tông sáng hơn cho CTA; chữ giá cam dùng `#C2410C` 5,2:1), nút xanh `#0EA5E9` → `#0369A1` (5,9:1), chữ link `#0284C7` → `#0369A1`, badge giảm giá `#EF4444` → `#DC2626`. `#0EA5E9` chỉ còn dùng cho viền/trang trí.
+Độ tương phản màu (đã xử lý 2026-11-06): nút cam: chủ cửa hàng chọn cam nhạt, sáng (utility `cta-orange`, gradient `#FB923C` → `#F97316`, chữ trắng đậm có bóng mờ) — chấp nhận dưới chuẩn 4,5:1 để CTA nổi bật; chữ giá cam dùng `#C2410C` (5,2:1), nút xanh `#0EA5E9` → `#0369A1` (5,9:1), chữ link `#0284C7` → `#0369A1`, badge giảm giá `#EF4444` → `#DC2626`. `#0EA5E9` chỉ còn dùng cho viền/trang trí.
 
 ### 1.1 Header
 

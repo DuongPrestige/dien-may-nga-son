@@ -82,7 +82,7 @@ export default async function ProjectsPage({
             <div className="flex flex-col gap-3 sm:flex-row">
               <a
                 href={contactLinks.phoneHref}
-                className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#EA580C] px-5 text-sm font-bold text-white hover:bg-[#C2410C]"
+                className="inline-flex min-h-11 items-center justify-center rounded-md cta-orange px-5 text-sm font-bold text-white"
               >
                 Gọi tư vấn
               </a>

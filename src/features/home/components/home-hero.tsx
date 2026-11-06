@@ -51,7 +51,7 @@ export function HomeHero({ contactLinks }: HomeHeroProps) {
           <div className="grid gap-3 sm:flex">
             <a
               href={contactLinks.phoneHref}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-[#EA580C] px-6 text-base font-bold text-white shadow-[0_8px_20px_rgba(249,115,22,0.25)] transition-colors hover:bg-[#C2410C]"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md cta-orange px-6 text-base font-bold text-white"
             >
               <Phone aria-hidden="true" className="h-5 w-5" />
               Gọi ngay
