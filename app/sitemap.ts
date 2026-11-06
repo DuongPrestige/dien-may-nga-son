@@ -1,4 +1,4 @@
-import { ProductStatus } from "@prisma/client";
+import { ProductStatus, ProjectStatus } from "@prisma/client";
 import type { MetadataRoute } from "next";
 
 import { buildCanonicalUrl, getSiteUrl } from "@/src/lib/seo";
@@ -13,6 +13,7 @@ const staticRoutes = [
   { path: "/products", priority: 0.9 },
   { path: "/services", priority: 0.9 },
   { path: "/blog", priority: 0.7 },
+  { path: "/cong-trinh-thuc-te", priority: 0.8 },
 ] as const;
 
 function createEntry(
@@ -29,31 +30,23 @@ function createEntry(
 }
 
 async function getDynamicEntries(): Promise<SitemapEntry[]> {
-  const products = await prisma.product.findMany({
-    where: {
-      status: ProductStatus.ACTIVE,
-    },
-    select: {
-      slug: true,
-      updatedAt: true,
-    },
-  });
-  const services = await prisma.service.findMany({
-    select: {
-      slug: true,
-      updatedAt: true,
-    },
-  });
-  const posts = await prisma.post.findMany({
-    where: {
-      isPublished: true,
-    },
-    select: {
-      slug: true,
-      updatedAt: true,
-      publishedAt: true,
-    },
-  });
+  const [products, services, posts, projects] = await Promise.all([
+    prisma.product.findMany({
+      where: { status: ProductStatus.ACTIVE },
+      select: { slug: true, updatedAt: true },
+    }),
+    prisma.service.findMany({
+      select: { slug: true, updatedAt: true },
+    }),
+    prisma.post.findMany({
+      where: { isPublished: true },
+      select: { slug: true, updatedAt: true, publishedAt: true },
+    }),
+    prisma.project.findMany({
+      where: { status: ProjectStatus.PUBLISHED },
+      select: { slug: true, updatedAt: true },
+    }),
+  ]);
 
   return [
     ...products.map((product) =>
@@ -67,6 +60,13 @@ async function getDynamicEntries(): Promise<SitemapEntry[]> {
         `/blog/${post.slug}`,
         post.publishedAt ?? post.updatedAt,
         0.6,
+      ),
+    ),
+    ...projects.map((project) =>
+      createEntry(
+        `/cong-trinh-thuc-te/${project.slug}`,
+        project.updatedAt,
+        0.7,
       ),
     ),
   ];

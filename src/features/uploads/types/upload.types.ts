@@ -2,6 +2,7 @@ export const UPLOAD_FOLDERS = {
   products: "dien-may-nga-son/products",
   services: "dien-may-nga-son/services",
   blog: "dien-may-nga-son/blog",
+  projects: "dien-may-nga-son/projects",
   settings: "dien-may-nga-son/settings",
 } as const;
 

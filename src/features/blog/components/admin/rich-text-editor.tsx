@@ -4,7 +4,7 @@ import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 type RichTextEditorProps = {
   content: string;
@@ -73,6 +73,9 @@ export function RichTextEditor({
   disabled = false,
   onChange,
 }: RichTextEditorProps) {
+  const isReadyRef = useRef(false);
+  const isExternalSyncRef = useRef(false);
+
   const editor = useEditor({
     immediatelyRender: false,
     editable: !disabled,
@@ -109,6 +112,10 @@ export function RichTextEditor({
       },
     },
     onUpdate: ({ editor: currentEditor }) => {
+      if (!isReadyRef.current || isExternalSyncRef.current) {
+        return;
+      }
+
       onChange(currentEditor.getHTML());
     },
   });
@@ -127,9 +134,8 @@ export function RichTextEditor({
     // Manual HTML edits update the parent state while Tiptap may stay mounted.
     // Suppressing the update event prevents this external sync from feeding
     // back into onChange and creating an editor <-> React update loop.
-    editor.commands.setContent(content, {
-      emitUpdate: false,
-    });
+    isExternalSyncRef.current = true;
+    editor.commands.setContent(content, { emitUpdate: false });
 
     // Keep the previous cursor/selection when those positions still exist in
     // the replacement document, otherwise move them to the nearest valid spot.
@@ -141,7 +147,26 @@ export function RichTextEditor({
       from: nextFrom,
       to: nextTo,
     });
+    isExternalSyncRef.current = false;
   }, [content, editor]);
+
+  useEffect(() => {
+    if (!editor) {
+      return;
+    }
+
+    // Tiptap may emit a delayed empty initialization update after mounting.
+    // Accept user-driven updates only after external content synchronization
+    // has completed and the editor has reached the next browser frame.
+    const frame = window.requestAnimationFrame(() => {
+      isReadyRef.current = true;
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      isReadyRef.current = false;
+    };
+  }, [editor]);
 
   if (!editor) {
     return (

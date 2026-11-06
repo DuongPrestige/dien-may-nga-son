@@ -30,9 +30,26 @@ enum LeadSourceType {
   PRODUCT
   SERVICE
   BLOG
+  PROJECT
   CONTACT
   PROMOTION
   HOME
+}
+
+enum ProjectStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum ProjectType {
+  AIRCON_INSTALL
+  AIRCON_MAINTENANCE
+  AIRCON_REPAIR
+  WASHING_MACHINE_REPAIR
+  REFRIGERATOR_REPAIR
+  TV_INSTALL
+  DELIVERY
+  OTHER
 }
 
 model User {
@@ -180,6 +197,31 @@ model Post {
 
   @@index([slug], map: "idx_posts_slug")
   @@map("posts")
+}
+
+model Project {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title          String        @db.VarChar(255)
+  slug           String        @unique @db.VarChar(255)
+  excerpt        String?
+  content        String
+  status         ProjectStatus @default(DRAFT)
+  projectType    ProjectType   @map("project_type")
+  location       String        @db.VarChar(255)
+  customerArea   String?       @map("customer_area") @db.VarChar(255)
+  performedAt    DateTime      @map("performed_at")
+  thumbnailUrl   String?       @map("thumbnail_url")
+  facebookUrl    String?       @map("facebook_url")
+  seoTitle       String?       @map("seo_title") @db.VarChar(255)
+  seoDescription String?       @map("seo_description")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+
+  @@index([slug], map: "idx_projects_slug")
+  @@index([status], map: "idx_projects_status")
+  @@index([projectType], map: "idx_projects_project_type")
+  @@index([performedAt], map: "idx_projects_performed_at")
+  @@map("projects")
 }
 
 model Banner {

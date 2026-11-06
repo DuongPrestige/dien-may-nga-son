@@ -12,6 +12,7 @@ export const leadSourceTypeSchema = z.enum([
   LeadSourceType.PRODUCT,
   LeadSourceType.SERVICE,
   LeadSourceType.BLOG,
+  LeadSourceType.PROJECT,
   LeadSourceType.CONTACT,
   LeadSourceType.PROMOTION,
   LeadSourceType.HOME,

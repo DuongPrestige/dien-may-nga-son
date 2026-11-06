@@ -22,6 +22,9 @@ type BlogContentFieldProps = {
   defaultValue?: string;
   disabled?: boolean;
   error?: string;
+  label?: string;
+  helpText?: string;
+  manualAriaLabel?: string;
 };
 
 type EditorErrorBoundaryProps = {
@@ -53,12 +56,14 @@ class EditorErrorBoundary extends Component<
 type ManualContentEditorProps = {
   content: string;
   disabled?: boolean;
+  ariaLabel: string;
   onChange: (content: string) => void;
 };
 
 function ManualContentEditor({
   content,
   disabled,
+  ariaLabel,
   onChange,
 }: ManualContentEditorProps) {
   return (
@@ -66,7 +71,7 @@ function ManualContentEditor({
       value={content}
       rows={16}
       disabled={disabled}
-      aria-label="Blog post content HTML"
+      aria-label={ariaLabel}
       onChange={(event) => onChange(event.target.value)}
       className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 font-mono text-sm font-normal leading-6 outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
     />
@@ -77,6 +82,9 @@ export function BlogContentField({
   defaultValue = "",
   disabled = false,
   error,
+  label = "Content",
+  helpText = "Use H2 and H3 headings, readable paragraphs, descriptive image alt text, and internal links to relevant products, services, or contact pages.",
+  manualAriaLabel = "Blog post content HTML",
 }: BlogContentFieldProps) {
   const [content, setContent] = useState(defaultValue);
   const [isManualMode, setIsManualMode] = useState(false);
@@ -84,6 +92,7 @@ export function BlogContentField({
     <ManualContentEditor
       content={content}
       disabled={disabled}
+      ariaLabel={manualAriaLabel}
       onChange={setContent}
     />
   );
@@ -99,7 +108,7 @@ export function BlogContentField({
   return (
     <div className="space-y-2 lg:col-span-2">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <span className="text-sm font-semibold text-[#111827]">Content</span>
+        <span className="text-sm font-semibold text-[#111827]">{label}</span>
         <button
           type="button"
           disabled={disabled}
@@ -125,9 +134,7 @@ export function BlogContentField({
       )}
 
       <p className="text-xs leading-5 text-[#6B7280]">
-        Use H2 and H3 headings, readable paragraphs, descriptive image alt
-        text, and internal links to relevant products, services, or contact
-        pages.
+        {helpText}
       </p>
 
       {error ? (

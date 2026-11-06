@@ -14,6 +14,7 @@ export const uploadFolderSchema = z.enum([
   "products",
   "services",
   "blog",
+  "projects",
   "settings",
 ]);
 
