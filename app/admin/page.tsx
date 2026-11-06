@@ -59,7 +59,7 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-7">
       <div>
-        <p className="text-sm font-bold uppercase text-[#0284C7]">Dashboard</p>
+        <p className="text-sm font-bold uppercase text-[#0369A1]">Dashboard</p>
         <h2 className="mt-2 text-3xl font-bold text-[#111827]">
           Business overview
         </h2>
@@ -173,7 +173,7 @@ export default async function AdminDashboardPage() {
           </div>
           <Link
             href="/admin/leads"
-            className="whitespace-nowrap text-sm font-bold text-[#0284C7] hover:text-[#0369A1]"
+            className="whitespace-nowrap text-sm font-bold text-[#0369A1] hover:text-[#075985]"
           >
             View all
           </Link>
@@ -197,7 +197,7 @@ export default async function AdminDashboardPage() {
                     <td className="px-4 py-3">
                       <Link
                         href={`/admin/leads/${lead.id}`}
-                        className="font-bold text-[#0284C7] hover:text-[#0369A1]"
+                        className="font-bold text-[#0369A1] hover:text-[#075985]"
                       >
                         {lead.name}
                       </Link>

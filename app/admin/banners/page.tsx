@@ -80,7 +80,7 @@ export default async function AdminBannersPage({
         </div>
         <Link
           href="/admin/banners/new"
-          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7]"
+          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985]"
         >
           Add banner
         </Link>
@@ -199,7 +199,7 @@ export default async function AdminBannersPage({
             </p>
             <Link
               href="/admin/banners/new"
-              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7]"
+              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985]"
             >
               Add banner
             </Link>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { isAiSeoEnabled } from "@/src/features/ai-seo/lib/ai-seo-config";
 import { ServiceForm } from "@/src/features/services/components/admin/service-form";
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export default function NewServicePage() {
         </p>
       </div>
       <div className="rounded-lg border border-[#E5E7EB] bg-white p-4 sm:p-6">
-        <ServiceForm />
+        <ServiceForm isAiSeoEnabled={isAiSeoEnabled()} />
       </div>
     </div>
   );

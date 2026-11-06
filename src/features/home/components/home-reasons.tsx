@@ -51,7 +51,7 @@ export function HomeReasons() {
               key={title}
               className="rounded-xl border border-[#E5E7EB] bg-white p-3 sm:p-5"
             >
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#E0F2FE] text-[#0284C7]">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#E0F2FE] text-[#0369A1]">
                 <Icon aria-hidden="true" className="h-5 w-5" />
               </span>
               <h3 className="mt-3 text-base font-bold text-[#111827]">
@@ -66,14 +66,14 @@ export function HomeReasons() {
 
         <div className="mt-6 flex flex-col gap-3 rounded-xl border border-[#BAE6FD] bg-[#F0F9FF] p-4 sm:flex-row sm:items-center sm:p-5">
           <p className="flex items-center gap-2 text-sm font-bold text-[#0C4A6E]">
-            <MapPin aria-hidden="true" className="h-5 w-5 text-[#0284C7]" />
+            <MapPin aria-hidden="true" className="h-5 w-5 text-[#0369A1]" />
             Khu vực phục vụ:
           </p>
           <ul className="flex flex-wrap gap-2">
             {SERVICE_AREAS.map((area) => (
               <li
                 key={area}
-                className="rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-[#0284C7]"
+                className="rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-[#0369A1]"
               >
                 {area}
               </li>

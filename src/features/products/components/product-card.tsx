@@ -39,18 +39,18 @@ export function ProductCard({
           sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, 50vw"
         />
         {discountPercent ? (
-          <span className="absolute left-2 top-2 rounded-md bg-[#EF4444] px-1.5 py-0.5 text-xs font-bold text-white">
+          <span className="absolute left-2 top-2 rounded-md bg-[#DC2626] px-1.5 py-0.5 text-xs font-bold text-white">
             -{discountPercent}%
           </span>
         ) : null}
       </Link>
 
       <div className="flex flex-1 flex-col pt-3">
-        <p className="text-xs font-semibold text-[#0284C7]">
+        <p className="text-xs font-semibold text-[#0369A1]">
           {product.brand.name}
         </p>
         <Heading className="mt-1 line-clamp-2 text-sm font-bold leading-5 text-[#111827] sm:text-base sm:leading-6">
-          <Link href={detailHref} className="hover:text-[#0284C7]">
+          <Link href={detailHref} className="hover:text-[#075985]">
             {product.name}
           </Link>
         </Heading>
@@ -79,7 +79,7 @@ export function ProductCard({
         <div className="mt-3 flex gap-2">
           <a
             href={contactLinks.phoneHref}
-            className="inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-md bg-[#F97316] px-2 text-sm font-bold text-white transition-colors hover:bg-[#ea580c]"
+            className="inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-md bg-[#C2410C] px-2 text-sm font-bold text-white transition-colors hover:bg-[#9A3412]"
           >
             <Phone aria-hidden="true" className="h-4 w-4" />
             Gọi
@@ -87,7 +87,7 @@ export function ProductCard({
           <a
             href={contactLinks.zaloHref}
             aria-label={`Nhắn Zalo hỏi giá ${product.name}`}
-            className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-md border border-[#0EA5E9] px-2 text-sm font-bold text-[#0284C7] transition-colors hover:bg-[#F0F9FF] sm:flex-1"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-md border border-[#0EA5E9] px-2 text-sm font-bold text-[#0369A1] transition-colors hover:bg-[#F0F9FF] sm:flex-1"
           >
             <MessageCircle aria-hidden="true" className="h-4 w-4" />
             <span className="hidden sm:inline">Zalo</span>

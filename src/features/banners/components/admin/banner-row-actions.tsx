@@ -63,7 +63,7 @@ export function BannerRowActions({
       <div className="flex flex-wrap items-start gap-3">
         <Link
           href={`/admin/banners/${bannerId}/edit`}
-          className="text-sm font-bold text-[#0284C7] hover:text-[#0369A1]"
+          className="text-sm font-bold text-[#0369A1] hover:text-[#075985]"
         >
           Edit
         </Link>

@@ -36,12 +36,12 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
         )}
       </div>
       <div className="flex flex-1 flex-col p-4">
-        <div className="flex flex-wrap gap-2 text-xs font-semibold text-[#0284C7]">
+        <div className="flex flex-wrap gap-2 text-xs font-semibold text-[#0369A1]">
           {post.category ? <span>{post.category.name}</span> : null}
           <span>{formatBlogDate(post.publishedAt ?? post.createdAt)}</span>
         </div>
         <h2 className="mt-2 line-clamp-2 text-base font-bold leading-6 text-[#111827] sm:text-lg sm:leading-7">
-          <Link href={`/blog/${post.slug}`} className="hover:text-[#0284C7]">
+          <Link href={`/blog/${post.slug}`} className="hover:text-[#075985]">
             {post.title}
           </Link>
         </h2>
@@ -52,7 +52,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
         ) : null}
         <Link
           href={`/blog/${post.slug}`}
-          className="mt-auto inline-flex min-h-10 items-center pt-3 text-sm font-bold text-[#0284C7] hover:text-[#0369A1]"
+          className="mt-auto inline-flex min-h-10 items-center pt-3 text-sm font-bold text-[#0369A1] hover:text-[#075985]"
         >
           Đọc tiếp →
         </Link>

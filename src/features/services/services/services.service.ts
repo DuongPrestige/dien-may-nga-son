@@ -33,7 +33,12 @@ function logServicesTiming(
   );
 }
 
-const serviceCardSelect = {
+const priceItemSelect = {
+  select: { name: true, priceLabel: true, note: true },
+  orderBy: { sortOrder: "asc" },
+} satisfies Prisma.Service$priceItemsArgs;
+
+export const serviceCardSelect = {
   id: true,
   name: true,
   slug: true,
@@ -51,6 +56,7 @@ const serviceDetailSelect = {
   content: true,
   seoTitle: true,
   seoDescription: true,
+  priceItems: priceItemSelect,
 } satisfies Prisma.ServiceSelect;
 
 async function fetchServices(): Promise<ServiceCardData[]> {
@@ -327,8 +333,18 @@ export async function getAdminServiceById(
       status: true,
       seoTitle: true,
       seoDescription: true,
+      priceItems: priceItemSelect,
     },
   });
+}
+
+function toPriceItemsCreate(input: ServiceFormSchema) {
+  return input.priceTable.map((item, index) => ({
+    name: item.name,
+    priceLabel: item.priceLabel,
+    note: item.note ?? null,
+    sortOrder: index,
+  }));
 }
 
 function toServiceData(input: ServiceFormSchema) {
@@ -347,7 +363,10 @@ function toServiceData(input: ServiceFormSchema) {
 
 export async function createService(input: ServiceFormSchema) {
   return prisma.service.create({
-    data: toServiceData(input),
+    data: {
+      ...toServiceData(input),
+      priceItems: { create: toPriceItemsCreate(input) },
+    },
   });
 }
 
@@ -359,7 +378,13 @@ export async function updateService(id: string, input: ServiceFormSchema) {
     });
     const service = await tx.service.update({
       where: { id },
-      data: toServiceData(input),
+      data: {
+        ...toServiceData(input),
+        priceItems: {
+          deleteMany: {},
+          create: toPriceItemsCreate(input),
+        },
+      },
       select: { slug: true },
     });
 

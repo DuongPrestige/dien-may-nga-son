@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 
+import { AiSeoButton } from "@/src/features/ai-seo/components/ai-seo-button";
 import {
   createBlogPostAction,
   updateBlogPostAction,
@@ -18,6 +19,7 @@ import { usePreservedFormAction } from "@/src/hooks/use-preserved-form-action";
 type BlogPostFormProps = {
   post?: AdminBlogPostDetail;
   categories: BlogCategoryData[];
+  isAiSeoEnabled?: boolean;
 };
 
 const initialState: BlogPostActionState = {
@@ -29,6 +31,7 @@ const initialState: BlogPostActionState = {
 export function BlogPostForm({
   post,
   categories,
+  isAiSeoEnabled = false,
 }: BlogPostFormProps) {
   const action = post
     ? updateBlogPostAction.bind(null, post.id)
@@ -93,6 +96,9 @@ export function BlogPostForm({
           error={state.fieldErrors.content}
           disabled={isPending}
         />
+        {isAiSeoEnabled ? (
+          <AiSeoButton entityType="post" disabled={isPending} />
+        ) : null}
         <Field
           label="SEO title"
           name="seoTitle"
@@ -132,7 +138,7 @@ export function BlogPostForm({
       <div className="flex flex-col gap-3 sm:flex-row">
         <button
           type="submit"
-          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7] disabled:cursor-not-allowed disabled:opacity-70"
+          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985] disabled:cursor-not-allowed disabled:opacity-70"
           disabled={isPending || categories.length === 0}
         >
           {isPending
@@ -190,7 +196,7 @@ function Field({
         defaultValue={defaultValue}
         required={required}
         disabled={disabled}
-        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
       />
       {error ? (
         <p className="text-sm font-normal text-red-600">{error}</p>
@@ -231,7 +237,7 @@ function TextareaField({
         defaultValue={defaultValue}
         required={required}
         disabled={disabled}
-        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
       />
       {error ? (
         <p className="text-sm font-normal text-red-600">{error}</p>
@@ -261,7 +267,7 @@ function CategoryField({
         defaultValue={defaultValue}
         required
         disabled={disabled}
-        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
       >
         <option value="">Select category</option>
         {categories.map((category) => (

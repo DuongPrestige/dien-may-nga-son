@@ -11,8 +11,8 @@ type ProductPriceProps = {
 };
 
 const PRICE_CLASS_NAMES = {
-  default: "text-lg font-bold text-[#F97316]",
-  compact: "text-base font-bold text-[#F97316] sm:text-lg",
+  default: "text-lg font-bold text-[#C2410C]",
+  compact: "text-base font-bold text-[#C2410C] sm:text-lg",
 } as const;
 
 const ORIGINAL_PRICE_CLASS_NAMES = {

@@ -30,7 +30,7 @@ export function SectionHeading({
       {action ? (
         <Link
           href={action.href}
-          className="inline-flex min-h-10 shrink-0 items-center gap-1 text-sm font-bold text-[#0284C7] hover:text-[#0369A1]"
+          className="inline-flex min-h-10 shrink-0 items-center gap-1 text-sm font-bold text-[#0369A1] hover:text-[#075985]"
         >
           {action.label}
           <ArrowRight aria-hidden="true" className="h-4 w-4" />

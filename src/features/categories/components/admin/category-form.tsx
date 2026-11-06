@@ -57,7 +57,7 @@ export function CategoryForm({ category }: CategoryFormProps) {
             rows={5}
             defaultValue={category?.description ?? ""}
             disabled={isPending}
-            className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+            className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
           />
           {state.fieldErrors.description ? (
             <p className="text-sm font-normal text-red-600">
@@ -77,7 +77,7 @@ export function CategoryForm({ category }: CategoryFormProps) {
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7] disabled:cursor-not-allowed disabled:opacity-70"
+          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985] disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isPending
             ? "Đang lưu..."
@@ -121,7 +121,7 @@ function Field({
         defaultValue={defaultValue}
         required={required}
         disabled={disabled}
-        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
       />
       {error ? (
         <p className="text-sm font-normal text-red-600">{error}</p>

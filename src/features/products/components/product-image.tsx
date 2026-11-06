@@ -28,7 +28,7 @@ export function ProductImage({
       <div
         role="img"
         aria-label={alt ? `${alt} - chưa có hình ảnh` : "Chưa có hình ảnh"}
-        className="flex aspect-[4/3] w-full items-center justify-center rounded-md bg-[#E0F2FE] px-4 text-center text-sm font-semibold text-[#0284C7]"
+        className="flex aspect-[4/3] w-full items-center justify-center rounded-md bg-[#E0F2FE] px-4 text-center text-sm font-semibold text-[#0369A1]"
       >
         Hình ảnh đang cập nhật
       </div>

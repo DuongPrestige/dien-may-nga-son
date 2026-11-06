@@ -60,13 +60,13 @@ export async function MobileStickyCTA() {
             data-analytics-event={analyticsEvent}
             className={`flex flex-col items-center justify-center gap-1 px-1 text-center text-xs font-bold transition-colors ${
               isPrimary
-                ? "bg-[#F97316] text-white hover:bg-[#ea580c]"
+                ? "bg-[#C2410C] text-white hover:bg-[#9A3412]"
                 : "border-l border-[#E5E7EB] text-[#111827] hover:bg-[#F8FAFC]"
             }`}
           >
             <Icon
               aria-hidden="true"
-              className={`h-5 w-5 ${isPrimary ? "" : "text-[#0284C7]"}`}
+              className={`h-5 w-5 ${isPrimary ? "" : "text-[#0369A1]"}`}
             />
             {label}
           </a>

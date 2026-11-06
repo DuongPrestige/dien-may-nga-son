@@ -57,7 +57,7 @@ export function HomeCategories() {
                 href={`/products?category=${slug}#danh-sach`}
                 className="flex h-full flex-col gap-3 rounded-xl border border-[#E5E7EB] bg-white p-4 transition-[border-color,box-shadow] duration-200 hover:border-[#7DD3FC] hover:shadow-[0_12px_32px_rgba(14,165,233,0.10)] sm:flex-row sm:items-center sm:p-5"
               >
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#E0F2FE] text-[#0284C7]">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#E0F2FE] text-[#0369A1]">
                   <Icon aria-hidden="true" className="h-6 w-6" />
                 </span>
                 <span>

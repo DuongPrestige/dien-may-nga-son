@@ -1,4 +1,13 @@
-import type { ProductStatus, Service } from "@prisma/client";
+import type {
+  ProductStatus,
+  Service,
+  ServicePriceItem,
+} from "@prisma/client";
+
+export type ServicePriceItemData = Pick<
+  ServicePriceItem,
+  "name" | "priceLabel" | "note"
+>;
 
 export type ServiceCardData = Pick<
   Service,
@@ -20,7 +29,9 @@ export type ServiceDetailData = Pick<
   | "content"
   | "seoTitle"
   | "seoDescription"
->;
+> & {
+  priceItems: ServicePriceItemData[];
+};
 
 export type AdminServiceFilters = {
   search?: string;
@@ -54,6 +65,7 @@ export type AdminServiceDetail = Pick<
   | "seoDescription"
 > & {
   status: ProductStatus;
+  priceItems: ServicePriceItemData[];
 };
 
 export type AdminServiceListResult = {
@@ -76,5 +88,6 @@ export type ServiceActionState = {
     status?: string;
     seoTitle?: string;
     seoDescription?: string;
+    priceTable?: string;
   };
 };

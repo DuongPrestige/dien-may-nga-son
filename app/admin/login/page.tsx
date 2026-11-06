@@ -24,7 +24,7 @@ export default async function AdminLoginPage() {
     <div className="min-h-[calc(100vh-12rem)] bg-[#F8FAFC] px-4 py-10 sm:py-16">
       <div className="mx-auto w-full max-w-md rounded-lg border border-[#E5E7EB] bg-white p-6 shadow-[0_18px_50px_rgba(17,24,39,0.08)]">
         <div className="mb-6">
-          <p className="text-sm font-bold uppercase text-[#0284C7]">
+          <p className="text-sm font-bold uppercase text-[#0369A1]">
             Admin
           </p>
           <h1 className="mt-2 text-2xl font-bold text-[#111827]">

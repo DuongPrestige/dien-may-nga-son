@@ -8,6 +8,8 @@ const adminMenuItems = [
   { label: "Services", href: "/admin/services" },
   { label: "Công trình", href: "/admin/projects" },
   { label: "Banners", href: "/admin/banners" },
+  { label: "Đánh giá", href: "/admin/testimonials" },
+  { label: "Khu vực", href: "/admin/service-areas" },
   { label: "Blog", href: "/admin/blog" },
   { label: "Redirects", href: "/admin/redirects" },
   { label: "Leads", href: "/admin/leads" },
@@ -28,7 +30,7 @@ export function AdminSidebar({ canManageUsers }: AdminSidebarProps) {
   return (
     <aside className="border-b border-[#E5E7EB] bg-white lg:min-h-[calc(100vh-9rem)] lg:w-64 lg:border-b-0 lg:border-r">
       <div className="p-4 lg:p-6">
-        <p className="text-xs font-bold uppercase text-[#0284C7]">
+        <p className="text-xs font-bold uppercase text-[#0369A1]">
           Quản trị
         </p>
         <h2 className="mt-1 text-lg font-bold text-[#111827]">
@@ -43,7 +45,7 @@ export function AdminSidebar({ canManageUsers }: AdminSidebarProps) {
           <Link
             key={item.href}
             href={item.href}
-            className="whitespace-nowrap rounded-md px-3 py-2 text-sm font-semibold text-[#374151] hover:bg-[#F0F9FF] hover:text-[#0284C7]"
+            className="whitespace-nowrap rounded-md px-3 py-2 text-sm font-semibold text-[#374151] hover:bg-[#F0F9FF] hover:text-[#075985]"
           >
             {item.label}
           </Link>

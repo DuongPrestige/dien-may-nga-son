@@ -12,13 +12,17 @@ import type {
   AdminProjectDetail,
   ProjectActionState,
 } from "@/src/features/projects/types/projects.types";
+import { AiSeoButton } from "@/src/features/ai-seo/components/ai-seo-button";
 import { BlogContentField } from "@/src/features/blog/components/admin/blog-content-field";
 import { ImageUploadField } from "@/src/features/uploads/components/image-upload-field";
 import { usePreservedFormAction } from "@/src/hooks/use-preserved-form-action";
 
 type ProjectFormProps = {
   project?: AdminProjectDetail;
+  isAiSeoEnabled?: boolean;
 };
+
+const AI_SEO_LOCATION_FIELD_NAMES = ["location", "customerArea"] as const;
 
 const initialState: ProjectActionState = {
   success: false,
@@ -34,7 +38,10 @@ function formatDateInput(date: Date | undefined) {
   return `${year}-${month}-${day}`;
 }
 
-export function ProjectForm({ project }: ProjectFormProps) {
+export function ProjectForm({
+  project,
+  isAiSeoEnabled = false,
+}: ProjectFormProps) {
   const action = project ? updateProjectAction : createProjectAction;
   const [state, formAction, isPending] = useActionState(action, initialState);
   const handleSubmit = usePreservedFormAction(formAction);
@@ -146,6 +153,15 @@ export function ProjectForm({ project }: ProjectFormProps) {
           manualAriaLabel="Nội dung HTML công trình"
           helpText="Mô tả quá trình thực hiện bằng đoạn văn, H2/H3 và hình ảnh có alt text rõ ràng."
         />
+        {isAiSeoEnabled ? (
+          <div className="lg:col-span-2">
+            <AiSeoButton
+              entityType="project"
+              locationFieldNames={AI_SEO_LOCATION_FIELD_NAMES}
+              disabled={isPending}
+            />
+          </div>
+        ) : null}
         <Field
           label="SEO title"
           name="seoTitle"
@@ -181,7 +197,7 @@ export function ProjectForm({ project }: ProjectFormProps) {
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7] disabled:cursor-not-allowed disabled:opacity-70"
+          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985] disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isPending
             ? "Đang lưu..."
@@ -233,7 +249,7 @@ function Field({
         required={required}
         disabled={disabled}
         aria-invalid={Boolean(error)}
-        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
       />
       {error ? (
         <p className="text-sm font-normal text-red-600">{error}</p>
@@ -268,7 +284,7 @@ function TextareaField({
         required={required}
         disabled={disabled}
         aria-invalid={Boolean(error)}
-        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
       />
       {error ? (
         <p className="text-sm font-normal text-red-600">{error}</p>
@@ -302,7 +318,7 @@ function SelectField({
         defaultValue={defaultValue}
         disabled={disabled}
         aria-invalid={Boolean(error)}
-        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>

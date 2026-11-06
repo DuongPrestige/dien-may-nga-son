@@ -71,7 +71,7 @@ export function LeadForm({
           type="text"
           autoComplete="name"
           required
-          className="w-full rounded-md border border-[#E5E7EB] px-3 py-2 text-sm outline-none transition-colors focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+          className="w-full rounded-md border border-[#E5E7EB] px-3 py-2 text-sm outline-none transition-colors focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
           aria-invalid={Boolean(state.fieldErrors.name)}
           aria-describedby={
             state.fieldErrors.name ? "lead-name-error" : undefined
@@ -100,7 +100,7 @@ export function LeadForm({
           autoComplete="tel"
           required
           inputMode="tel"
-          className="w-full rounded-md border border-[#E5E7EB] px-3 py-2 text-sm outline-none transition-colors focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+          className="w-full rounded-md border border-[#E5E7EB] px-3 py-2 text-sm outline-none transition-colors focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
           aria-invalid={Boolean(state.fieldErrors.phone)}
           aria-describedby={
             state.fieldErrors.phone ? "lead-phone-error" : undefined
@@ -126,7 +126,7 @@ export function LeadForm({
           id="lead-message"
           name="message"
           rows={4}
-          className="w-full resize-y rounded-md border border-[#E5E7EB] px-3 py-2 text-sm outline-none transition-colors focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+          className="w-full resize-y rounded-md border border-[#E5E7EB] px-3 py-2 text-sm outline-none transition-colors focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
           aria-invalid={Boolean(state.fieldErrors.message)}
           aria-describedby={
             state.fieldErrors.message ? "lead-message-error" : undefined
@@ -161,7 +161,7 @@ export function LeadForm({
 
       <button
         type="submit"
-        className="min-h-11 w-full rounded-md bg-[#F97316] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#ea580c] disabled:cursor-not-allowed disabled:opacity-70"
+        className="min-h-11 w-full rounded-md bg-[#C2410C] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#9A3412] disabled:cursor-not-allowed disabled:opacity-70"
         disabled={isPending}
       >
         {isPending ? "Đang gửi..." : "Gửi yêu cầu tư vấn"}

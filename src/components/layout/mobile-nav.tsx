@@ -73,7 +73,7 @@ export function MobileNav({ items }: MobileNavProps) {
                     aria-current={isActive ? "page" : undefined}
                     onClick={close}
                     className={`flex min-h-12 items-center border-b border-[#F1F5F9] text-base font-semibold last:border-b-0 ${
-                      isActive ? "text-[#0284C7]" : "text-[#111827]"
+                      isActive ? "text-[#0369A1]" : "text-[#111827]"
                     }`}
                   >
                     {item.label}

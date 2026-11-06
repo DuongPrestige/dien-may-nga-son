@@ -108,7 +108,7 @@ export function RichTextEditor({
       attributes: {
         "aria-label": "Blog post content",
         class:
-          "min-h-80 px-4 py-3 text-sm leading-7 text-[#374151] outline-none [&_a]:font-semibold [&_a]:text-[#0284C7] [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-[#BAE6FD] [&_blockquote]:pl-4 [&_h2]:mb-3 [&_h2]:mt-6 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[#111827] [&_h3]:mb-2 [&_h3]:mt-5 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-[#111827] [&_img]:my-5 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-md [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:my-3 [&_ul]:my-4 [&_ul]:list-disc [&_ul]:pl-6",
+          "min-h-80 px-4 py-3 text-sm leading-7 text-[#374151] outline-none [&_a]:font-semibold [&_a]:text-[#0369A1] [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-[#BAE6FD] [&_blockquote]:pl-4 [&_h2]:mb-3 [&_h2]:mt-6 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[#111827] [&_h3]:mb-2 [&_h3]:mt-5 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-[#111827] [&_img]:my-5 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-md [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:my-3 [&_ul]:my-4 [&_ul]:list-disc [&_ul]:pl-6",
       },
     },
     onUpdate: ({ editor: currentEditor }) => {
@@ -250,7 +250,7 @@ export function RichTextEditor({
   }
 
   return (
-    <div className="overflow-hidden rounded-md border border-[#E5E7EB] bg-white focus-within:border-[#0EA5E9] focus-within:ring-2 focus-within:ring-[#0EA5E9]/20">
+    <div className="overflow-hidden rounded-md border border-[#E5E7EB] bg-white focus-within:border-[#0EA5E9] focus-within:ring-2 focus-within:ring-[#0284C7]/20">
       <div
         role="toolbar"
         aria-label="Content formatting"

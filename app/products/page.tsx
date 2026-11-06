@@ -5,8 +5,12 @@ import { Container } from "@/src/components/shared/container";
 import { Section } from "@/src/components/shared/section";
 import { BannerStrip } from "@/src/features/banners/components/banner-strip";
 import { ProductCard } from "@/src/features/products/components/product-card";
+import { AcBuyingGuide } from "@/src/features/products/components/ac-buying-guide";
 import { ProductFilterPanel } from "@/src/features/products/components/product-filters";
-import { AIR_CONDITIONER_CAPACITIES } from "@/src/features/products/lib/product-highlights";
+import {
+  AIR_CONDITIONER_CAPACITIES,
+  AIR_CONDITIONER_CATEGORY_SLUG,
+} from "@/src/features/products/lib/product-highlights";
 import { getProducts } from "@/src/features/products/services/products.service";
 import type {
   ProductFilters,
@@ -92,6 +96,8 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     page: 1,
     limit: 12,
   };
+  const showAcGuide =
+    !filters.category || filters.category === AIR_CONDITIONER_CATEGORY_SLUG;
   const [{ products, categories, brands }, contactLinks] = await Promise.all([
     getSafeProducts(filters),
     getStoreContactLinks(),
@@ -146,19 +152,25 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
                 <a
                   href={contactLinks.phoneHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#C2410C] px-5 text-sm font-bold text-white hover:bg-[#9A3412]"
                 >
                   Gọi ngay
                 </a>
                 <Link
                   href="/#bao-gia"
-                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-5 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-5 text-sm font-bold text-[#0369A1] hover:bg-[#E0F2FE]"
                 >
                   Gửi yêu cầu báo giá
                 </Link>
               </div>
             </div>
           )}
+
+          {showAcGuide ? (
+            <div className="mt-8">
+              <AcBuyingGuide />
+            </div>
+          ) : null}
         </Container>
       </Section>
 
@@ -174,13 +186,13 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <a
                 href={contactLinks.phoneHref}
-                className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
+                className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#C2410C] px-5 text-sm font-bold text-white hover:bg-[#9A3412]"
               >
                 Gọi ngay
               </a>
               <a
                 href={contactLinks.zaloHref}
-                className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-5 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
+                className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-5 text-sm font-bold text-[#0369A1] hover:bg-[#E0F2FE]"
               >
                 Nhắn Zalo
               </a>

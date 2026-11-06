@@ -143,7 +143,7 @@ export default async function AdminLeadsPage({
                     <td className="px-4 py-3">
                       <Link
                         href={`/admin/leads/${lead.id}`}
-                        className="font-bold text-[#0284C7] hover:text-[#0369A1]"
+                        className="font-bold text-[#0369A1] hover:text-[#075985]"
                       >
                         {lead.name}
                       </Link>

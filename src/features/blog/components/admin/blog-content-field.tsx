@@ -73,7 +73,7 @@ function ManualContentEditor({
       disabled={disabled}
       aria-label={ariaLabel}
       onChange={(event) => onChange(event.target.value)}
-      className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 font-mono text-sm font-normal leading-6 outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+      className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 font-mono text-sm font-normal leading-6 outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
     />
   );
 }
@@ -113,7 +113,7 @@ export function BlogContentField({
           type="button"
           disabled={disabled}
           onClick={() => setIsManualMode((currentMode) => !currentMode)}
-          className="self-start text-xs font-bold text-[#0284C7] hover:text-[#0369A1] disabled:cursor-not-allowed disabled:opacity-60"
+          className="self-start text-xs font-bold text-[#0369A1] hover:text-[#075985] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isManualMode ? "Use rich text editor" : "Edit HTML manually"}
         </button>

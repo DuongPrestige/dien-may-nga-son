@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 import { authConfig } from "@/auth.config";
@@ -7,6 +7,18 @@ import {
   verifyAdminCredentials,
 } from "@/src/features/auth/services/auth.service";
 import { loginSchema } from "@/src/features/auth/validators/auth.validator";
+import {
+  consumeRateLimit,
+  getClientIp,
+  RATE_LIMIT_RULES,
+  resetRateLimit,
+} from "@/src/lib/rate-limit";
+
+export const LOGIN_RATE_LIMITED_CODE = "rate_limited";
+
+class LoginRateLimitedError extends CredentialsSignin {
+  code = LOGIN_RATE_LIMITED_CODE;
+}
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -61,17 +73,43 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials, request) {
         const parsedCredentials = loginSchema.safeParse(credentials);
 
         if (!parsedCredentials.success) {
           return null;
         }
 
-        return verifyAdminCredentials(
+        // Counted inside authorize so both the login form and direct POSTs
+        // to the NextAuth callback endpoint are throttled.
+        const [ipLimit, emailLimit] = await Promise.all([
+          consumeRateLimit(
+            RATE_LIMIT_RULES.loginByIp,
+            getClientIp(request.headers),
+          ),
+          consumeRateLimit(
+            RATE_LIMIT_RULES.loginByEmail,
+            parsedCredentials.data.email,
+          ),
+        ]);
+
+        if (!ipLimit.allowed || !emailLimit.allowed) {
+          throw new LoginRateLimitedError();
+        }
+
+        const user = await verifyAdminCredentials(
           parsedCredentials.data.email,
           parsedCredentials.data.password,
         );
+
+        if (user) {
+          await resetRateLimit(
+            RATE_LIMIT_RULES.loginByEmail,
+            parsedCredentials.data.email,
+          );
+        }
+
+        return user;
       },
     }),
   ],

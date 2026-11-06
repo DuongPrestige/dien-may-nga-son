@@ -21,7 +21,7 @@ export const BLOG_DETAIL_CACHE_TAG = "blog-detail";
 const BLOG_CACHE_REVALIDATE_SECONDS = 600;
 const HOMEPAGE_BLOG_CACHE_REVALIDATE_SECONDS = 3600;
 
-const blogPostCardSelect = {
+export const blogPostCardSelect = {
   id: true,
   title: true,
   slug: true,

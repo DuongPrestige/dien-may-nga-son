@@ -342,7 +342,7 @@ export default async function ServiceDetailPage({
         <Container>
           <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div>
-              <p className="text-sm font-bold uppercase text-[#0284C7]">
+              <p className="text-sm font-bold uppercase text-[#0369A1]">
                 Dịch vụ điện lạnh địa phương
               </p>
               <h1 className="mt-3 text-3xl font-bold leading-tight text-[#111827] sm:text-5xl">
@@ -355,13 +355,13 @@ export default async function ServiceDetailPage({
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
                 <a
                   href={contactLinks.phoneHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-4 text-sm font-bold text-white hover:bg-[#ea580c]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#C2410C] px-4 text-sm font-bold text-white hover:bg-[#9A3412]"
                 >
                   Gọi ngay
                 </a>
                 <a
                   href={contactLinks.zaloHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-4 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-4 text-sm font-bold text-[#0369A1] hover:bg-[#E0F2FE]"
                 >
                   Nhắn Zalo
                 </a>
@@ -414,7 +414,7 @@ export default async function ServiceDetailPage({
                   >
                     <AlertCircle
                       aria-hidden="true"
-                      className="h-4 w-4 shrink-0 text-[#F97316]"
+                      className="h-4 w-4 shrink-0 text-[#C2410C]"
                     />
                     {problem}
                   </li>
@@ -432,7 +432,7 @@ export default async function ServiceDetailPage({
                     key={step.title}
                     className="rounded-lg border border-[#E5E7EB] bg-white p-3"
                   >
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#0EA5E9] text-xs font-bold text-white">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#0369A1] text-xs font-bold text-white">
                       {index + 1}
                     </span>
                     <p className="mt-2 text-sm font-bold text-[#111827]">
@@ -448,21 +448,51 @@ export default async function ServiceDetailPage({
 
             <div className="rounded-lg border border-[#FED7AA] bg-[#FFF7ED] p-5 sm:p-6">
               <h2 className="text-xl font-bold text-[#111827] sm:text-2xl">
-                Chi phí
+                {service.priceItems.length > 0 ? "Bảng giá tham khảo" : "Chi phí"}
               </h2>
-              <p className="mt-2 text-sm leading-6 text-[#374151]">
-                Tùy tình trạng máy và linh kiện. Báo giá rõ trước khi làm.
-              </p>
+              {service.priceItems.length > 0 ? (
+                <>
+                  <ul className="mt-3 divide-y divide-[#FED7AA] overflow-hidden rounded-lg border border-[#FED7AA] bg-white">
+                    {service.priceItems.map((item) => (
+                      <li
+                        key={item.name}
+                        className="flex items-start justify-between gap-3 px-4 py-3"
+                      >
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-[#111827]">
+                            {item.name}
+                          </p>
+                          {item.note ? (
+                            <p className="mt-0.5 text-xs text-[#6B7280]">
+                              {item.note}
+                            </p>
+                          ) : null}
+                        </div>
+                        <p className="shrink-0 text-right text-sm font-bold text-[#C2410C]">
+                          {item.priceLabel}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-2 text-xs text-[#6B7280]">
+                    Giá tham khảo, báo chính xác sau khi kiểm tra máy.
+                  </p>
+                </>
+              ) : (
+                <p className="mt-2 text-sm leading-6 text-[#374151]">
+                  Tùy tình trạng máy và linh kiện. Báo giá rõ trước khi làm.
+                </p>
+              )}
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                 <a
                   href={contactLinks.phoneHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#C2410C] px-5 text-sm font-bold text-white hover:bg-[#9A3412]"
                 >
                   Gọi hỏi chi phí
                 </a>
                 <a
                   href="#bao-gia"
-                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#F97316] px-5 text-sm font-bold text-[#C2410C] hover:bg-white"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#C2410C] px-5 text-sm font-bold text-[#C2410C] hover:bg-white"
                 >
                   Gửi tình trạng thiết bị
                 </a>
@@ -481,7 +511,7 @@ export default async function ServiceDetailPage({
                   >
                     <Icon
                       aria-hidden="true"
-                      className="h-4 w-4 shrink-0 text-[#0284C7]"
+                      className="h-4 w-4 shrink-0 text-[#0369A1]"
                     />
                     {label}
                   </li>
@@ -547,13 +577,13 @@ export default async function ServiceDetailPage({
               <div className="mt-4 grid gap-3">
                 <a
                   href={contactLinks.phoneHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#C2410C] px-5 text-sm font-bold text-white hover:bg-[#9A3412]"
                 >
                   Gọi ngay
                 </a>
                 <a
                   href={contactLinks.zaloHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] bg-white px-5 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] bg-white px-5 text-sm font-bold text-[#0369A1] hover:bg-[#E0F2FE]"
                 >
                   Nhắn Zalo
                 </a>
@@ -595,7 +625,7 @@ export default async function ServiceDetailPage({
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <a
                 href={contactLinks.phoneHref}
-                className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
+                className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#C2410C] px-5 text-sm font-bold text-white hover:bg-[#9A3412]"
               >
                 Gọi ngay
               </a>

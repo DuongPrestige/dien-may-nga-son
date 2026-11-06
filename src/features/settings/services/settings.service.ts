@@ -217,3 +217,55 @@ export const getContactSettings = cache(
     return getCachedContactSettings();
   },
 );
+
+export type TrustStat = {
+  label: string;
+  value: string;
+};
+
+export type TrustContent = {
+  logoUrl: string;
+  stats: TrustStat[];
+  warrantyLines: string[];
+  acInstallLines: string[];
+};
+
+const EMPTY_TRUST_CONTENT: TrustContent = {
+  logoUrl: "",
+  stats: [],
+  warrantyLines: [],
+  acInstallLines: [],
+};
+
+function toLines(value: string): string[] {
+  return value
+    .split(/\r?\n/)
+    .map((line) => line.replace(/^[-•*]\s*/, "").trim())
+    .filter(Boolean);
+}
+
+function toTrustContent(settings: SettingsMap): TrustContent {
+  const stats: TrustStat[] = [
+    { label: "Năm kinh nghiệm", value: settings.stat_years },
+    { label: "Công trình đã làm", value: settings.stat_projects },
+    { label: "Phản hồi trong", value: settings.stat_response_time },
+  ].filter((stat) => stat.value.trim());
+
+  return {
+    logoUrl: settings.logo_url.trim(),
+    stats,
+    warrantyLines: toLines(settings.warranty_policy),
+    acInstallLines: toLines(settings.ac_install_policy),
+  };
+}
+
+/** Owner-provided trust content; every part is optional and hidden when empty. */
+export const getTrustContent = cache(async (): Promise<TrustContent> => {
+  try {
+    return toTrustContent(await getCachedSettings());
+  } catch (error) {
+    console.error("Failed to load trust content", error);
+
+    return EMPTY_TRUST_CONTENT;
+  }
+});

@@ -10,12 +10,21 @@ import type {
   AdminServiceDetail,
   ServiceActionState,
 } from "@/src/features/services/types/services.types";
+import { AiSeoButton } from "@/src/features/ai-seo/components/ai-seo-button";
+import { formatPriceTable } from "@/src/features/services/lib/price-table";
 import { ImageUploadField } from "@/src/features/uploads/components/image-upload-field";
 import { usePreservedFormAction } from "@/src/hooks/use-preserved-form-action";
 
 type ServiceFormProps = {
   service?: AdminServiceDetail;
+  isAiSeoEnabled?: boolean;
 };
+
+const AI_SEO_TARGET_FIELD_NAMES = {
+  seoTitle: "seoTitle",
+  seoDescription: "seoDescription",
+  excerpt: "shortDescription",
+} as const;
 
 const initialState: ServiceActionState = {
   success: false,
@@ -23,7 +32,10 @@ const initialState: ServiceActionState = {
   fieldErrors: {},
 };
 
-export function ServiceForm({ service }: ServiceFormProps) {
+export function ServiceForm({
+  service,
+  isAiSeoEnabled = false,
+}: ServiceFormProps) {
   const action = service
     ? updateServiceAction.bind(null, service.id)
     : createServiceAction;
@@ -93,6 +105,16 @@ export function ServiceForm({ service }: ServiceFormProps) {
           disabled={isPending}
           className="lg:col-span-2"
         />
+        {isAiSeoEnabled ? (
+          <div className="lg:col-span-2">
+            <AiSeoButton
+              entityType="service"
+              titleFieldName="name"
+              targetFieldNames={AI_SEO_TARGET_FIELD_NAMES}
+              disabled={isPending}
+            />
+          </div>
+        ) : null}
         <Field
           label="SEO title"
           name="seoTitle"
@@ -100,6 +122,16 @@ export function ServiceForm({ service }: ServiceFormProps) {
           error={state.fieldErrors.seoTitle}
           disabled={isPending}
           className="lg:col-span-2"
+        />
+        <TextareaField
+          label="Bảng giá tham khảo (mỗi dòng: Hạng mục | Giá | Ghi chú)"
+          name="priceTable"
+          rows={6}
+          defaultValue={formatPriceTable(service?.priceItems ?? [])}
+          error={state.fieldErrors.priceTable}
+          disabled={isPending}
+          className="lg:col-span-2"
+          placeholder={"Vệ sinh điều hòa treo tường | 150.000đ | Mỗi máy\nNạp gas R32 | Từ 250.000đ | Tùy lượng gas"}
         />
         <TextareaField
           label="SEO description"
@@ -132,7 +164,7 @@ export function ServiceForm({ service }: ServiceFormProps) {
       <div className="flex flex-col gap-3 sm:flex-row">
         <button
           type="submit"
-          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7] disabled:cursor-not-allowed disabled:opacity-70"
+          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985] disabled:cursor-not-allowed disabled:opacity-70"
           disabled={isPending}
         >
           {isPending
@@ -181,7 +213,7 @@ function Field({
         defaultValue={defaultValue}
         required={required}
         disabled={disabled}
-        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
       />
       {error ? (
         <p className="text-sm font-normal text-red-600">{error}</p>
@@ -198,6 +230,7 @@ type TextareaFieldProps = {
   error?: string;
   disabled?: boolean;
   className?: string;
+  placeholder?: string;
 };
 
 function TextareaField({
@@ -208,6 +241,7 @@ function TextareaField({
   error,
   disabled,
   className = "",
+  placeholder,
 }: TextareaFieldProps) {
   return (
     <label
@@ -219,7 +253,8 @@ function TextareaField({
         rows={rows}
         defaultValue={defaultValue}
         disabled={disabled}
-        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+        placeholder={placeholder}
+        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
       />
       {error ? (
         <p className="text-sm font-normal text-red-600">{error}</p>
@@ -250,7 +285,7 @@ function SelectField({
         name={name}
         defaultValue={defaultValue}
         disabled={disabled}
-        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
       >
         <option value="ACTIVE">Active</option>
         <option value="INACTIVE">Inactive</option>

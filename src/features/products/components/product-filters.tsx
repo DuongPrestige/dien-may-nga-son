@@ -58,8 +58,8 @@ function buildFilterHref(
 function chipClassName(isActive: boolean): string {
   return `inline-flex min-h-10 shrink-0 items-center whitespace-nowrap rounded-full border px-4 text-sm font-semibold transition-colors ${
     isActive
-      ? "border-[#0284C7] bg-[#0284C7] text-white"
-      : "border-[#E5E7EB] bg-white text-[#111827] hover:border-[#0EA5E9] hover:text-[#0284C7]"
+      ? "border-[#0369A1] bg-[#0369A1] text-white"
+      : "border-[#E5E7EB] bg-white text-[#111827] hover:border-[#0EA5E9] hover:text-[#075985]"
   }`;
 }
 
@@ -135,7 +135,7 @@ export function ProductFilterPanel({
                     aria-current={isActive ? "true" : undefined}
                     className={`flex min-h-14 flex-col justify-center rounded-lg border px-3 py-2 transition-colors ${
                       isActive
-                        ? "border-[#0284C7] bg-[#0284C7] text-white"
+                        ? "border-[#0369A1] bg-[#0369A1] text-white"
                         : "border-[#E5E7EB] bg-white text-[#111827] hover:border-[#0EA5E9]"
                     }`}
                   >
@@ -164,13 +164,13 @@ export function ProductFilterPanel({
         <summary className="flex min-h-12 cursor-pointer list-none items-center gap-2 px-4 text-sm font-bold text-[#111827] [&::-webkit-details-marker]:hidden">
           <SlidersHorizontal
             aria-hidden="true"
-            className="h-4 w-4 text-[#0284C7]"
+            className="h-4 w-4 text-[#0369A1]"
           />
           Lọc thêm: thương hiệu, giá, sắp xếp
-          <span className="ml-auto text-xs font-semibold text-[#0284C7] group-open:hidden">
+          <span className="ml-auto text-xs font-semibold text-[#0369A1] group-open:hidden">
             Mở
           </span>
-          <span className="ml-auto hidden text-xs font-semibold text-[#0284C7] group-open:inline">
+          <span className="ml-auto hidden text-xs font-semibold text-[#0369A1] group-open:inline">
             Đóng
           </span>
         </summary>
@@ -242,7 +242,7 @@ export function ProductFilterPanel({
           <div className="flex items-end">
             <button
               type="submit"
-              className="min-h-11 w-full rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7]"
+              className="min-h-11 w-full rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985]"
             >
               Áp dụng
             </button>

@@ -38,7 +38,7 @@ export function ServiceCard({ service, contactLinks }: ServiceCardProps) {
       </div>
       <div className="flex flex-1 flex-col p-4">
         {service.isFeatured ? (
-          <p className="text-xs font-semibold uppercase text-[#0284C7]">
+          <p className="text-xs font-semibold uppercase text-[#0369A1]">
             Dịch vụ nổi bật
           </p>
         ) : null}
@@ -52,13 +52,13 @@ export function ServiceCard({ service, contactLinks }: ServiceCardProps) {
         <div className="mt-5 grid gap-2 sm:grid-cols-3">
           <a
             href={contactLinks.phoneHref}
-            className="inline-flex min-h-10 items-center justify-center rounded-md bg-[#F97316] px-3 text-sm font-bold text-white hover:bg-[#ea580c]"
+            className="inline-flex min-h-10 items-center justify-center rounded-md bg-[#C2410C] px-3 text-sm font-bold text-white hover:bg-[#9A3412]"
           >
             Gọi
           </a>
           <a
             href={contactLinks.zaloHref}
-            className="inline-flex min-h-10 items-center justify-center rounded-md border border-[#0EA5E9] px-3 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
+            className="inline-flex min-h-10 items-center justify-center rounded-md border border-[#0EA5E9] px-3 text-sm font-bold text-[#0369A1] hover:bg-[#E0F2FE]"
           >
             Zalo
           </a>

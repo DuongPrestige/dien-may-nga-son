@@ -37,7 +37,7 @@ export function HomeBrands({ brands }: HomeBrandsProps) {
               <li key={brand.slug}>
                 <Link
                   href={`/products?brand=${brand.slug}#danh-sach`}
-                  className="flex h-12 min-w-24 items-center justify-center rounded-lg border border-[#E5E7EB] bg-white px-4 text-sm font-bold text-[#334155] transition-colors hover:border-[#0EA5E9] hover:text-[#0284C7]"
+                  className="flex h-12 min-w-24 items-center justify-center rounded-lg border border-[#E5E7EB] bg-white px-4 text-sm font-bold text-[#334155] transition-colors hover:border-[#0EA5E9] hover:text-[#075985]"
                 >
                   {logoSrc ? (
                     <Image

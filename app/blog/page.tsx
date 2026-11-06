@@ -91,7 +91,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       <Section padding="none" className="bg-[#F8FAFC] py-10 sm:py-14">
         <Container>
           <div className="max-w-3xl space-y-4">
-            <p className="text-sm font-bold uppercase text-[#0284C7]">
+            <p className="text-sm font-bold uppercase text-[#0369A1]">
               Kinh nghiệm điện máy gia đình
             </p>
             <h1 className="text-3xl font-bold leading-tight text-[#111827] sm:text-5xl">
@@ -128,7 +128,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               </label>
               <button
                 type="submit"
-                className="mt-4 min-h-11 rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7]"
+                className="mt-4 min-h-11 rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985]"
               >
                 Lọc bài viết
               </button>
@@ -153,13 +153,13 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
                 <a
                   href={contactLinks.phoneHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#C2410C] px-5 text-sm font-bold text-white hover:bg-[#9A3412]"
                 >
                   Gọi tư vấn
                 </a>
                 <Link
                   href="/#bao-gia"
-                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-5 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-5 text-sm font-bold text-[#0369A1] hover:bg-[#E0F2FE]"
                 >
                   Gửi yêu cầu báo giá
                 </Link>
@@ -181,13 +181,13 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <a
                 href={contactLinks.phoneHref}
-                className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
+                className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#C2410C] px-5 text-sm font-bold text-white hover:bg-[#9A3412]"
               >
                 Gọi ngay
               </a>
               <a
                 href={contactLinks.zaloHref}
-                className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-5 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
+                className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-5 text-sm font-bold text-[#0369A1] hover:bg-[#E0F2FE]"
               >
                 Nhắn Zalo
               </a>

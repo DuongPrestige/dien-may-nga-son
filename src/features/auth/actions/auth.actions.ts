@@ -1,9 +1,9 @@
 "use server";
 
-import { AuthError } from "next-auth";
+import { AuthError, CredentialsSignin } from "next-auth";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 
-import { signIn, signOut } from "@/auth";
+import { LOGIN_RATE_LIMITED_CODE, signIn, signOut } from "@/auth";
 import type { LoginActionState } from "@/src/features/auth/types/auth.types";
 import { loginSchema } from "@/src/features/auth/validators/auth.validator";
 
@@ -44,6 +44,17 @@ export async function loginAction(
   } catch (error) {
     if (isRedirectError(error)) {
       throw error;
+    }
+
+    if (
+      error instanceof CredentialsSignin &&
+      error.code === LOGIN_RATE_LIMITED_CODE
+    ) {
+      return {
+        success: false,
+        message: "Đăng nhập sai quá nhiều lần. Vui lòng thử lại sau 15 phút.",
+        fieldErrors: {},
+      };
     }
 
     if (error instanceof AuthError) {

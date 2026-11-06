@@ -193,7 +193,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
         <Container>
           <article className="mx-auto max-w-4xl">
             <div className="space-y-4">
-              <div className="flex flex-wrap gap-2 text-sm font-semibold text-[#0284C7]">
+              <div className="flex flex-wrap gap-2 text-sm font-semibold text-[#0369A1]">
                 {post.category ? <span>{post.category.name}</span> : null}
                 <time dateTime={postDate?.toISOString()}>
                   {formatBlogDate(postDate)}
@@ -210,13 +210,13 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               <div className="flex flex-col gap-3 sm:flex-row">
                 <a
                   href={contactLinks.phoneHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#C2410C] px-5 text-sm font-bold text-white hover:bg-[#9A3412]"
                 >
                   Gọi tư vấn
                 </a>
                 <Link
                   href="#tu-van"
-                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-5 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-5 text-sm font-bold text-[#0369A1] hover:bg-[#E0F2FE]"
                 >
                   Gửi câu hỏi
                 </Link>
@@ -263,7 +263,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                       key={item.id}
                       className={item.level === 3 ? "pl-4" : undefined}
                     >
-                      <a href={`#${item.id}`} className="hover:text-[#0284C7]">
+                      <a href={`#${item.id}`} className="hover:text-[#075985]">
                         {item.title}
                       </a>
                     </li>
@@ -273,7 +273,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             ) : null}
 
             <div
-              className="text-base leading-8 text-[#374151] [&_a]:font-semibold [&_a]:text-[#0284C7] [&_a]:underline [&_a]:underline-offset-2 [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-[#BAE6FD] [&_blockquote]:bg-[#F8FAFC] [&_blockquote]:py-3 [&_blockquote]:pl-5 [&_h2]:mb-4 [&_h2]:mt-8 [&_h2]:scroll-mt-24 [&_h2]:pt-2 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:leading-tight [&_h2]:text-[#111827] [&_h3]:mb-3 [&_h3]:mt-7 [&_h3]:scroll-mt-24 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:leading-tight [&_h3]:text-[#111827] [&_img]:my-7 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-lg [&_ol]:my-5 [&_ol]:list-decimal [&_ol]:space-y-2 [&_ol]:pl-6 [&_p]:my-5 [&_ul]:my-5 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-6"
+              className="text-base leading-8 text-[#374151] [&_a]:font-semibold [&_a]:text-[#0369A1] [&_a]:underline [&_a]:underline-offset-2 [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-[#BAE6FD] [&_blockquote]:bg-[#F8FAFC] [&_blockquote]:py-3 [&_blockquote]:pl-5 [&_h2]:mb-4 [&_h2]:mt-8 [&_h2]:scroll-mt-24 [&_h2]:pt-2 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:leading-tight [&_h2]:text-[#111827] [&_h3]:mb-3 [&_h3]:mt-7 [&_h3]:scroll-mt-24 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:leading-tight [&_h3]:text-[#111827] [&_img]:my-7 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-lg [&_ol]:my-5 [&_ol]:list-decimal [&_ol]:space-y-2 [&_ol]:pl-6 [&_p]:my-5 [&_ul]:my-5 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-6"
               dangerouslySetInnerHTML={{ __html: contentHtml }}
             />
 
@@ -289,13 +289,13 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                 <a
                   href={contactLinks.phoneHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#C2410C] px-5 text-sm font-bold text-white hover:bg-[#9A3412]"
                 >
                   Gọi ngay
                 </a>
                 <a
                   href="#tu-van"
-                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#F97316] px-5 text-sm font-bold text-[#C2410C] hover:bg-white"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#C2410C] px-5 text-sm font-bold text-[#C2410C] hover:bg-white"
                 >
                   Gửi yêu cầu tư vấn
                 </a>

@@ -151,7 +151,7 @@ export default async function ContactPage() {
         <Container>
           <div className="grid gap-8 lg:grid-cols-[1fr_0.82fr] lg:items-center">
             <div className="min-w-0 space-y-5">
-              <p className="text-sm font-bold uppercase text-[#0284C7]">
+              <p className="text-sm font-bold uppercase text-[#0369A1]">
                 Liên hệ cửa hàng
               </p>
               <h1 className="text-3xl font-bold leading-tight text-[#111827] sm:text-5xl">
@@ -165,13 +165,13 @@ export default async function ContactPage() {
               <div className="grid gap-3 sm:grid-cols-2">
                 <a
                   href={phoneHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#C2410C] px-5 text-sm font-bold text-white hover:bg-[#9A3412]"
                 >
                   Gọi ngay
                 </a>
                 <a
                   href={zaloHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] bg-white px-5 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] bg-white px-5 text-sm font-bold text-[#0369A1] hover:bg-[#E0F2FE]"
                 >
                   Nhắn Zalo
                 </a>

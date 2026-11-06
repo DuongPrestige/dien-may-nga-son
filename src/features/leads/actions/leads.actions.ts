@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
@@ -16,6 +17,12 @@ import {
   createLeadSchema,
   updateLeadStatusSchema,
 } from "@/src/features/leads/validators/lead.validator";
+import {
+  consumeRateLimit,
+  formatRetryAfter,
+  getClientIp,
+  RATE_LIMIT_RULES,
+} from "@/src/lib/rate-limit";
 
 const leadSuccessMessage =
   "Cảm ơn bạn. Điện Máy Nga Sơn sẽ liên hệ với bạn trong thời gian sớm nhất.";
@@ -67,6 +74,27 @@ export async function createLeadAction(
         },
         {},
       ),
+    };
+  }
+
+  const ipLimit = await consumeRateLimit(
+    RATE_LIMIT_RULES.leadByIp,
+    getClientIp(await headers()),
+  );
+  const phoneLimit = ipLimit.allowed
+    ? await consumeRateLimit(
+        RATE_LIMIT_RULES.leadByPhone,
+        parsedInput.data.phone,
+      )
+    : ipLimit;
+
+  if (!phoneLimit.allowed) {
+    return {
+      success: false,
+      message: `Bạn đã gửi nhiều yêu cầu. Vui lòng thử lại sau ${formatRetryAfter(
+        phoneLimit.retryAfterSeconds,
+      )} hoặc gọi trực tiếp cho cửa hàng.`,
+      fieldErrors: {},
     };
   }
 

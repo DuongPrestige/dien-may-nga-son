@@ -85,12 +85,20 @@ export default async function AdminProjectsPage({
             Quản lý các công trình đã lắp đặt, bảo dưỡng và sửa chữa.
           </p>
         </div>
-        <Link
-          href="/admin/projects/new"
-          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7]"
-        >
-          Thêm công trình
-        </Link>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Link
+            href="/admin/projects/import"
+            className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] bg-white px-5 text-sm font-bold text-[#0369A1] hover:bg-[#F0F9FF]"
+          >
+            Nhập từ Facebook
+          </Link>
+          <Link
+            href="/admin/projects/new"
+            className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985]"
+          >
+            Thêm công trình
+          </Link>
+        </div>
       </div>
 
       <form
@@ -178,7 +186,7 @@ export default async function AdminProjectsPage({
                       {formatDate(project.performedAt)}
                     </td>
                     <td className="px-4 py-3">
-                      <span className="rounded-md bg-[#F0F9FF] px-2 py-1 text-xs font-bold text-[#0284C7]">
+                      <span className="rounded-md bg-[#F0F9FF] px-2 py-1 text-xs font-bold text-[#0369A1]">
                         {project.status === ProjectStatus.PUBLISHED
                           ? "Đã xuất bản"
                           : "Bản nháp"}
@@ -188,7 +196,7 @@ export default async function AdminProjectsPage({
                       <div className="flex gap-3">
                         <Link
                           href={`/admin/projects/${project.id}/edit`}
-                          className="text-sm font-bold text-[#0284C7] hover:text-[#0369A1]"
+                          className="text-sm font-bold text-[#0369A1] hover:text-[#075985]"
                         >
                           Sửa
                         </Link>
@@ -213,7 +221,7 @@ export default async function AdminProjectsPage({
             </p>
             <Link
               href="/admin/projects/new"
-              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7]"
+              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985]"
             >
               Thêm công trình
             </Link>

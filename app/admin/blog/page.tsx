@@ -101,7 +101,7 @@ export default async function AdminBlogPage({
         </div>
         <Link
           href="/admin/blog/new"
-          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7]"
+          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985]"
         >
           Add post
         </Link>
@@ -204,7 +204,7 @@ export default async function AdminBlogPage({
                       <div className="flex gap-3">
                         <Link
                           href={`/admin/blog/${post.id}/edit`}
-                          className="text-sm font-bold text-[#0284C7] hover:text-[#0369A1]"
+                          className="text-sm font-bold text-[#0369A1] hover:text-[#075985]"
                         >
                           Edit
                         </Link>
@@ -229,7 +229,7 @@ export default async function AdminBlogPage({
             </p>
             <Link
               href="/admin/blog/new"
-              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7]"
+              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985]"
             >
               Add post
             </Link>

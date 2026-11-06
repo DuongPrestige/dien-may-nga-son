@@ -19,7 +19,12 @@ import type {
   ProductDetailData,
 } from "@/src/features/products/types/products.types";
 import { toSafePriceNumber } from "@/src/features/products/utils/price";
-import { getStoreContactLinks } from "@/src/features/settings/services/settings.service";
+import { AIR_CONDITIONER_CATEGORY_SLUG } from "@/src/features/products/lib/product-highlights";
+import { PolicyList } from "@/src/features/settings/components/policy-list";
+import {
+  getStoreContactLinks,
+  getTrustContent,
+} from "@/src/features/settings/services/settings.service";
 import {
   BreadcrumbSchema,
   FAQSchema,
@@ -125,9 +130,10 @@ export default async function ProductDetailPage({
   params,
 }: ProductDetailPageProps) {
   const { slug } = await params;
-  const [product, contactLinks] = await Promise.all([
+  const [product, contactLinks, trustContent] = await Promise.all([
     getSafeProduct(slug),
     getStoreContactLinks(),
+    getTrustContent(),
   ]);
 
   if (!product) {
@@ -141,6 +147,8 @@ export default async function ProductDetailPage({
     .map(getSafeImageSrc)
     .filter((image): image is string => image !== null);
   const relatedProducts = await getSafeRelatedProducts(product);
+  const isAirConditioner =
+    product.category.slug === AIR_CONDITIONER_CATEGORY_SLUG;
   const productSchemaPrice =
     toSafePriceNumber(product.salePrice) ??
     toSafePriceNumber(product.price) ??
@@ -199,7 +207,7 @@ export default async function ProductDetailPage({
             </div>
 
             <div className="rounded-lg border border-[#E5E7EB] bg-white p-5 sm:p-6">
-              <p className="text-sm font-semibold text-[#0284C7]">
+              <p className="text-sm font-semibold text-[#0369A1]">
                 {product.brand.name} · {product.category.name}
               </p>
               <h1 className="mt-3 text-3xl font-bold leading-tight text-[#111827] sm:text-4xl">
@@ -222,13 +230,13 @@ export default async function ProductDetailPage({
               <div className="mt-5 grid gap-3 sm:grid-cols-3">
                 <a
                   href={contactLinks.phoneHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-4 text-sm font-bold text-white hover:bg-[#ea580c]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#C2410C] px-4 text-sm font-bold text-white hover:bg-[#9A3412]"
                 >
                   Gọi ngay
                 </a>
                 <a
                   href={contactLinks.zaloHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-4 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] px-4 text-sm font-bold text-[#0369A1] hover:bg-[#E0F2FE]"
                 >
                   Nhắn Zalo
                 </a>
@@ -286,13 +294,25 @@ export default async function ProductDetailPage({
                   <li key={label} className="flex items-center gap-2">
                     <Icon
                       aria-hidden="true"
-                      className="h-4 w-4 shrink-0 text-[#0284C7]"
+                      className="h-4 w-4 shrink-0 text-[#0369A1]"
                     />
                     {label}
                   </li>
                 ))}
               </ul>
             </div>
+
+            {isAirConditioner ? (
+              <PolicyList
+                title="Gói lắp đặt điều hòa"
+                lines={trustContent.acInstallLines}
+              />
+            ) : null}
+
+            <PolicyList
+              title="Chính sách bảo hành"
+              lines={trustContent.warrantyLines}
+            />
 
             <div>
               <h2 className="text-xl font-bold text-[#111827] sm:text-2xl">

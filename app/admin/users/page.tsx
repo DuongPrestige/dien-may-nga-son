@@ -34,7 +34,7 @@ export default async function AdminUsersPage() {
         </div>
         <Link
           href="/admin/users/new"
-          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7]"
+          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985]"
         >
           Add user
         </Link>
@@ -59,7 +59,7 @@ export default async function AdminUsersPage() {
                     <div className="font-bold text-[#111827]">
                       {user.fullName ?? user.email}
                       {user.id === userId ? (
-                        <span className="ml-2 text-xs font-semibold text-[#0284C7]">
+                        <span className="ml-2 text-xs font-semibold text-[#0369A1]">
                           (Bạn)
                         </span>
                       ) : null}
@@ -86,7 +86,7 @@ export default async function AdminUsersPage() {
                   <td className="px-4 py-3">
                     <Link
                       href={`/admin/users/${user.id}/edit`}
-                      className="text-sm font-bold text-[#0284C7] hover:text-[#0369A1]"
+                      className="text-sm font-bold text-[#0369A1] hover:text-[#075985]"
                     >
                       Edit
                     </Link>

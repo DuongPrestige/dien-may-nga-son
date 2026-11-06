@@ -82,6 +82,12 @@ export type AdminProjectDetail = Pick<
   | "seoDescription"
 >;
 
+export type FacebookImportActionState = {
+  success: boolean;
+  message: string;
+  url?: string;
+};
+
 export type ProjectActionState = {
   success: boolean;
   message: string;

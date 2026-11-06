@@ -14,6 +14,8 @@ const staticRoutes = [
   { path: "/services", priority: 0.9 },
   { path: "/blog", priority: 0.7 },
   { path: "/cong-trinh-thuc-te", priority: 0.8 },
+  { path: "/hinh-anh-thuc-te", priority: 0.7 },
+  { path: "/khu-vuc", priority: 0.7 },
 ] as const;
 
 function createEntry(
@@ -30,7 +32,7 @@ function createEntry(
 }
 
 async function getDynamicEntries(): Promise<SitemapEntry[]> {
-  const [products, services, posts, projects] = await Promise.all([
+  const [products, services, posts, projects, serviceAreas] = await Promise.all([
     prisma.product.findMany({
       where: { status: ProductStatus.ACTIVE },
       select: { slug: true, updatedAt: true },
@@ -44,6 +46,10 @@ async function getDynamicEntries(): Promise<SitemapEntry[]> {
     }),
     prisma.project.findMany({
       where: { status: ProjectStatus.PUBLISHED },
+      select: { slug: true, updatedAt: true },
+    }),
+    prisma.serviceArea.findMany({
+      where: { isActive: true },
       select: { slug: true, updatedAt: true },
     }),
   ]);
@@ -68,6 +74,9 @@ async function getDynamicEntries(): Promise<SitemapEntry[]> {
         project.updatedAt,
         0.7,
       ),
+    ),
+    ...serviceAreas.map((area) =>
+      createEntry(`/khu-vuc/${area.slug}`, area.updatedAt, 0.8),
     ),
   ];
 }

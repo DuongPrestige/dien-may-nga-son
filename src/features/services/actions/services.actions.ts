@@ -43,6 +43,7 @@ function formDataToServiceInput(formData: FormData) {
     status: formData.get("status"),
     seoTitle: formData.get("seoTitle"),
     seoDescription: formData.get("seoDescription"),
+    priceTable: formData.get("priceTable"),
   };
 }
 
@@ -60,6 +61,7 @@ function getServiceFieldErrors(error: {
     status: fieldErrors.status?.[0],
     seoTitle: fieldErrors.seoTitle?.[0],
     seoDescription: fieldErrors.seoDescription?.[0],
+    priceTable: fieldErrors.priceTable?.[0],
   };
 }
 

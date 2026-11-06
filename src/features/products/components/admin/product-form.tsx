@@ -223,7 +223,7 @@ export function ProductForm({ product, categories, brands }: ProductFormProps) {
       <div className="flex flex-col gap-3 sm:flex-row">
         <button
           type="submit"
-          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7] disabled:cursor-not-allowed disabled:opacity-70"
+          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985] disabled:cursor-not-allowed disabled:opacity-70"
           disabled={isPending}
         >
           {isPending
@@ -279,7 +279,7 @@ function Field({
         defaultValue={defaultValue}
         required={required}
         disabled={disabled}
-        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
       />
       {error ? <p className="text-sm font-normal text-red-600">{error}</p> : null}
     </label>
@@ -315,7 +315,7 @@ function TextareaField({
         rows={rows}
         defaultValue={defaultValue}
         disabled={disabled}
-        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
       />
       {helpText ? (
         <p className="text-xs font-normal text-[#6B7280]">{helpText}</p>
@@ -349,7 +349,7 @@ function SelectField({
         name={name}
         defaultValue={defaultValue}
         disabled={disabled}
-        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
       >
         <option value="">Chọn</option>
         {options.map((option) => (

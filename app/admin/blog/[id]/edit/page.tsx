@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { isAiSeoEnabled } from "@/src/features/ai-seo/lib/ai-seo-config";
 import { BlogPostForm } from "@/src/features/blog/components/admin/blog-post-form";
 import {
   getAdminBlogCategories,
@@ -43,7 +44,11 @@ export default async function EditBlogPostPage({
         </p>
       </div>
       <div className="rounded-lg border border-[#E5E7EB] bg-white p-4 sm:p-6">
-        <BlogPostForm post={post} categories={categories} />
+        <BlogPostForm
+          post={post}
+          categories={categories}
+          isAiSeoEnabled={isAiSeoEnabled()}
+        />
       </div>
     </div>
   );

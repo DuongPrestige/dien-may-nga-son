@@ -164,6 +164,7 @@ model Service {
   createdAt        DateTime      @default(now()) @map("created_at")
   updatedAt        DateTime      @updatedAt @map("updated_at")
   leads            Lead[]
+  priceItems       ServicePriceItem[]
 
   @@index([slug], map: "idx_services_slug")
   @@index([status], map: "idx_services_status")
@@ -274,4 +275,57 @@ model SeoRedirect {
   createdAt       DateTime @default(now()) @map("created_at")
 
   @@map("seo_redirects")
+}
+
+model ServicePriceItem {
+  id         String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  serviceId  String  @map("service_id") @db.Uuid
+  name       String  @db.VarChar(255)
+  priceLabel String  @map("price_label") @db.VarChar(100)
+  note       String? @db.VarChar(255)
+  sortOrder  Int     @default(0) @map("sort_order")
+  service    Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@index([serviceId], map: "idx_service_price_items_service")
+  @@map("service_price_items")
+}
+
+model Testimonial {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  customerName String   @map("customer_name") @db.VarChar(255)
+  area         String?  @db.VarChar(255)
+  content      String
+  imageUrl     String?  @map("image_url")
+  isActive     Boolean  @default(true) @map("is_active")
+  sortOrder    Int      @default(0) @map("sort_order")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@index([isActive, sortOrder], map: "idx_testimonials_active_sort")
+  @@map("testimonials")
+}
+
+model ServiceArea {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String   @db.VarChar(255)
+  slug           String   @unique @db.VarChar(255)
+  description    String?
+  isActive       Boolean  @default(true) @map("is_active")
+  sortOrder      Int      @default(0) @map("sort_order")
+  seoTitle       String?  @map("seo_title") @db.VarChar(255)
+  seoDescription String?  @map("seo_description")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@index([isActive, sortOrder], map: "idx_service_areas_active_sort")
+  @@map("service_areas")
+}
+
+model RateLimit {
+  key     String   @id @db.VarChar(255)
+  count   Int
+  resetAt DateTime @map("reset_at")
+
+  @@index([resetAt], map: "idx_rate_limits_reset_at")
+  @@map("rate_limits")
 }

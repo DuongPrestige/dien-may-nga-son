@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 
 import { updateSettingsAction } from "@/src/features/settings/actions/settings.actions";
+import { ImageUploadField } from "@/src/features/uploads/components/image-upload-field";
 import type {
   SettingsActionState,
   SettingsMap,
@@ -64,6 +65,84 @@ export function SettingsForm({ settings }: SettingsFormProps) {
             rows={3}
             defaultValue={settings.working_hours}
             error={state.fieldErrors.working_hours}
+            disabled={isPending}
+          />
+        </div>
+      </SettingsSection>
+
+      <SettingsSection
+        title="Logo"
+        description="Shown in the header and footer. A wide PNG/WebP with a transparent background works best."
+      >
+        <div className="grid gap-4">
+          <Field
+            label="Logo URL"
+            name="logo_url"
+            defaultValue={settings.logo_url}
+            error={state.fieldErrors.logo_url}
+            disabled={isPending}
+          />
+          <ImageUploadField
+            targetName="logo_url"
+            folder="settings"
+            initialUrl={settings.logo_url}
+            disabled={isPending}
+            label="Upload logo"
+          />
+        </div>
+      </SettingsSection>
+
+      <SettingsSection
+        title="Trust stats"
+        description="Short real numbers shown on the home page (e.g. 10+, 1.500+, 30 phút). Leave all empty to hide the block."
+      >
+        <div className="grid gap-4 lg:grid-cols-3">
+          <Field
+            label="Years in business"
+            name="stat_years"
+            defaultValue={settings.stat_years}
+            error={state.fieldErrors.stat_years}
+            disabled={isPending}
+            placeholder="10+"
+          />
+          <Field
+            label="Completed jobs"
+            name="stat_projects"
+            defaultValue={settings.stat_projects}
+            error={state.fieldErrors.stat_projects}
+            disabled={isPending}
+            placeholder="1.500+"
+          />
+          <Field
+            label="Response time"
+            name="stat_response_time"
+            defaultValue={settings.stat_response_time}
+            error={state.fieldErrors.stat_response_time}
+            disabled={isPending}
+            placeholder="30 phút"
+          />
+        </div>
+      </SettingsSection>
+
+      <SettingsSection
+        title="Policies"
+        description="One item per line, up to 6 lines. Empty fields are hidden on the website."
+      >
+        <div className="grid gap-4 lg:grid-cols-2">
+          <TextareaField
+            label="Warranty policy (home page & product pages)"
+            name="warranty_policy"
+            rows={6}
+            defaultValue={settings.warranty_policy}
+            error={state.fieldErrors.warranty_policy}
+            disabled={isPending}
+          />
+          <TextareaField
+            label="Air conditioner installation package (AC product pages)"
+            name="ac_install_policy"
+            rows={6}
+            defaultValue={settings.ac_install_policy}
+            error={state.fieldErrors.ac_install_policy}
             disabled={isPending}
           />
         </div>
@@ -149,7 +228,7 @@ export function SettingsForm({ settings }: SettingsFormProps) {
       <button
         type="submit"
         disabled={isPending}
-        className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7] disabled:cursor-not-allowed disabled:opacity-70"
+        className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985] disabled:cursor-not-allowed disabled:opacity-70"
       >
         {isPending ? "Saving..." : "Save settings"}
       </button>
@@ -209,7 +288,7 @@ function Field({
         required={required}
         placeholder={placeholder}
         aria-invalid={Boolean(error)}
-        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
       />
       {error ? (
         <p className="text-sm font-normal text-[#B91C1C]">{error}</p>
@@ -247,7 +326,7 @@ function TextareaField({
         disabled={disabled}
         placeholder={placeholder}
         aria-invalid={Boolean(error)}
-        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0EA5E9]/20"
+        className="w-full rounded-md border border-[#E5E7EB] px-3 py-2.5 text-sm font-normal outline-none focus:border-[#0EA5E9] focus:ring-2 focus:ring-[#0284C7]/20"
       />
       {error ? (
         <p className="text-sm font-normal text-[#B91C1C]">{error}</p>

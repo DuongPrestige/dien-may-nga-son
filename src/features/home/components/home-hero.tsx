@@ -34,7 +34,7 @@ export function HomeHero({ contactLinks }: HomeHeroProps) {
     <section className="bg-gradient-to-b from-[#F0F9FF] to-[#F8FAFC] py-8 sm:py-14 lg:py-20">
       <Container className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
         <div className="space-y-5 sm:space-y-6">
-          <p className="inline-flex items-center gap-2 rounded-full border border-[#BAE6FD] bg-white px-3 py-1 text-xs font-semibold text-[#0284C7] sm:text-sm">
+          <p className="inline-flex items-center gap-2 rounded-full border border-[#BAE6FD] bg-white px-3 py-1 text-xs font-semibold text-[#0369A1] sm:text-sm">
             <Snowflake aria-hidden="true" className="h-4 w-4" />
             Điện máy & điện lạnh tại Kinh Môn
           </p>
@@ -51,7 +51,7 @@ export function HomeHero({ contactLinks }: HomeHeroProps) {
           <div className="grid gap-3 sm:flex">
             <a
               href={contactLinks.phoneHref}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-[#F97316] px-6 text-base font-bold text-white shadow-[0_8px_20px_rgba(249,115,22,0.25)] transition-colors hover:bg-[#ea580c]"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-[#C2410C] px-6 text-base font-bold text-white shadow-[0_8px_20px_rgba(249,115,22,0.25)] transition-colors hover:bg-[#9A3412]"
             >
               <Phone aria-hidden="true" className="h-5 w-5" />
               Gọi ngay
@@ -59,7 +59,7 @@ export function HomeHero({ contactLinks }: HomeHeroProps) {
             <div className="grid grid-cols-2 gap-3 sm:flex">
               <a
                 href={contactLinks.zaloHref}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-[#0EA5E9] bg-white px-5 text-sm font-bold text-[#0284C7] transition-colors hover:bg-[#E0F2FE]"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-[#0EA5E9] bg-white px-5 text-sm font-bold text-[#0369A1] transition-colors hover:bg-[#E0F2FE]"
               >
                 <MessageCircle aria-hidden="true" className="h-4 w-4" />
                 Nhắn Zalo
@@ -110,7 +110,7 @@ export function HomeHero({ contactLinks }: HomeHeroProps) {
           </ul>
           <Link
             href={`/products?category=${AIR_CONDITIONER_CATEGORY_SLUG}#danh-sach`}
-            className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-md bg-[#0EA5E9] px-4 text-sm font-bold text-white transition-colors hover:bg-[#0284C7]"
+            className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-md bg-[#0369A1] px-4 text-sm font-bold text-white transition-colors hover:bg-[#075985]"
           >
             Xem tất cả điều hòa
           </Link>

@@ -179,7 +179,7 @@ export default async function AboutPage() {
         <Container>
           <div className="grid gap-8 lg:grid-cols-[1fr_0.82fr] lg:items-center">
             <div className="space-y-5">
-              <p className="text-sm font-bold uppercase text-[#0284C7]">
+              <p className="text-sm font-bold uppercase text-[#0369A1]">
                 Giới thiệu cửa hàng
               </p>
               <h1 className="text-3xl font-bold leading-tight text-[#111827] sm:text-5xl">
@@ -193,13 +193,13 @@ export default async function AboutPage() {
               <div className="flex flex-col gap-3 sm:flex-row">
                 <a
                   href={phoneHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#C2410C] px-5 text-sm font-bold text-white hover:bg-[#9A3412]"
                 >
                   Gọi ngay
                 </a>
                 <a
                   href={zaloHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] bg-white px-5 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] bg-white px-5 text-sm font-bold text-[#0369A1] hover:bg-[#E0F2FE]"
                 >
                   Nhắn Zalo
                 </a>
@@ -301,7 +301,7 @@ export default async function AboutPage() {
                 {["Quang Thành", "Kinh Môn", "Hải Dương"].map((area) => (
                   <div
                     key={area}
-                    className="rounded-lg border border-[#BAE6FD] bg-white p-4 text-center text-sm font-bold text-[#0284C7]"
+                    className="rounded-lg border border-[#BAE6FD] bg-white p-4 text-center text-sm font-bold text-[#0369A1]"
                   >
                     {area}
                   </div>
@@ -341,19 +341,19 @@ export default async function AboutPage() {
               <div className="mt-5 grid gap-3">
                 <a
                   href={phoneHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white hover:bg-[#ea580c]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#C2410C] px-5 text-sm font-bold text-white hover:bg-[#9A3412]"
                 >
                   Gọi ngay
                 </a>
                 <a
                   href={zaloHref}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] bg-white px-5 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#0EA5E9] bg-white px-5 text-sm font-bold text-[#0369A1] hover:bg-[#E0F2FE]"
                 >
                   Nhắn Zalo
                 </a>
                 <Link
                   href="/contact#bao-gia"
-                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#F97316] bg-white px-5 text-sm font-bold text-[#C2410C] hover:bg-white"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[#C2410C] bg-white px-5 text-sm font-bold text-[#C2410C] hover:bg-white"
                 >
                   Gửi yêu cầu báo giá
                 </Link>

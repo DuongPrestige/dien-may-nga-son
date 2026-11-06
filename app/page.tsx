@@ -13,6 +13,7 @@ import { HomeCategories } from "@/src/features/home/components/home-categories";
 import { HomeHero } from "@/src/features/home/components/home-hero";
 import { HomeReasons } from "@/src/features/home/components/home-reasons";
 import { HomeServices } from "@/src/features/home/components/home-services";
+import { HomeTrustStats } from "@/src/features/home/components/home-trust-stats";
 import { SectionHeading } from "@/src/features/home/components/section-heading";
 import { LeadForm } from "@/src/features/leads/components/lead-form";
 import { ProductCard } from "@/src/features/products/components/product-card";
@@ -26,7 +27,12 @@ import {
   getServices,
 } from "@/src/features/services/services/services.service";
 import type { ServiceCardData } from "@/src/features/services/types/services.types";
-import { getStoreContactLinks } from "@/src/features/settings/services/settings.service";
+import { PolicyList } from "@/src/features/settings/components/policy-list";
+import { TestimonialsSection } from "@/src/features/testimonials/components/testimonials-section";
+import {
+  getStoreContactLinks,
+  getTrustContent,
+} from "@/src/features/settings/services/settings.service";
 import { buildMetadata } from "@/src/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -74,6 +80,7 @@ export default async function Home() {
     brands,
     latestPosts,
     contactLinks,
+    trustContent,
   ] = await Promise.all([
     getFeaturedProducts(FEATURED_PRODUCT_LIMIT).catch(() => []),
     getHomeServices().catch(() => []),
@@ -81,6 +88,7 @@ export default async function Home() {
     getPublicBrands().catch(() => []),
     getHomepagePosts().catch(() => []),
     getStoreContactLinks(),
+    getTrustContent(),
   ]);
   const projects = projectResult?.items.slice(0, HOME_PROJECT_LIMIT) ?? [];
   const products = sortAirConditionersFirst(featuredProducts);
@@ -88,6 +96,8 @@ export default async function Home() {
   return (
     <>
       <HomeHero contactLinks={contactLinks} />
+
+      <HomeTrustStats stats={trustContent.stats} />
 
       <HomeBrands brands={brands} />
 
@@ -145,6 +155,8 @@ export default async function Home() {
 
       <HomeReasons />
 
+      <TestimonialsSection className="bg-[#F8FAFC]" />
+
       {latestPosts.length > 0 ? (
         <Section padding="compact">
           <Container>
@@ -177,18 +189,25 @@ export default async function Home() {
             <div className="grid grid-cols-2 gap-3 sm:flex">
               <a
                 href={contactLinks.phoneHref}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-[#F97316] px-5 text-sm font-bold text-white transition-colors hover:bg-[#ea580c]"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-[#C2410C] px-5 text-sm font-bold text-white transition-colors hover:bg-[#9A3412]"
               >
                 <Phone aria-hidden="true" className="h-4 w-4" />
                 Gọi ngay
               </a>
               <a
                 href={contactLinks.zaloHref}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-[#0EA5E9] bg-white px-5 text-sm font-bold text-[#0284C7] transition-colors hover:bg-[#E0F2FE]"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-[#0EA5E9] bg-white px-5 text-sm font-bold text-[#0369A1] transition-colors hover:bg-[#E0F2FE]"
               >
                 <MessageCircle aria-hidden="true" className="h-4 w-4" />
                 Nhắn Zalo
               </a>
+            </div>
+            <div className="pt-2">
+              <PolicyList
+                title="Chính sách bảo hành"
+                lines={trustContent.warrantyLines}
+                headingLevel="h3"
+              />
             </div>
           </div>
           <div className="rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-[0_18px_50px_rgba(17,24,39,0.08)]">

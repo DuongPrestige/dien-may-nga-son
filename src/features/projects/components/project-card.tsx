@@ -45,7 +45,7 @@ export function ProjectCard({
         )}
       </Link>
       <div className="flex flex-1 flex-col p-4">
-        <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs font-semibold text-[#0284C7]">
+        <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs font-semibold text-[#0369A1]">
           <span>{getProjectTypeLabel(project.projectType)}</span>
           <time dateTime={getProjectDateIso(project.performedAt)}>
             {formatProjectDate(project.performedAt)}
@@ -54,7 +54,7 @@ export function ProjectCard({
         <Heading className="mt-2 line-clamp-2 text-base font-bold leading-6 text-[#111827] sm:text-lg sm:leading-7">
           <Link
             href={`/cong-trinh-thuc-te/${project.slug}`}
-            className="hover:text-[#0284C7]"
+            className="hover:text-[#075985]"
           >
             {project.title}
           </Link>

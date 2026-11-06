@@ -100,7 +100,7 @@ export default async function AdminProductsPage({
         </div>
         <Link
           href="/admin/products/new"
-          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7]"
+          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985]"
         >
           Add product
         </Link>
@@ -209,7 +209,7 @@ export default async function AdminProductsPage({
                         : formatPrice(product.price)}
                     </td>
                     <td className="px-4 py-3">
-                      <span className="rounded-md bg-[#F0F9FF] px-2 py-1 text-xs font-bold text-[#0284C7]">
+                      <span className="rounded-md bg-[#F0F9FF] px-2 py-1 text-xs font-bold text-[#0369A1]">
                         {product.status}
                       </span>
                     </td>
@@ -217,7 +217,7 @@ export default async function AdminProductsPage({
                       <div className="flex gap-3">
                         <Link
                           href={`/admin/products/${product.id}/edit`}
-                          className="text-sm font-bold text-[#0284C7] hover:text-[#0369A1]"
+                          className="text-sm font-bold text-[#0369A1] hover:text-[#075985]"
                         >
                           Edit
                         </Link>
@@ -243,7 +243,7 @@ export default async function AdminProductsPage({
             </p>
             <Link
               href="/admin/products/new"
-              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7]"
+              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985]"
             >
               Add product
             </Link>

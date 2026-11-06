@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { isAiSeoEnabled } from "@/src/features/ai-seo/lib/ai-seo-config";
 import { BlogPostForm } from "@/src/features/blog/components/admin/blog-post-form";
 import { getAdminBlogCategories } from "@/src/features/blog/services/blog.service";
 
@@ -23,7 +24,10 @@ export default async function NewBlogPostPage() {
         </p>
       </div>
       <div className="rounded-lg border border-[#E5E7EB] bg-white p-4 sm:p-6">
-        <BlogPostForm categories={categories} />
+        <BlogPostForm
+          categories={categories}
+          isAiSeoEnabled={isAiSeoEnabled()}
+        />
       </div>
     </div>
   );

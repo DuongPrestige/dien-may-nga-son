@@ -39,7 +39,7 @@ function logProductsTiming(
   console.log(`[perf:/products] ${label}: ${Date.now() - startedAt}ms${detailsText}`);
 }
 
-const productCardSelect = {
+export const productCardSelect = {
   id: true,
   name: true,
   slug: true,

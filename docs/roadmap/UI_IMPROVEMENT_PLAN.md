@@ -95,9 +95,7 @@ Kết quả kiểm tra:
 * Lighthouse mobile trang chủ (localhost): Accessibility 96, SEO 100. Best Practices 81 chỉ do chạy HTTP localhost.
 * LCP lab (Slow 4G + CPU 4x, localhost): trang chủ 3,1s, trang giới thiệu 2,5s. ~1,2s là CSS chặn render (chung toàn site). Cần đo lại trên Vercel sau deploy.
 
-Việc còn mở (chờ quyết định):
-
-* Độ tương phản màu: chữ trắng trên `#F97316` (2,8:1) và `#0EA5E9` (2,77:1), chữ `#0284C7` trên nền trắng (4,09:1) chưa đạt WCAG AA 4,5:1. Các màu này nằm trong bảng màu `UI_UX_GUIDELINES.md`; đề xuất dùng sắc đậm hơn cho chữ/nút: cam `#C2410C`, xanh `#0369A1`.
+Độ tương phản màu (đã xử lý 2026-11-06): nút cam `#F97316` → `#C2410C` (5,2:1), nút xanh `#0EA5E9` → `#0369A1` (5,9:1), chữ link `#0284C7` → `#0369A1`, badge giảm giá `#EF4444` → `#DC2626`. `#0EA5E9` chỉ còn dùng cho viền/trang trí.
 
 ### 1.1 Header
 
@@ -153,7 +151,9 @@ Thứ tự section mới (theo guidelines mục 10, bỏ phần chưa có dữ l
 
 ---
 
-## Đợt 2 – Tạo niềm tin (cần chủ cửa hàng cung cấp nội dung thật)
+## Đợt 2 – Tạo niềm tin — CODE HOÀN THÀNH 2026-11-06, chờ nội dung thật
+
+Đã làm: logo (Settings → header), dải số liệu (Settings, tự ẩn), chính sách bảo hành + gói lắp đặt điều hòa (Settings, mỗi dòng một ý, tự ẩn), đánh giá khách hàng (`/admin/testimonials`, khối trang chủ tự ẩn), bảng giá dịch vụ (ô "Bảng giá tham khảo" trong form dịch vụ, dạng `Hạng mục | Giá | Ghi chú`), khu vực phục vụ (`/admin/service-areas`, footer lấy từ DB). Ảnh hero dùng Banner sẵn có; logo hãng dùng trường `logoUrl` của Brands.
 
 | Hạng mục | Cách làm | Nội dung cần cung cấp |
 |---|---|---|
@@ -166,12 +166,13 @@ Thứ tự section mới (theo guidelines mục 10, bỏ phần chưa có dữ l
 | Gói lắp đặt điều hòa | Khối trên trang chi tiết điều hòa: miễn phí gì, vật tư phát sinh theo mét/HP, bảo hành lắp đặt | Chính sách lắp đặt |
 | Khu vực phục vụ | Danh sách xã/phường từ Settings | Danh sách xã/phường |
 
-## Đợt 3 – Mở rộng
+## Đợt 3 – Mở rộng — HOÀN THÀNH 2026-11-06
 
-* Gói bảo dưỡng định kỳ (ví dụ "Vệ sinh 2 lần/năm").
-* Trang theo khu vực (`/kinh-mon`, `/hiep-an`, …) – trùng Phase 2 roadmap.
-* Khối tư vấn chọn điều hòa (Inverter vs thường, bảng chọn công suất) dưới lưới sản phẩm.
-* Ô tìm kiếm trên header (guidelines mục 9).
+* Gói bảo dưỡng định kỳ: tạo như một dịch vụ trong admin (ví dụ "Gói vệ sinh 2 lần/năm") kèm bảng giá; không cần module riêng.
+* Trang theo khu vực: `/khu-vuc/{slug}` (dùng tiền tố `/khu-vuc/` để tránh trùng route gốc) + `/khu-vuc`.
+* Khối "Chọn điều hòa bao nhiêu BTU?" dưới lưới `/products` (khi xem tất cả hoặc danh mục điều hòa).
+* Tìm kiếm: nút trên header → `/tim-kiem` (sản phẩm, dịch vụ, bài viết; gõ không dấu vẫn tìm được; `noindex`).
+* Thư viện ảnh `/hinh-anh-thuc-te` lọc theo loại công trình.
 
 ---
 

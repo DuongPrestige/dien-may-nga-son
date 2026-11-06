@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-import { STORE_SETTING_KEYS } from "@/src/features/settings/constants";
+import {
+  MAX_POLICY_LINES,
+  STORE_SETTING_KEYS,
+} from "@/src/features/settings/constants";
+import { isValidImageSrc } from "@/src/lib/image-src";
 import {
   isGoogleMapsEmbedUrl,
   isGoogleMapsShareUrl,
@@ -25,6 +29,22 @@ const optionalHttpUrlSchema = z
       return false;
     }
   }, "Enter a valid HTTP or HTTPS URL");
+
+const statSchema = z
+  .string()
+  .trim()
+  .max(24, "Keep this value short (24 characters or fewer)");
+
+const policySchema = z
+  .string()
+  .trim()
+  .max(800, "Policy must be 800 characters or fewer")
+  .refine(
+    (value) =>
+      value.split(/\r?\n/).filter((line) => line.trim()).length <=
+      MAX_POLICY_LINES,
+    `Use at most ${MAX_POLICY_LINES} lines`,
+  );
 
 export const updateSettingsSchema = z.object({
   store_name: z
@@ -71,6 +91,18 @@ export const updateSettingsSchema = z.object({
     .string()
     .trim()
     .max(500, "SEO description must be 500 characters or fewer"),
+  logo_url: z
+    .string()
+    .trim()
+    .refine(
+      (value) => !value || isValidImageSrc(value),
+      "Enter an http/https image URL or a path starting with /",
+    ),
+  stat_years: statSchema,
+  stat_projects: statSchema,
+  stat_response_time: statSchema,
+  warranty_policy: policySchema,
+  ac_install_policy: policySchema,
 });
 
 export const updateSettingSchema = z

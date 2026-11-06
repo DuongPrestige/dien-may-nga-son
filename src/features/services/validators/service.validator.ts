@@ -1,6 +1,7 @@
 import { ProductStatus } from "@prisma/client";
 import { z } from "zod";
 
+import { parsePriceTable } from "@/src/features/services/lib/price-table";
 import { isValidImageSrc } from "@/src/lib/image-src";
 
 const optionalText = z.preprocess(
@@ -47,6 +48,18 @@ export const serviceFormSchema = z.object({
   status: serviceStatusSchema,
   seoTitle: optionalText,
   seoDescription: optionalText,
+  priceTable: z
+    .preprocess((value) => (typeof value === "string" ? value : ""), z.string())
+    .transform((value, context) => {
+      const result = parsePriceTable(value);
+
+      if (!result.success) {
+        context.addIssue({ code: "custom", message: result.error });
+        return z.NEVER;
+      }
+
+      return result.items;
+    }),
 });
 
 export const serviceIdSchema = z.string().uuid("Invalid service id");

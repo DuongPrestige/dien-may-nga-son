@@ -88,11 +88,15 @@ Avoid:
 
 # 4. Color System
 
-Primary:
+Primary (decorative: borders, accents, backgrounds tints):
 
 #0EA5E9
 
-Primary Dark:
+Primary Action (buttons with white text, links, active chips — 5.9:1 on white):
+
+#0369A1 (hover #075985)
+
+Primary Dark (focus rings, borders only):
 
 #0284C7
 
@@ -100,9 +104,19 @@ Secondary:
 
 #2563EB
 
-CTA Orange:
+CTA Orange (buttons with white text, price text — 5.2:1 on white):
+
+#C2410C (hover #9A3412)
+
+CTA Orange Light (decorative only, never behind white text):
 
 #F97316
+
+Discount badge:
+
+#DC2626
+
+Contrast rule (WCAG AA): text and white-on-color buttons need ≥ 4.5:1. Do not put text in #0EA5E9 / #F97316 / #0284C7.
 
 Success:
 

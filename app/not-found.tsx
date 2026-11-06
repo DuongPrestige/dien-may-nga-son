@@ -43,7 +43,7 @@ export default async function NotFound() {
     <Section padding="none" className="bg-[#F8FAFC] py-12 sm:py-16 lg:py-20">
       <Container className="max-w-4xl">
         <div className="space-y-5 text-center">
-          <p className="text-sm font-bold uppercase tracking-wide text-[#0284C7]">
+          <p className="text-sm font-bold uppercase tracking-wide text-[#0369A1]">
             Lỗi 404
           </p>
           <h1 className="text-3xl font-bold leading-tight text-[#111827] sm:text-4xl">
@@ -57,19 +57,19 @@ export default async function NotFound() {
           <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <Link
               href="/"
-              className="inline-flex min-h-12 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white transition-colors hover:bg-[#0284C7]"
+              className="inline-flex min-h-12 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white transition-colors hover:bg-[#075985]"
             >
               Về trang chủ
             </Link>
             <a
               href={contactLinks.phoneHref}
-              className="inline-flex min-h-12 items-center justify-center rounded-md bg-[#F97316] px-5 text-sm font-bold text-white transition-colors hover:bg-[#ea580c]"
+              className="inline-flex min-h-12 items-center justify-center rounded-md bg-[#C2410C] px-5 text-sm font-bold text-white transition-colors hover:bg-[#9A3412]"
             >
               Gọi ngay
             </a>
             <a
               href={contactLinks.zaloHref}
-              className="inline-flex min-h-12 items-center justify-center rounded-md border border-[#0EA5E9] bg-white px-5 text-sm font-bold text-[#0284C7] transition-colors hover:bg-[#E0F2FE]"
+              className="inline-flex min-h-12 items-center justify-center rounded-md border border-[#0EA5E9] bg-white px-5 text-sm font-bold text-[#0369A1] transition-colors hover:bg-[#E0F2FE]"
             >
               Nhắn Zalo
             </a>

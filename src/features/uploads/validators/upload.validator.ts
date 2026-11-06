@@ -17,6 +17,7 @@ export const uploadFolderSchema = z.enum([
   "projects",
   "banners",
   "settings",
+  "testimonials",
 ]);
 
 export const uploadImageSchema = z.object({

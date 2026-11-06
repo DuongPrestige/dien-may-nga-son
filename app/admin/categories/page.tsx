@@ -67,7 +67,7 @@ export default async function AdminCategoriesPage({
         </div>
         <Link
           href="/admin/categories/new"
-          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7]"
+          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985]"
         >
           Add category
         </Link>
@@ -129,7 +129,7 @@ export default async function AdminCategoriesPage({
                       <div className="flex items-start gap-3">
                         <Link
                           href={`/admin/categories/${category.id}/edit`}
-                          className="text-sm font-bold text-[#0284C7] hover:text-[#0369A1]"
+                          className="text-sm font-bold text-[#0369A1] hover:text-[#075985]"
                         >
                           Edit
                         </Link>
@@ -154,7 +154,7 @@ export default async function AdminCategoriesPage({
             </p>
             <Link
               href="/admin/categories/new"
-              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-md bg-[#0EA5E9] px-5 text-sm font-bold text-white hover:bg-[#0284C7]"
+              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-md bg-[#0369A1] px-5 text-sm font-bold text-white hover:bg-[#075985]"
             >
               Add category
             </Link>

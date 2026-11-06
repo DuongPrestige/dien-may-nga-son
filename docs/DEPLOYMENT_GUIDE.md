@@ -102,7 +102,22 @@ RESEND_API_KEY=
 TELEGRAM_BOT_TOKEN=
 
 TELEGRAM_CHAT_ID=
+
+ANTHROPIC_API_KEY=
 ```
+
+## AI SEO Generator (optional)
+
+`ANTHROPIC_API_KEY` enables the "Gợi ý SEO bằng AI" button in the admin project form.
+
+- Leave it empty (or unset) to hide the button completely; nothing else depends on it.
+- The key is read only on the server (Server Action), never exposed to the browser.
+- Model: `claude-haiku-5-5` via the official `@anthropic-ai/sdk`. It generates SEO title (≤60 chars), meta description (≤155 chars) and excerpt (≤200 chars) from the form's title, location and content. Admins must review before saving.
+- Create the key at https://platform.claude.com, then add it in Vercel → Project Settings → Environment Variables (Production + Preview) and redeploy.
+
+## Facebook Import (no configuration)
+
+Admin → Công trình → "Nhập từ Facebook" reads OpenGraph tags of a **public** Facebook post and creates a DRAFT project. It uses the existing Cloudinary variables to re-host the post image (Facebook CDN URLs expire). Private posts or posts behind a login wall cannot be read and must be entered manually.
 
 ---
 
@@ -253,7 +268,11 @@ Next.js
 
 Build Command:
 
-Auto Detect
+Defined in `vercel.json`: `prisma migrate deploy && next build`. Pending migrations are applied with `DIRECT_URL` before every production build.
+
+Region:
+
+`vercel.json` pins functions to `sin1` (Singapore), the same region as Supabase.
 
 Output Directory:
 
@@ -261,7 +280,7 @@ Default
 
 Install Command:
 
-npm install
+npm install (runs `prisma generate` via `postinstall`)
 
 ---
 
@@ -421,7 +440,23 @@ Never expose:
 
 Database
 
-Supabase Backups
+Supabase Backups (Pro plan: daily, 7 days)
+
+GitHub Actions: `.github/workflows/db-backup.yml` runs `pg_dump` every day at 02:00 (Vietnam time) and keeps an encrypted copy as a workflow artifact for 30 days. The repository is public, so the dump is always encrypted with AES-256 before upload.
+
+Repository secrets (Settings > Secrets and variables > Actions):
+
+* `BACKUP_DATABASE_URL`: Supabase direct/session connection string (port 5432, not the pgbouncer pooler)
+* `BACKUP_PASSPHRASE`: long random passphrase, stored in a password manager. Without it the backup cannot be restored.
+
+Restore:
+
+```bash
+gpg --decrypt dien-may-nga-son-YYYYMMDD-HHMM.dump.gpg > backup.dump
+pg_restore --no-owner --no-privileges --clean --if-exists -d "$TARGET_DATABASE_URL" backup.dump
+```
+
+Test a restore into a scratch database at least once after setup.
 
 Repository
 

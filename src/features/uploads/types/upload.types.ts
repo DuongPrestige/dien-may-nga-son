@@ -5,6 +5,7 @@ export const UPLOAD_FOLDERS = {
   projects: "dien-may-nga-son/projects",
   banners: "dien-may-nga-son/banners",
   settings: "dien-may-nga-son/settings",
+  testimonials: "dien-may-nga-son/testimonials",
 } as const;
 
 export type UploadFolder = keyof typeof UPLOAD_FOLDERS;

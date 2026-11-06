@@ -62,7 +62,7 @@ export default async function AdminLeadDetailPage({
       <div>
         <Link
           href="/admin/leads"
-          className="text-sm font-bold text-[#0284C7] hover:text-[#0369A1]"
+          className="text-sm font-bold text-[#0369A1] hover:text-[#075985]"
         >
           Back to leads
         </Link>
@@ -81,7 +81,7 @@ export default async function AdminLeadDetailPage({
               value={
                 <a
                   href={`tel:${lead.phone}`}
-                  className="font-bold text-[#0284C7] hover:underline"
+                  className="font-bold text-[#0369A1] hover:underline"
                 >
                   {lead.phone}
                 </a>
@@ -105,7 +105,7 @@ export default async function AdminLeadDetailPage({
                 sourceHref ? (
                   <Link
                     href={sourceHref}
-                    className="break-all font-bold text-[#0284C7] hover:underline"
+                    className="break-all font-bold text-[#0369A1] hover:underline"
                   >
                     {lead.sourceUrl}
                   </Link>
@@ -122,14 +122,14 @@ export default async function AdminLeadDetailPage({
                 lead.product ? (
                   <Link
                     href={`/products/${lead.product.slug}`}
-                    className="font-bold text-[#0284C7] hover:underline"
+                    className="font-bold text-[#0369A1] hover:underline"
                   >
                     Product: {lead.product.name}
                   </Link>
                 ) : lead.service ? (
                   <Link
                     href={`/services/${lead.service.slug}`}
-                    className="font-bold text-[#0284C7] hover:underline"
+                    className="font-bold text-[#0369A1] hover:underline"
                   >
                     Service: {lead.service.name}
                   </Link>

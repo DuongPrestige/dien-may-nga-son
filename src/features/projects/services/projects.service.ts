@@ -5,6 +5,10 @@ import { unstable_cache } from "next/cache";
 import { prisma } from "@/src/lib/prisma";
 import { sanitizeBlogContent } from "@/src/features/blog/lib/blog-content";
 import { syncSlugRedirect } from "@/src/features/redirects/services/redirects.service";
+import {
+  pickAvailableSlug,
+  toProjectSlug,
+} from "@/src/features/projects/lib/project-slug";
 import type { ProjectFormSchema } from "@/src/features/projects/validators/project.validator";
 import type {
   AdminProjectDetail,
@@ -271,6 +275,17 @@ export async function getAdminProjectById(
       seoDescription: true,
     },
   });
+}
+
+/** Returns a slug derived from `text` that no existing project uses yet. */
+export async function generateUniqueProjectSlug(text: string): Promise<string> {
+  const base = toProjectSlug(text);
+  const existing = await prisma.project.findMany({
+    where: { slug: { startsWith: base } },
+    select: { slug: true },
+  });
+
+  return pickAvailableSlug(base, new Set(existing.map((item) => item.slug)));
 }
 
 export async function createProject(data: ProjectFormSchema) {
