@@ -195,17 +195,10 @@ export function ArticleSchema({
   };
 }
 
-const JSON_LD_ESCAPES: Record<string, string> = {
-  "<": "\u003c",
-  ">": "\u003e",
-  "&": "\u0026",
-  "\u2028": "\u2028",
-  "\u2029": "\u2029",
-};
+function toUnicodeEscape(character: string): string {
+  return `\\u${character.charCodeAt(0).toString(16).padStart(4, "0")}`;
+}
 
 export function serializeJsonLd(schema: object): string {
-  return JSON.stringify(schema).replace(
-    /[<>&\u2028\u2029]/g,
-    (character) => JSON_LD_ESCAPES[character] ?? character,
-  );
+  return JSON.stringify(schema).replace(/[<>&\u2028\u2029]/g, toUnicodeEscape);
 }
