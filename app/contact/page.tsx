@@ -11,6 +11,7 @@ import {
   type ContactSettings,
 } from "@/src/features/settings/services/settings.service";
 import type { StoreInfo } from "@/src/features/settings/types/settings.types";
+import { serializeJsonLd } from "@/src/lib/schema";
 
 export const metadata: Metadata = {
   title: "Liên hệ Điện Máy Nga Sơn | Kinh Môn, Hải Dương",
@@ -142,7 +143,7 @@ export default async function ContactPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(localBusinessSchema),
+          __html: serializeJsonLd(localBusinessSchema),
         }}
       />
 

@@ -23,6 +23,7 @@ import {
   BreadcrumbSchema,
   FAQSchema,
   ProductSchema,
+  serializeJsonLd,
 } from "@/src/lib/schema";
 import { buildMetadata } from "@/src/lib/seo";
 import { getSafeImageSrc } from "@/src/lib/image-src";
@@ -157,15 +158,15 @@ export default async function ProductDetailPage({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(productSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbSchema) }}
       />
 
       <Section className="bg-[#F8FAFC] py-8 sm:py-12">

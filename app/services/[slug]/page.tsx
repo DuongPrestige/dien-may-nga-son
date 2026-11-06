@@ -20,6 +20,7 @@ import type {
 import { getStoreContactLinks } from "@/src/features/settings/lib/store-contact";
 import { getSafeStoreInfo } from "@/src/features/settings/services/settings.service";
 import type { StoreInfo } from "@/src/features/settings/types/settings.types";
+import { serializeJsonLd } from "@/src/lib/schema";
 import { buildMetadata } from "@/src/lib/seo";
 import {
   getSafeImageSrc,
@@ -321,15 +322,15 @@ export default async function ServiceDetailPage({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(serviceSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbSchema) }}
       />
 
       <Section className="bg-[#F8FAFC] py-8 sm:py-12">

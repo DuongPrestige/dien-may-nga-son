@@ -30,6 +30,7 @@ import {
   getSafeImageSrc,
   shouldUseUnoptimizedImage,
 } from "@/src/lib/image-src";
+import { serializeJsonLd } from "@/src/lib/schema";
 
 export const revalidate = 3600;
 
@@ -142,11 +143,11 @@ export default async function ProjectDetailPage({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(articleSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbSchema) }}
       />
 
       <Section className="bg-[#F8FAFC] py-8 sm:py-12">

@@ -24,6 +24,7 @@ import type {
 } from "@/src/features/blog/types/blog.types";
 import { LeadForm } from "@/src/features/leads/components/lead-form";
 import { getStoreContactLinks } from "@/src/features/settings/services/settings.service";
+import { serializeJsonLd } from "@/src/lib/schema";
 import { buildMetadata } from "@/src/lib/seo";
 import {
   getSafeImageSrc,
@@ -181,11 +182,11 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(articleSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbSchema) }}
       />
 
       <Section className="bg-[#F8FAFC] py-8 sm:py-12">
