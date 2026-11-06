@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+
+import { auth } from "@/auth";
 
 import { LoginForm } from "@/app/admin/login/login-form";
 
@@ -10,7 +13,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AdminLoginPage() {
+export default async function AdminLoginPage() {
+  const session = await auth();
+
+  if (session?.user) {
+    redirect("/admin");
+  }
+
   return (
     <div className="min-h-[calc(100vh-12rem)] bg-[#F8FAFC] px-4 py-10 sm:py-16">
       <div className="mx-auto w-full max-w-md rounded-lg border border-[#E5E7EB] bg-white p-6 shadow-[0_18px_50px_rgba(17,24,39,0.08)]">

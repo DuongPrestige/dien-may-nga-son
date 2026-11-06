@@ -38,3 +38,29 @@ export async function verifyAdminCredentials(
     role: user.role,
   };
 }
+
+export type ActiveSessionUser = Pick<AuthUser, "email" | "name" | "role">;
+
+export async function getActiveSessionUser(
+  id: string,
+): Promise<ActiveSessionUser | null> {
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: {
+      email: true,
+      fullName: true,
+      role: true,
+      isActive: true,
+    },
+  });
+
+  if (!user || !user.isActive) {
+    return null;
+  }
+
+  return {
+    email: user.email,
+    name: user.fullName ?? user.email,
+    role: user.role,
+  };
+}

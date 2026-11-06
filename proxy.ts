@@ -20,18 +20,17 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname.startsWith("/admin")) {
+    // The login page decides itself (via auth(), which re-validates the user
+    // in the database) whether to forward to /admin. Doing it here from the
+    // raw cookie would loop for users whose account was disabled.
+    if (pathname === adminLoginPath) {
+      return withPathnameHeader(request);
+    }
+
     const token = await getToken({
       req: request,
       secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
     });
-
-    if (pathname === adminLoginPath) {
-      if (token) {
-        return NextResponse.redirect(new URL("/admin", request.url));
-      }
-
-      return withPathnameHeader(request);
-    }
 
     if (!token) {
       return NextResponse.redirect(new URL(adminLoginPath, request.url));

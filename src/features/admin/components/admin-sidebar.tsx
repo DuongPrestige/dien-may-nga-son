@@ -14,7 +14,17 @@ const adminMenuItems = [
   { label: "Settings", href: "/admin/settings" },
 ] as const;
 
-export function AdminSidebar() {
+const superAdminMenuItems = [{ label: "Users", href: "/admin/users" }] as const;
+
+type AdminSidebarProps = {
+  canManageUsers: boolean;
+};
+
+export function AdminSidebar({ canManageUsers }: AdminSidebarProps) {
+  const menuItems = canManageUsers
+    ? [...adminMenuItems, ...superAdminMenuItems]
+    : adminMenuItems;
+
   return (
     <aside className="border-b border-[#E5E7EB] bg-white lg:min-h-[calc(100vh-9rem)] lg:w-64 lg:border-b-0 lg:border-r">
       <div className="p-4 lg:p-6">
@@ -29,7 +39,7 @@ export function AdminSidebar() {
         aria-label="Admin navigation"
         className="flex gap-2 overflow-x-auto px-4 pb-4 lg:grid lg:overflow-visible lg:px-4"
       >
-        {adminMenuItems.map((item) => (
+        {menuItems.map((item) => (
           <Link
             key={item.href}
             href={item.href}

@@ -1,3 +1,4 @@
+import { UserRole } from "@prisma/client";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -28,7 +29,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <div className="bg-[#F8FAFC]">
       <div className="lg:flex">
-        <AdminSidebar />
+        <AdminSidebar canManageUsers={session.user.role === UserRole.SUPER_ADMIN} />
         <div className="min-w-0 flex-1">
           <AdminTopbar session={session} />
           <div className="p-4 sm:p-6">{children}</div>
