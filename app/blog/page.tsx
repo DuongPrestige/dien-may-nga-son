@@ -98,9 +98,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               Tư vấn chọn mua, sử dụng và bảo dưỡng điện máy
             </h1>
             <p className="text-base leading-7 text-[#6B7280]">
-              Điện Máy Nga Sơn chia sẻ nội dung thực tế về điều hòa, tủ lạnh,
-              máy giặt và các lỗi thường gặp để khách hàng tại Kinh Môn, Quang
-              Thành, Hải Dương dễ chọn đúng giải pháp.
+              Mẹo chọn mua, sử dụng và xử lý lỗi điều hòa, tủ lạnh, máy giặt.
             </p>
           </div>
         </Container>
@@ -149,10 +147,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 Chưa có bài viết phù hợp
               </h2>
               <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-[#6B7280]">
-                Blog sẽ hiển thị các bài viết đã xuất bản từ hệ thống quản trị.
-                Trong thời gian cập nhật nội dung, bạn có thể liên hệ Điện Máy
-                Nga Sơn để được tư vấn trực tiếp về điều hòa, tủ lạnh hoặc máy
-                giặt.
+                Bài viết đang được cập nhật. Cần tư vấn ngay, hãy gọi cho cửa
+                hàng.
               </p>
               <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
                 <a
@@ -180,9 +176,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               Cần tư vấn thiết bị cho gia đình?
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-[#6B7280]">
-              Gửi tình trạng thiết bị hoặc nhu cầu mua điều hòa để Điện Máy Nga
-              Sơn tư vấn phương án phù hợp cho khu vực Kinh Môn, Quang Thành và
-              Hải Dương.
+              Gọi hoặc nhắn Zalo để được tư vấn nhanh.
             </p>
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <a

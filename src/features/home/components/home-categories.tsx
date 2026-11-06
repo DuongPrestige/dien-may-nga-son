@@ -49,10 +49,7 @@ export function HomeCategories() {
   return (
     <Section padding="compact">
       <Container>
-        <SectionHeading
-          title="Danh mục sản phẩm"
-          description="Chọn nhóm sản phẩm để xem mẫu đang có và nhận tư vấn theo nhu cầu gia đình."
-        />
+        <SectionHeading title="Danh mục sản phẩm" />
         <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {HOME_CATEGORIES.map(({ name, slug, description, icon: Icon }) => (
             <li key={slug}>
@@ -67,7 +64,7 @@ export function HomeCategories() {
                   <span className="block text-base font-bold text-[#111827]">
                     {name}
                   </span>
-                  <span className="mt-0.5 block text-xs leading-5 text-[#6B7280] sm:text-sm">
+                  <span className="mt-0.5 hidden text-sm leading-5 text-[#6B7280] sm:block">
                     {description}
                   </span>
                 </span>

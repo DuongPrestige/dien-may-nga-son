@@ -20,7 +20,6 @@ export function HomeServices({ services }: HomeServicesProps) {
       <Container>
         <SectionHeading
           title="Dịch vụ điện lạnh tại Kinh Môn"
-          description="Sửa chữa, bảo dưỡng và lắp đặt điều hòa, tủ lạnh, máy giặt cho gia đình."
           action={{ href: "/services", label: "Tất cả dịch vụ" }}
         />
         <ul className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
@@ -37,7 +36,7 @@ export function HomeServices({ services }: HomeServicesProps) {
                   {service.name}
                 </h3>
                 {service.shortDescription ? (
-                  <p className="mt-1.5 line-clamp-3 flex-1 text-sm leading-6 text-[#6B7280]">
+                  <p className="mt-1.5 line-clamp-2 flex-1 text-sm leading-6 text-[#6B7280]">
                     {service.shortDescription}
                   </p>
                 ) : (

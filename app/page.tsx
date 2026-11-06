@@ -99,7 +99,6 @@ export default async function Home() {
             <BannerStrip position="home" className="mb-8" />
             <SectionHeading
               title="Điều hòa & điện máy nổi bật"
-              description="Các mẫu cửa hàng đang giới thiệu. Gọi hoặc nhắn Zalo để nhận báo giá kèm lắp đặt."
               action={{ href: "/products", label: "Xem tất cả" }}
             />
             <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
@@ -129,12 +128,15 @@ export default async function Home() {
           <Container>
             <SectionHeading
               title="Công trình thực tế"
-              description="Hình ảnh lắp đặt, bảo dưỡng và sửa chữa đã thực hiện cho khách hàng địa phương."
               action={{ href: "/cong-trinh-thuc-te", label: "Xem thêm công trình" }}
             />
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {projects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  headingLevel="h3"
+                />
               ))}
             </div>
           </Container>
@@ -148,7 +150,6 @@ export default async function Home() {
           <Container>
             <SectionHeading
               title="Kinh nghiệm điện máy"
-              description="Mẹo chọn mua, sử dụng và bảo dưỡng thiết bị điện máy cho gia đình."
               action={{ href: "/blog", label: "Xem tất cả bài viết" }}
             />
             <div className="grid gap-4 md:grid-cols-3">
@@ -171,8 +172,7 @@ export default async function Home() {
               Cần tư vấn điều hòa hoặc sửa chữa điện lạnh?
             </h2>
             <p className="text-sm leading-6 text-[#6B7280]">
-              Để lại họ tên và số điện thoại, Điện Máy Nga Sơn sẽ gọi lại tư
-              vấn. Cần gấp, hãy gọi hoặc nhắn Zalo trực tiếp.
+              Để lại số điện thoại, cửa hàng sẽ gọi lại ngay.
             </p>
             <div className="grid grid-cols-2 gap-3 sm:flex">
               <a

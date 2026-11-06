@@ -14,9 +14,13 @@ import {
 
 type ProjectCardProps = {
   project: ProjectCardData;
+  headingLevel?: "h2" | "h3";
 };
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({
+  project,
+  headingLevel: Heading = "h2",
+}: ProjectCardProps) {
   const imageSrc = getSafeImageSrc(project.thumbnailUrl);
 
   return (
@@ -47,24 +51,20 @@ export function ProjectCard({ project }: ProjectCardProps) {
             {formatProjectDate(project.performedAt)}
           </time>
         </div>
-        <h2 className="mt-2 text-lg font-bold leading-7 text-[#111827]">
-          <Link href={`/cong-trinh-thuc-te/${project.slug}`}>
+        <Heading className="mt-2 line-clamp-2 text-base font-bold leading-6 text-[#111827] sm:text-lg sm:leading-7">
+          <Link
+            href={`/cong-trinh-thuc-te/${project.slug}`}
+            className="hover:text-[#0284C7]"
+          >
             {project.title}
           </Link>
-        </h2>
-        <p className="mt-2 text-sm font-semibold text-[#374151]">
-          {project.location}
-        </p>
-        <p className="mt-2 flex-1 text-sm leading-6 text-[#6B7280]">
-          {project.excerpt ??
-            "Hình ảnh và thông tin công trình thực tế do Điện Máy Nga Sơn thực hiện."}
-        </p>
-        <Link
-          href={`/cong-trinh-thuc-te/${project.slug}`}
-          className="mt-5 inline-flex min-h-10 items-center justify-center rounded-md border border-[#0EA5E9] px-4 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
-        >
-          Xem chi tiết
-        </Link>
+        </Heading>
+        <p className="mt-1.5 text-sm text-[#374151]">{project.location}</p>
+        {project.excerpt ? (
+          <p className="mt-1.5 line-clamp-2 text-sm leading-6 text-[#6B7280]">
+            {project.excerpt}
+          </p>
+        ) : null}
       </div>
     </article>
   );

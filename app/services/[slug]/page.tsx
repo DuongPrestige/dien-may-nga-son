@@ -1,5 +1,12 @@
 import { LeadSourceType } from "@prisma/client";
 import type { Metadata } from "next";
+import {
+  AlertCircle,
+  FileText,
+  Headset,
+  MapPin,
+  Snowflake,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -37,32 +44,32 @@ export const revalidate = 3600;
 
 const serviceProblemGroups = {
   airConditioner: [
-    "Điều hòa làm lạnh chậm, không đạt nhiệt độ cài đặt hoặc gió thổi yếu.",
-    "Dàn lạnh chảy nước, đóng tuyết hoặc xuất hiện mùi ẩm mốc.",
-    "Máy phát tiếng ồn, rung mạnh hoặc liên tục bật tắt bất thường.",
-    "Điều hòa báo lỗi, không nhận điều khiển hoặc không khởi động.",
-    "Tiền điện tăng cao do dàn nóng, dàn lạnh vận hành kém hiệu quả.",
+    "Làm lạnh chậm, gió yếu",
+    "Chảy nước, đóng tuyết, có mùi",
+    "Kêu to, rung, tự bật tắt",
+    "Báo lỗi, không nhận điều khiển",
+    "Tốn điện bất thường",
   ],
   washingMachine: [
-    "Máy giặt không cấp nước, không xả nước hoặc không vắt.",
-    "Lồng giặt rung mạnh, phát tiếng ồn hoặc máy bị dịch chuyển.",
-    "Quần áo giặt không sạch, còn mùi hoặc còn nhiều cặn bột giặt.",
-    "Máy báo lỗi, dừng giữa chu trình hoặc cửa không đóng được.",
-    "Đường nước rò rỉ hoặc máy giặt bị mất nguồn.",
+    "Không cấp nước, không xả, không vắt",
+    "Rung mạnh, kêu to khi vắt",
+    "Giặt không sạch, còn mùi",
+    "Báo lỗi, dừng giữa chừng",
+    "Rò rỉ nước, mất nguồn",
   ],
   refrigerator: [
-    "Tủ lạnh kém lạnh, ngăn đá không đông hoặc nhiệt độ không ổn định.",
-    "Tủ phát tiếng ồn lớn, chạy liên tục hoặc đóng tuyết bất thường.",
-    "Nước rò rỉ trong tủ hoặc chảy ra sàn.",
-    "Tủ có mùi khó chịu dù thực phẩm đã được sắp xếp và vệ sinh.",
-    "Tủ mất nguồn, đèn không sáng hoặc bảng điều khiển báo lỗi.",
+    "Kém lạnh, ngăn đá không đông",
+    "Kêu to, chạy liên tục, đóng tuyết",
+    "Rò rỉ nước ra sàn",
+    "Có mùi khó chịu",
+    "Mất nguồn, báo lỗi",
   ],
   general: [
-    "Thiết bị hoạt động yếu hoặc không đạt hiệu quả như bình thường.",
-    "Máy phát tiếng ồn, rung mạnh hoặc có mùi bất thường.",
-    "Thiết bị chảy nước, báo lỗi hoặc ngắt liên tục khi sử dụng.",
-    "Tiền điện tăng cao do thiết bị vận hành kém hiệu quả.",
-    "Cần kiểm tra, vệ sinh hoặc lắp đặt đúng kỹ thuật trước mùa cao điểm.",
+    "Hoạt động yếu, kém hiệu quả",
+    "Kêu to, rung, có mùi lạ",
+    "Chảy nước, báo lỗi, ngắt liên tục",
+    "Tốn điện bất thường",
+    "Cần vệ sinh, lắp đặt trước mùa cao điểm",
   ],
 } as const;
 
@@ -94,19 +101,17 @@ function getCommonProblems(service: ServiceDetailData): readonly string[] {
 }
 
 const processSteps = [
-  "Tiếp nhận thông tin thiết bị và khu vực cần hỗ trợ.",
-  "Tư vấn sơ bộ qua điện thoại hoặc Zalo để xác định tình trạng ban đầu.",
-  "Kiểm tra thực tế nếu cần thiết và giải thích nguyên nhân rõ ràng.",
-  "Báo phương án xử lý, chi phí tham khảo và thời gian thực hiện.",
-  "Thực hiện dịch vụ sau khi khách hàng đồng ý.",
-  "Bàn giao, hướng dẫn sử dụng và lưu ý bảo dưỡng sau dịch vụ.",
+  { title: "Tiếp nhận", detail: "Qua điện thoại, Zalo hoặc form" },
+  { title: "Kiểm tra & báo giá", detail: "Báo phương án trước khi làm" },
+  { title: "Thực hiện", detail: "Sau khi khách đồng ý" },
+  { title: "Bàn giao", detail: "Chạy thử, hướng dẫn sử dụng" },
 ] as const;
 
 const reasons = [
-  "Tập trung phục vụ khách hàng địa phương tại Kinh Môn và Quang Thành.",
-  "Ưu tiên tư vấn đúng nhu cầu, không xây dựng quy trình mua hàng online phức tạp.",
-  "Báo rõ tình trạng và phương án trước khi sửa chữa hoặc lắp đặt.",
-  "Kết hợp kinh nghiệm bán thiết bị điện máy với dịch vụ điện lạnh thực tế.",
+  { icon: MapPin, label: "Phục vụ tại Kinh Môn" },
+  { icon: FileText, label: "Báo giá trước khi làm" },
+  { icon: Headset, label: "Tư vấn đúng nhu cầu" },
+  { icon: Snowflake, label: "Chuyên điện lạnh" },
 ] as const;
 
 const faqs = [
@@ -389,12 +394,6 @@ export default async function ServiceDetailPage({
                   </div>
                 )}
               </div>
-              <div className="p-5">
-                <p className="text-sm font-semibold leading-6 text-[#374151]">
-                  Phục vụ tư vấn dịch vụ cho khách hàng khu vực Kinh Môn,
-                  Quang Thành, Hải Dương.
-                </p>
-              </div>
             </div>
           </div>
         </Container>
@@ -404,51 +403,55 @@ export default async function ServiceDetailPage({
         <Container className="grid gap-8 lg:grid-cols-[1fr_0.78fr]">
           <div className="space-y-10">
             <div>
-              <h2 className="text-2xl font-bold text-[#111827]">
-                Tình huống thường gặp
+              <h2 className="text-xl font-bold text-[#111827] sm:text-2xl">
+                Dấu hiệu cần gọi thợ
               </h2>
-              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <ul className="mt-4 grid gap-2 sm:grid-cols-2">
                 {commonProblems.map((problem) => (
-                  <div
+                  <li
                     key={problem}
-                    className="rounded-lg border border-[#E5E7EB] bg-white p-4 text-sm leading-6 text-[#374151]"
+                    className="flex items-center gap-2 rounded-lg border border-[#E5E7EB] bg-white px-3 py-2.5 text-sm font-medium text-[#374151]"
                   >
+                    <AlertCircle
+                      aria-hidden="true"
+                      className="h-4 w-4 shrink-0 text-[#F97316]"
+                    />
                     {problem}
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-[#111827]">
-                Quy trình dịch vụ
+              <h2 className="text-xl font-bold text-[#111827] sm:text-2xl">
+                Quy trình 4 bước
               </h2>
-              <ol className="mt-5 grid gap-3">
+              <ol className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
                 {processSteps.map((step, index) => (
                   <li
-                    key={step}
-                    className="grid grid-cols-[2.5rem_1fr] gap-3 rounded-lg border border-[#E5E7EB] bg-white p-4"
+                    key={step.title}
+                    className="rounded-lg border border-[#E5E7EB] bg-white p-3"
                   >
-                    <span className="flex h-10 w-10 items-center justify-center rounded-md bg-[#0EA5E9] text-sm font-bold text-white">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#0EA5E9] text-xs font-bold text-white">
                       {index + 1}
                     </span>
-                    <span className="pt-2 text-sm leading-6 text-[#374151]">
-                      {step}
-                    </span>
+                    <p className="mt-2 text-sm font-bold text-[#111827]">
+                      {step.title}
+                    </p>
+                    <p className="mt-0.5 text-xs leading-5 text-[#6B7280]">
+                      {step.detail}
+                    </p>
                   </li>
                 ))}
               </ol>
             </div>
 
             <div className="rounded-lg border border-[#FED7AA] bg-[#FFF7ED] p-5 sm:p-6">
-              <h2 className="text-2xl font-bold text-[#111827]">
-                Tham khảo chi phí
+              <h2 className="text-xl font-bold text-[#111827] sm:text-2xl">
+                Chi phí
               </h2>
-              <p className="mt-3 text-sm leading-7 text-[#374151]">
-                Giá dịch vụ phụ thuộc vào tình trạng thực tế của thiết bị, mức
-                độ xử lý và linh kiện nếu phát sinh. Điện Máy Nga Sơn ưu tiên
-                tư vấn rõ phương án và chi phí tham khảo trước khi thực hiện để
-                khách hàng chủ động quyết định.
+              <p className="mt-2 text-sm leading-6 text-[#374151]">
+                Tùy tình trạng máy và linh kiện. Báo giá rõ trước khi làm.
               </p>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                 <a
@@ -467,23 +470,27 @@ export default async function ServiceDetailPage({
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-[#111827]">
+              <h2 className="text-xl font-bold text-[#111827] sm:text-2xl">
                 Vì sao chọn Điện Máy Nga Sơn?
               </h2>
-              <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                {reasons.map((reason) => (
-                  <div
-                    key={reason}
-                    className="rounded-lg border border-[#E5E7EB] bg-[#F8FAFC] p-4 text-sm leading-6 text-[#374151]"
+              <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {reasons.map(({ icon: Icon, label }) => (
+                  <li
+                    key={label}
+                    className="flex items-center gap-2 rounded-lg bg-[#F0F9FF] px-3 py-2.5 text-sm font-semibold text-[#0C4A6E]"
                   >
-                    {reason}
-                  </div>
+                    <Icon
+                      aria-hidden="true"
+                      className="h-4 w-4 shrink-0 text-[#0284C7]"
+                    />
+                    {label}
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-[#111827]">
+              <h2 className="text-xl font-bold text-[#111827] sm:text-2xl">
                 Nội dung dịch vụ
               </h2>
               <div className="mt-3 whitespace-pre-line text-sm leading-7 text-[#6B7280]">
@@ -493,7 +500,7 @@ export default async function ServiceDetailPage({
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-[#111827]">
+              <h2 className="text-xl font-bold text-[#111827] sm:text-2xl">
                 Câu hỏi thường gặp
               </h2>
               <div className="mt-4 space-y-3">
@@ -522,9 +529,8 @@ export default async function ServiceDetailPage({
               <h2 className="text-xl font-bold text-[#111827]">
                 Gửi yêu cầu dịch vụ
               </h2>
-              <p className="mt-2 text-sm leading-6 text-[#6B7280]">
-                Để lại thông tin và tình trạng thiết bị. Điện Máy Nga Sơn sẽ
-                liên hệ tư vấn trong thời gian sớm nhất.
+              <p className="mt-1 text-sm text-[#6B7280]">
+                Cửa hàng sẽ gọi lại tư vấn.
               </p>
               <LeadForm
                 className="mt-5"
@@ -538,10 +544,6 @@ export default async function ServiceDetailPage({
               <h2 className="text-xl font-bold text-[#111827]">
                 Cần hỗ trợ nhanh?
               </h2>
-              <p className="mt-2 text-sm leading-6 text-[#374151]">
-                Gọi hoặc nhắn Zalo để mô tả lỗi thiết bị và nhận hướng xử lý ban
-                đầu.
-              </p>
               <div className="mt-4 grid gap-3">
                 <a
                   href={contactLinks.phoneHref}

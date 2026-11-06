@@ -77,9 +77,7 @@ export default async function ProjectsPage({
               Công trình điện lạnh đã thực hiện tại Kinh Môn
             </h1>
             <p className="text-base leading-7 text-[#6B7280]">
-              Hình ảnh lắp đặt, bảo dưỡng và sửa chữa thiết bị thực tế cho
-              khách hàng tại Kinh Môn, Quang Thành và các khu vực lân cận Hải
-              Dương.
+              Ảnh thực tế lắp đặt, bảo dưỡng, sửa chữa tại Kinh Môn.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
               <a

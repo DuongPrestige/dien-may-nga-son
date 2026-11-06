@@ -45,9 +45,9 @@ export function ServiceCard({ service, contactLinks }: ServiceCardProps) {
         <h2 className="mt-2 text-lg font-bold leading-7 text-[#111827]">
           <Link href={`/services/${service.slug}`}>{service.name}</Link>
         </h2>
-        <p className="mt-2 flex-1 text-sm leading-6 text-[#6B7280]">
+        <p className="mt-2 line-clamp-2 flex-1 text-sm leading-6 text-[#6B7280]">
           {service.shortDescription ??
-            "Tư vấn nhanh, kiểm tra rõ tình trạng và báo giá trước khi thực hiện."}
+            "Kiểm tra tình trạng, báo giá trước khi làm."}
         </p>
         <div className="mt-5 grid gap-2 sm:grid-cols-3">
           <a

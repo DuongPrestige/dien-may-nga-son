@@ -1,4 +1,5 @@
 import { LeadSourceType } from "@prisma/client";
+import { Ruler, ShieldCheck, Wrench } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -36,7 +37,13 @@ type ProductDetailPageProps = {
 
 export const revalidate = 300;
 
-const priceNote = "Liên hệ để nhận báo giá chính xác và giá tốt hơn.";
+const priceNote = "Gọi để nhận báo giá kèm lắp đặt.";
+
+const purchaseSupport = [
+  { icon: Ruler, label: "Tư vấn đúng công suất" },
+  { icon: Wrench, label: "Tư vấn vị trí, vật tư lắp đặt" },
+  { icon: ShieldCheck, label: "Báo rõ bảo hành trước khi mua" },
+] as const;
 
 const faqs = [
   {
@@ -261,7 +268,7 @@ export default async function ProductDetailPage({
         <Container className="grid gap-8 lg:grid-cols-[1fr_0.85fr]">
           <div className="space-y-8">
             <div>
-              <h2 className="text-2xl font-bold text-[#111827]">
+              <h2 className="text-xl font-bold text-[#111827] sm:text-2xl">
                 Mô tả sản phẩm
               </h2>
               <div className="mt-3 whitespace-pre-line text-sm leading-7 text-[#6B7280]">
@@ -271,23 +278,24 @@ export default async function ProductDetailPage({
             </div>
 
             <div className="rounded-lg border border-[#E5E7EB] bg-[#F8FAFC] p-5">
-              <h2 className="text-2xl font-bold text-[#111827]">
-                Bảo hành và hỗ trợ lắp đặt
+              <h2 className="text-xl font-bold text-[#111827] sm:text-2xl">
+                Hỗ trợ khi mua
               </h2>
-              <div className="mt-3 grid gap-3 text-sm leading-6 text-[#374151] sm:grid-cols-2">
-                <p>
-                  Sản phẩm được tư vấn theo nhu cầu sử dụng thực tế của gia
-                  đình, diện tích phòng và ngân sách dự kiến.
-                </p>
-                <p>
-                  Với điều hòa, cửa hàng hỗ trợ tư vấn vị trí lắp đặt, vật tư
-                  cần thiết và chính sách bảo hành trước khi khách quyết định.
-                </p>
-              </div>
+              <ul className="mt-3 grid gap-2 text-sm font-medium text-[#374151] sm:grid-cols-3">
+                {purchaseSupport.map(({ icon: Icon, label }) => (
+                  <li key={label} className="flex items-center gap-2">
+                    <Icon
+                      aria-hidden="true"
+                      className="h-4 w-4 shrink-0 text-[#0284C7]"
+                    />
+                    {label}
+                  </li>
+                ))}
+              </ul>
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-[#111827]">
+              <h2 className="text-xl font-bold text-[#111827] sm:text-2xl">
                 Câu hỏi thường gặp
               </h2>
               <div className="mt-4 space-y-3">
@@ -315,8 +323,8 @@ export default async function ProductDetailPage({
             <h2 className="text-xl font-bold text-[#111827]">
               Gửi yêu cầu báo giá
             </h2>
-            <p className="mt-2 text-sm leading-6 text-[#6B7280]">
-              Điền thông tin để Điện Máy Nga Sơn liên hệ tư vấn sản phẩm này.
+            <p className="mt-1 text-sm text-[#6B7280]">
+              Cửa hàng sẽ gọi lại báo giá.
             </p>
             <LeadForm
               className="mt-5"

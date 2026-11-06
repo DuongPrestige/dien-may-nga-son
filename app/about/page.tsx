@@ -53,37 +53,37 @@ const providedItems = [
   {
     title: "Tư vấn điều hòa",
     description:
-      "Ưu tiên tư vấn điều hòa phù hợp diện tích phòng, nhu cầu sử dụng và ngân sách gia đình.",
+      "Chọn đúng công suất theo diện tích phòng và ngân sách.",
   },
   {
     title: "Thiết bị điện máy gia đình",
     description:
-      "Giới thiệu tivi, tủ lạnh, máy giặt và các sản phẩm điện máy thiết yếu cho sinh hoạt hằng ngày.",
+      "Tivi, tủ lạnh, máy giặt cho gia đình.",
   },
   {
     title: "Sửa chữa điện lạnh",
     description:
-      "Hỗ trợ các nhu cầu sửa điều hòa, sửa tủ lạnh, sửa máy giặt theo tình trạng thực tế.",
+      "Sửa điều hòa, tủ lạnh, máy giặt.",
   },
   {
     title: "Bảo dưỡng và lắp đặt",
     description:
-      "Tư vấn bảo dưỡng điều hòa, vệ sinh thiết bị và lắp đặt đúng nhu cầu sử dụng.",
+      "Vệ sinh, bảo dưỡng và lắp đặt điều hòa.",
   },
 ] as const;
 
 const chooseReasons = [
-  "Cửa hàng địa phương, dễ liên hệ và trao đổi nhu cầu.",
-  "Tập trung vào tư vấn thực tế thay vì quy trình mua hàng online phức tạp.",
-  "Ưu tiên điều hòa và dịch vụ điện lạnh, đúng nhu cầu phổ biến của gia đình.",
-  "Có nhiều kênh liên hệ: gọi điện, Zalo, Facebook và form báo giá.",
+  "Cửa hàng địa phương, dễ liên hệ.",
+  "Tư vấn trực tiếp, đúng nhu cầu.",
+  "Chuyên điều hòa và điện lạnh.",
+  "Gọi, Zalo, Facebook hoặc form báo giá.",
 ] as const;
 
 const commitments = [
-  "Tư vấn rõ ràng theo nhu cầu sử dụng của từng gia đình.",
-  "Không xây dựng giỏ hàng, thanh toán online hay quy trình thương mại điện tử.",
-  "Khuyến khích khách hàng liên hệ trực tiếp để nhận báo giá phù hợp.",
-  "Nội dung website phục vụ sản phẩm, dịch vụ, local SEO và tạo khách hàng tiềm năng.",
+  "Tư vấn rõ ràng theo nhu cầu từng gia đình.",
+  "Báo giá trước, khách quyết định sau.",
+  "Hỗ trợ trực tiếp qua điện thoại và Zalo.",
+  "Ưu tiên phục vụ nhanh tại Kinh Môn.",
 ] as const;
 
 function getDisplayValue(value: string, fallback: string): string {
@@ -239,9 +239,7 @@ export default async function AboutPage() {
             </h2>
             <p className="mt-3 text-sm leading-7 text-[#6B7280]">
               {storeName} được xây dựng như một điểm liên hệ điện máy gần gũi
-              cho khách hàng gia đình tại Kinh Môn. Website này không phải sàn
-              thương mại điện tử; mục tiêu là giúp khách hàng xem thông tin sản
-              phẩm, hiểu dịch vụ và liên hệ nhanh khi cần tư vấn.
+              cho khách hàng gia đình tại Kinh Môn.
             </p>
             <p className="mt-3 text-sm leading-7 text-[#6B7280]">
               Với vị trí tại Quang Thành - Kinh Môn - Hải Dương, cửa hàng ưu
@@ -297,10 +295,7 @@ export default async function AboutPage() {
                 Khu vực phục vụ
               </h2>
               <p className="mt-3 text-sm leading-7 text-[#6B7280]">
-                Nội dung website và các CTA liên hệ ưu tiên khách hàng tại Kinh
-                Môn, đặc biệt khu vực Quang Thành và các địa bàn phù hợp trong
-                Hải Dương. Khách hàng có thể gọi điện hoặc nhắn Zalo để mô tả
-                nhu cầu trước khi quyết định.
+                Kinh Môn, Quang Thành và các khu vực lân cận tại Hải Dương.
               </p>
               <div className="mt-5 grid gap-3 sm:grid-cols-3">
                 {["Quang Thành", "Kinh Môn", "Hải Dương"].map((area) => (
@@ -322,7 +317,7 @@ export default async function AboutPage() {
           <div className="grid gap-8 lg:grid-cols-[1fr_0.82fr] lg:items-center">
             <div>
               <h2 className="text-2xl font-bold text-[#111827]">
-                Cam kết xây dựng niềm tin
+                Cam kết của chúng tôi
               </h2>
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 {commitments.map((commitment) => (
@@ -341,9 +336,7 @@ export default async function AboutPage() {
                 Cần tư vấn sản phẩm hoặc dịch vụ?
               </h2>
               <p className="mt-3 text-sm leading-6 text-[#374151]">
-                Liên hệ {storeName} để được tư vấn điều hòa, tivi, tủ lạnh, máy
-                giặt hoặc dịch vụ sửa chữa, bảo dưỡng, lắp đặt phù hợp với nhu
-                cầu gia đình.
+                Gọi hoặc nhắn Zalo cho {storeName} để được tư vấn nhanh.
               </p>
               <div className="mt-5 grid gap-3">
                 <a

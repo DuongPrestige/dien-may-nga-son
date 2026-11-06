@@ -106,8 +106,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               Điều hòa, điện máy chính hãng tại Kinh Môn
             </h1>
             <p className="text-sm leading-6 text-[#6B7280] sm:text-base">
-              Tư vấn chọn điều hòa đúng công suất cho từng phòng, kèm tivi, tủ
-              lạnh, máy giặt cho gia đình tại Kinh Môn, Hải Dương.
+              Chọn điều hòa đúng công suất cho từng phòng.
             </p>
           </div>
         </Container>
@@ -142,9 +141,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                 Chưa có sản phẩm phù hợp
               </h2>
               <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-[#6B7280]">
-                Danh mục sản phẩm đang được cập nhật. Bạn vẫn có thể gọi hoặc
-                gửi yêu cầu báo giá để được tư vấn điều hòa, tivi, tủ lạnh hoặc
-                máy giặt phù hợp.
+                Chưa có mẫu phù hợp bộ lọc. Gọi để cửa hàng tư vấn mẫu khác.
               </p>
               <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
                 <a
@@ -172,8 +169,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               Cần tư vấn chọn sản phẩm?
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-[#6B7280]">
-              Điện Máy Nga Sơn ưu tiên tư vấn nhanh, báo giá rõ ràng và hỗ trợ
-              khách hàng địa phương tại Kinh Môn, Hải Dương.
+              Gọi hoặc nhắn Zalo để được tư vấn nhanh, báo giá rõ ràng.
             </p>
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <a

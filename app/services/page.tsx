@@ -51,9 +51,7 @@ export default async function ServicesPage() {
               Dịch vụ sửa chữa, bảo dưỡng và lắp đặt điện máy
             </h1>
             <p className="text-base leading-7 text-[#6B7280]">
-              Điện Máy Nga Sơn phục vụ khách hàng tại Kinh Môn, Quang Thành và
-              khu vực Hải Dương với các dịch vụ trọng tâm như sửa điều hòa, bảo
-              dưỡng điều hòa, lắp đặt điều hòa, sửa tủ lạnh và sửa máy giặt.
+              Sửa, bảo dưỡng, lắp đặt điều hòa, tủ lạnh, máy giặt tại Kinh Môn.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
               <a
@@ -81,8 +79,7 @@ export default async function ServicesPage() {
                 Danh sách dịch vụ
               </h2>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-[#6B7280]">
-                Chọn dịch vụ phù hợp để xem quy trình, tình huống thường gặp và
-                gửi thông tin cần hỗ trợ.
+                Chọn dịch vụ để xem chi tiết.
               </p>
             </div>
           </div>
@@ -103,9 +100,8 @@ export default async function ServicesPage() {
                 Dịch vụ đang được cập nhật
               </h2>
               <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-[#6B7280]">
-                Danh sách dịch vụ sẽ được hiển thị từ dữ liệu quản trị. Bạn vẫn
-                có thể gọi hoặc gửi yêu cầu để Điện Máy Nga Sơn tư vấn hỗ trợ
-                tại Kinh Môn, Quang Thành và Hải Dương.
+                Dịch vụ đang được cập nhật. Cần hỗ trợ ngay, hãy gọi cho cửa
+                hàng.
               </p>
               <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
                 <a
@@ -133,8 +129,7 @@ export default async function ServicesPage() {
               Cần kiểm tra thiết bị tại nhà?
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-[#6B7280]">
-              Hãy mô tả tình trạng thiết bị. Điện Máy Nga Sơn sẽ liên hệ tư vấn
-              hướng xử lý phù hợp trước khi thực hiện dịch vụ.
+              Mô tả tình trạng máy, cửa hàng sẽ gọi lại tư vấn.
             </p>
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <a

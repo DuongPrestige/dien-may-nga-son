@@ -40,18 +40,21 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
           {post.category ? <span>{post.category.name}</span> : null}
           <span>{formatBlogDate(post.publishedAt ?? post.createdAt)}</span>
         </div>
-        <h2 className="mt-2 text-lg font-bold leading-7 text-[#111827]">
-          <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+        <h2 className="mt-2 line-clamp-2 text-base font-bold leading-6 text-[#111827] sm:text-lg sm:leading-7">
+          <Link href={`/blog/${post.slug}`} className="hover:text-[#0284C7]">
+            {post.title}
+          </Link>
         </h2>
-        <p className="mt-2 flex-1 text-sm leading-6 text-[#6B7280]">
-          {post.excerpt ??
-            "Bài viết chia sẻ kinh nghiệm chọn mua, sử dụng và bảo dưỡng thiết bị điện máy cho gia đình."}
-        </p>
+        {post.excerpt ? (
+          <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#6B7280]">
+            {post.excerpt}
+          </p>
+        ) : null}
         <Link
           href={`/blog/${post.slug}`}
-          className="mt-5 inline-flex min-h-10 items-center justify-center rounded-md border border-[#0EA5E9] px-4 text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
+          className="mt-auto inline-flex min-h-10 items-center pt-3 text-sm font-bold text-[#0284C7] hover:text-[#0369A1]"
         >
-          Đọc bài viết
+          Đọc tiếp →
         </Link>
       </div>
     </article>

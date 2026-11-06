@@ -43,9 +43,8 @@ export function HomeHero({ contactLinks }: HomeHeroProps) {
               Điều hòa chính hãng, sửa chữa điện lạnh nhanh tại Hải Dương
             </h1>
             <p className="max-w-2xl text-base leading-7 text-[#4B5563] sm:text-lg">
-              Điện Máy Nga Sơn tư vấn mua điều hòa, lắp đặt, bảo dưỡng và sửa
-              chữa điện lạnh cho gia đình tại Kinh Môn, Quang Thành và Hải
-              Dương.
+              Mua, lắp đặt, bảo dưỡng, sửa chữa điều hòa tại Kinh Môn –
+              Quang Thành.
             </p>
           </div>
 
@@ -91,9 +90,6 @@ export function HomeHero({ contactLinks }: HomeHeroProps) {
         <div className="rounded-2xl border border-[#E5E7EB] bg-white p-4 shadow-[0_20px_60px_rgba(14,165,233,0.12)] sm:p-6">
           <p className="text-lg font-bold text-[#111827]">
             Chọn điều hòa theo diện tích phòng
-          </p>
-          <p className="mt-1 text-sm text-[#6B7280]">
-            Chọn đúng công suất giúp làm lạnh nhanh và tiết kiệm điện.
           </p>
           <ul className="mt-4 grid grid-cols-2 gap-2 sm:gap-3">
             {AIR_CONDITIONER_CAPACITIES.map((option) => (
