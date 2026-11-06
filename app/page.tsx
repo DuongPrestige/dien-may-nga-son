@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { Container } from "@/src/components/shared/container";
 import { Section } from "@/src/components/shared/section";
+import { BannerStrip } from "@/src/features/banners/components/banner-strip";
 import { BlogPostCard } from "@/src/features/blog/components/blog-post-card";
 import { getHomepagePosts } from "@/src/features/blog/services/blog.service";
 import { LeadForm } from "@/src/features/leads/components/lead-form";
@@ -154,6 +155,7 @@ export default async function Home() {
 
       <Section>
         <Container>
+          <BannerStrip position="home" className="mb-10" />
           <div className="mb-6 space-y-2">
             <h2 className="text-2xl font-bold text-[#111827] sm:text-3xl">
               Danh mục cần tư vấn nhanh

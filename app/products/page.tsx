@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Container } from "@/src/components/shared/container";
 import { Section } from "@/src/components/shared/section";
+import { BannerStrip } from "@/src/features/banners/components/banner-strip";
 import { ProductCard } from "@/src/features/products/components/product-card";
 import { getProducts } from "@/src/features/products/services/products.service";
 import type {
@@ -104,6 +105,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
       <Section>
         <Container>
+          <BannerStrip position="products" className="mb-6" />
           <form
             action="/products"
             className="grid gap-3 rounded-lg border border-[#E5E7EB] bg-white p-4 md:grid-cols-5"

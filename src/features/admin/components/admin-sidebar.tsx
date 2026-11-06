@@ -7,6 +7,7 @@ const adminMenuItems = [
   { label: "Brands", href: "/admin/brands" },
   { label: "Services", href: "/admin/services" },
   { label: "Công trình", href: "/admin/projects" },
+  { label: "Banners", href: "/admin/banners" },
   { label: "Blog", href: "/admin/blog" },
   { label: "Redirects", href: "/admin/redirects" },
   { label: "Leads", href: "/admin/leads" },

@@ -3,6 +3,7 @@ export const UPLOAD_FOLDERS = {
   services: "dien-may-nga-son/services",
   blog: "dien-may-nga-son/blog",
   projects: "dien-may-nga-son/projects",
+  banners: "dien-may-nga-son/banners",
   settings: "dien-may-nga-son/settings",
 } as const;
 
