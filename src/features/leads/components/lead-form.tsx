@@ -3,6 +3,8 @@
 import type { LeadSourceType } from "@prisma/client";
 import { useActionState, useEffect, useRef } from "react";
 
+import { ANALYTICS_EVENTS } from "@/src/features/analytics/lib/analytics-events";
+import { trackEvent } from "@/src/features/analytics/lib/track-event";
 import { createLeadAction } from "@/src/features/leads/actions/leads.actions";
 import type { LeadFormState } from "@/src/features/leads/types/leads.types";
 import { cn } from "@/src/lib/utils";
@@ -39,8 +41,12 @@ export function LeadForm({
   useEffect(() => {
     if (state.success) {
       formRef.current?.reset();
+      trackEvent(ANALYTICS_EVENTS.generateLead, {
+        source_type: sourceType,
+        page_path: window.location.pathname,
+      });
     }
-  }, [state]);
+  }, [state, sourceType]);
 
   return (
     <form

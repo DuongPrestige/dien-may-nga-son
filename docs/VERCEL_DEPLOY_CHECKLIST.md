@@ -61,7 +61,15 @@ CLOUDINARY_CLOUD_NAME=
 CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=
 GOOGLE_ANALYTICS_ID=
+GOOGLE_SITE_VERIFICATION=
 ```
+
+Analytics notes:
+
+* `GOOGLE_ANALYTICS_ID` must be a GA4 id (`G-XXXXXXX`). When it is empty or invalid, no tracking script is loaded.
+* `GOOGLE_SITE_VERIFICATION` is the `content` value of the Search Console HTML-tag verification method.
+* Admin pages (`/admin/*`) never send page views.
+* Lead-intent events sent to GA4: `phone_click`, `zalo_click`, `facebook_click`, `quote_click`, `generate_lead`. Mark `generate_lead` (and optionally `phone_click`, `zalo_click`) as key events in GA4.
 
 Recommended production values:
 

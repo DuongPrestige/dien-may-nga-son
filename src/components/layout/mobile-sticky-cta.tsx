@@ -1,3 +1,4 @@
+import { ANALYTICS_EVENTS } from "@/src/features/analytics/lib/analytics-events";
 import { getStoreInfo } from "@/src/features/settings/services/settings.service";
 import type { StoreInfo } from "@/src/features/settings/types/settings.types";
 
@@ -25,10 +26,14 @@ function getPhoneHref(phone: string): string {
 export async function MobileStickyCTA() {
   const storeInfo = await getSafeStoreInfo();
   const mobileCtaItems = [
-    { href: getPhoneHref(storeInfo.phone), label: "Call" },
-    { href: storeInfo.zaloUrl || "#", label: "Zalo" },
-    { href: storeInfo.facebookUrl || "#", label: "Facebook" },
-    { href: "/contact", label: "Quote" },
+    { href: getPhoneHref(storeInfo.phone), label: "Call", event: undefined },
+    { href: storeInfo.zaloUrl || "#", label: "Zalo", event: undefined },
+    {
+      href: storeInfo.facebookUrl || "#",
+      label: "Facebook",
+      event: undefined,
+    },
+    { href: "/contact", label: "Quote", event: ANALYTICS_EVENTS.quoteClick },
   ] as const;
 
   return (
@@ -41,6 +46,7 @@ export async function MobileStickyCTA() {
           <a
             key={item.label}
             href={item.href}
+            data-analytics-event={item.event}
             className="flex items-center justify-center border-r border-[#E5E7EB] px-1 text-center text-xs font-semibold text-[#111827] last:border-r-0 hover:bg-[#F8FAFC]"
           >
             {item.label}
