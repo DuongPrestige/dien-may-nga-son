@@ -11,6 +11,7 @@ import type {
   AdminCategoryDetail,
   CategoryActionState,
 } from "@/src/features/categories/types/categories.types";
+import { usePreservedFormAction } from "@/src/hooks/use-preserved-form-action";
 
 type CategoryFormProps = {
   category?: AdminCategoryDetail;
@@ -27,10 +28,11 @@ export function CategoryForm({ category }: CategoryFormProps) {
     ? updateCategoryAction.bind(null, category.id)
     : createCategoryAction;
   const [state, formAction, isPending] = useActionState(action, initialState);
+  const handleSubmit = usePreservedFormAction(formAction);
   const isEditing = Boolean(category);
 
   return (
-    <form action={formAction} className="space-y-6" noValidate>
+    <form onSubmit={handleSubmit} className="space-y-6" noValidate>
       <div className="grid gap-4 lg:grid-cols-2">
         <Field
           label="Name"

@@ -80,14 +80,12 @@ export async function createBannerAction(
   void _previousState;
   await requireAdminSession();
 
-  const values = formDataToBannerInput(formData);
-  const parsedInput = bannerFormSchema.safeParse(values);
+  const parsedInput = bannerFormSchema.safeParse(formDataToBannerInput(formData));
 
   if (!parsedInput.success) {
     return {
       success: false,
       message: "Vui lòng kiểm tra thông tin banner.",
-      values,
       fieldErrors: getBannerFieldErrors(parsedInput.error),
     };
   }
@@ -99,7 +97,6 @@ export async function createBannerAction(
     return {
       success: false,
       message: "Không thể tạo banner. Vui lòng thử lại.",
-      values,
       fieldErrors: {},
     };
   }
@@ -126,14 +123,12 @@ export async function updateBannerAction(
     };
   }
 
-  const values = formDataToBannerInput(formData);
-  const parsedInput = bannerFormSchema.safeParse(values);
+  const parsedInput = bannerFormSchema.safeParse(formDataToBannerInput(formData));
 
   if (!parsedInput.success) {
     return {
       success: false,
       message: "Vui lòng kiểm tra thông tin banner.",
-      values,
       fieldErrors: getBannerFieldErrors(parsedInput.error),
     };
   }
@@ -145,7 +140,6 @@ export async function updateBannerAction(
     return {
       success: false,
       message: "Không thể cập nhật banner. Vui lòng thử lại.",
-      values,
       fieldErrors: {},
     };
   }

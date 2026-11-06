@@ -13,6 +13,7 @@ import type {
   BlogPostActionState,
 } from "@/src/features/blog/types/blog.types";
 import { ImageUploadField } from "@/src/features/uploads/components/image-upload-field";
+import { usePreservedFormAction } from "@/src/hooks/use-preserved-form-action";
 
 type BlogPostFormProps = {
   post?: AdminBlogPostDetail;
@@ -33,10 +34,11 @@ export function BlogPostForm({
     ? updateBlogPostAction.bind(null, post.id)
     : createBlogPostAction;
   const [state, formAction, isPending] = useActionState(action, initialState);
+  const handleSubmit = usePreservedFormAction(formAction);
   const isEditing = Boolean(post);
 
   return (
-    <form action={formAction} className="space-y-6" noValidate>
+    <form onSubmit={handleSubmit} className="space-y-6" noValidate>
       <div className="grid gap-4 lg:grid-cols-2">
         <Field
           label="Title"

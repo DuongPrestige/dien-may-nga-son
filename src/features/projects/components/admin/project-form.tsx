@@ -14,6 +14,7 @@ import type {
 } from "@/src/features/projects/types/projects.types";
 import { BlogContentField } from "@/src/features/blog/components/admin/blog-content-field";
 import { ImageUploadField } from "@/src/features/uploads/components/image-upload-field";
+import { usePreservedFormAction } from "@/src/hooks/use-preserved-form-action";
 
 type ProjectFormProps = {
   project?: AdminProjectDetail;
@@ -36,9 +37,10 @@ function formatDateInput(date: Date | undefined) {
 export function ProjectForm({ project }: ProjectFormProps) {
   const action = project ? updateProjectAction : createProjectAction;
   const [state, formAction, isPending] = useActionState(action, initialState);
+  const handleSubmit = usePreservedFormAction(formAction);
 
   return (
-    <form action={formAction} className="space-y-6" noValidate>
+    <form onSubmit={handleSubmit} className="space-y-6" noValidate>
       {project ? <input type="hidden" name="id" value={project.id} /> : null}
 
       <div className="grid gap-4 lg:grid-cols-2">

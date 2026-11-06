@@ -6,6 +6,7 @@ import { useFormStatus } from "react-dom";
 
 import { updateLeadStatusAction } from "@/src/features/leads/actions/leads.actions";
 import type { LeadStatusActionState } from "@/src/features/leads/types/leads.types";
+import { usePreservedFormAction } from "@/src/hooks/use-preserved-form-action";
 
 const initialState: LeadStatusActionState = {
   success: false,
@@ -46,10 +47,11 @@ export function LeadStatusForm({
 }: LeadStatusFormProps) {
   const updateAction = updateLeadStatusAction.bind(null, leadId);
   const [state, formAction] = useActionState(updateAction, initialState);
+  const handleSubmit = usePreservedFormAction(formAction);
   const savedStatus = state.savedStatus ?? currentStatus;
 
   return (
-    <form action={formAction} className="space-y-3">
+    <form onSubmit={handleSubmit} className="space-y-3">
       <label className="block space-y-2 text-sm font-semibold text-[#111827]">
         Status
         <select

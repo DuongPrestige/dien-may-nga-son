@@ -11,6 +11,7 @@ import type {
   AdminBrandDetail,
   BrandActionState,
 } from "@/src/features/brands/types/brands.types";
+import { usePreservedFormAction } from "@/src/hooks/use-preserved-form-action";
 
 type BrandFormProps = {
   brand?: AdminBrandDetail;
@@ -27,10 +28,11 @@ export function BrandForm({ brand }: BrandFormProps) {
     ? updateBrandAction.bind(null, brand.id)
     : createBrandAction;
   const [state, formAction, isPending] = useActionState(action, initialState);
+  const handleSubmit = usePreservedFormAction(formAction);
   const isEditing = Boolean(brand);
 
   return (
-    <form action={formAction} className="space-y-6" noValidate>
+    <form onSubmit={handleSubmit} className="space-y-6" noValidate>
       <div className="grid gap-4 lg:grid-cols-2">
         <Field
           label="Name"

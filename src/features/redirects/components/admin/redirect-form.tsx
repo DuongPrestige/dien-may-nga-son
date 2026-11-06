@@ -4,6 +4,7 @@ import { useActionState } from "react";
 
 import { createRedirectAction } from "@/src/features/redirects/actions/redirects.actions";
 import type { RedirectActionState } from "@/src/features/redirects/types/redirects.types";
+import { usePreservedFormAction } from "@/src/hooks/use-preserved-form-action";
 
 const initialState: RedirectActionState = {
   success: false,
@@ -16,10 +17,11 @@ export function RedirectForm() {
     createRedirectAction,
     initialState,
   );
+  const handleSubmit = usePreservedFormAction(formAction);
 
   return (
     <form
-      action={formAction}
+      onSubmit={handleSubmit}
       className="grid gap-4 rounded-lg border border-[#E5E7EB] bg-white p-4 sm:p-6 lg:grid-cols-[1fr_1fr_auto]"
       noValidate
     >

@@ -12,6 +12,7 @@ import type {
   ProductActionState,
 } from "@/src/features/products/types/products.types";
 import { ImageUploadField } from "@/src/features/uploads/components/image-upload-field";
+import { usePreservedFormAction } from "@/src/hooks/use-preserved-form-action";
 
 type ProductFormProps = {
   product?: AdminProductDetail;
@@ -46,10 +47,11 @@ export function ProductForm({ product, categories, brands }: ProductFormProps) {
     ? updateProductAction.bind(null, product.id)
     : createProductAction;
   const [state, formAction, isPending] = useActionState(action, initialState);
+  const handleSubmit = usePreservedFormAction(formAction);
   const isEditing = Boolean(product);
 
   return (
-    <form action={formAction} className="space-y-6" noValidate>
+    <form onSubmit={handleSubmit} className="space-y-6" noValidate>
       <div className="grid gap-4 lg:grid-cols-2">
         <Field
           label="Name"

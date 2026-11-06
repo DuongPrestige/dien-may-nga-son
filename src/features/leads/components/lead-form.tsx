@@ -6,6 +6,7 @@ import { useActionState, useEffect, useRef } from "react";
 import { createLeadAction } from "@/src/features/leads/actions/leads.actions";
 import type { LeadFormState } from "@/src/features/leads/types/leads.types";
 import { cn } from "@/src/lib/utils";
+import { usePreservedFormAction } from "@/src/hooks/use-preserved-form-action";
 
 type LeadFormProps = {
   sourceType: LeadSourceType;
@@ -33,17 +34,18 @@ export function LeadForm({
     createLeadAction,
     initialState,
   );
+  const handleSubmit = usePreservedFormAction(formAction);
 
   useEffect(() => {
     if (state.success) {
       formRef.current?.reset();
     }
-  }, [state.success]);
+  }, [state]);
 
   return (
     <form
       ref={formRef}
-      action={formAction}
+      onSubmit={handleSubmit}
       className={cn("space-y-4", className)}
       aria-busy={isPending}
       noValidate

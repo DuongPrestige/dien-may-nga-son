@@ -7,6 +7,7 @@ import type {
   SettingsActionState,
   SettingsMap,
 } from "@/src/features/settings/types/settings.types";
+import { usePreservedFormAction } from "@/src/hooks/use-preserved-form-action";
 
 const initialState: SettingsActionState = {
   success: false,
@@ -23,9 +24,10 @@ export function SettingsForm({ settings }: SettingsFormProps) {
     updateSettingsAction,
     initialState,
   );
+  const handleSubmit = usePreservedFormAction(formAction);
 
   return (
-    <form action={formAction} className="space-y-6" noValidate>
+    <form onSubmit={handleSubmit} className="space-y-6" noValidate>
       <SettingsSection
         title="General Information"
         description="Store identity and customer contact details."

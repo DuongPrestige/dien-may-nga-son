@@ -13,6 +13,7 @@ import type {
   BannerActionState,
 } from "@/src/features/banners/types/banners.types";
 import { ImageUploadField } from "@/src/features/uploads/components/image-upload-field";
+import { usePreservedFormAction } from "@/src/hooks/use-preserved-form-action";
 
 type BannerFormProps = {
   banner?: AdminBannerDetail;
@@ -32,15 +33,15 @@ export function BannerForm({ banner }: BannerFormProps) {
     ? updateBannerAction.bind(null, banner.id)
     : createBannerAction;
   const [state, formAction, isPending] = useActionState(action, initialState);
-  const values = state.values;
+  const handleSubmit = usePreservedFormAction(formAction);
 
   return (
-    <form action={formAction} className="space-y-6" noValidate>
+    <form onSubmit={handleSubmit} className="space-y-6" noValidate>
       <div className="grid gap-4 lg:grid-cols-2">
         <Field
           label="Tiêu đề (dùng làm alt text của ảnh)"
           name="title"
-          defaultValue={values?.title ?? banner?.title}
+          defaultValue={banner?.title}
           error={state.fieldErrors.title}
           disabled={isPending}
           required
@@ -49,7 +50,7 @@ export function BannerForm({ banner }: BannerFormProps) {
         <Field
           label="URL ảnh banner"
           name="imageUrl"
-          defaultValue={values?.imageUrl ?? banner?.imageUrl}
+          defaultValue={banner?.imageUrl}
           error={state.fieldErrors.imageUrl}
           disabled={isPending}
           required
@@ -59,7 +60,7 @@ export function BannerForm({ banner }: BannerFormProps) {
           <ImageUploadField
             targetName="imageUrl"
             folder="banners"
-            initialUrl={values?.imageUrl ?? banner?.imageUrl ?? ""}
+            initialUrl={banner?.imageUrl ?? ""}
             disabled={isPending}
             label="Tải ảnh banner lên Cloudinary"
           />
@@ -71,7 +72,7 @@ export function BannerForm({ banner }: BannerFormProps) {
         <Field
           label="Link khi bấm vào banner"
           name="targetUrl"
-          defaultValue={values?.targetUrl ?? banner?.targetUrl ?? ""}
+          defaultValue={banner?.targetUrl ?? ""}
           placeholder="/services/sua-dieu-hoa hoặc https://..."
           error={state.fieldErrors.targetUrl}
           disabled={isPending}
@@ -81,11 +82,7 @@ export function BannerForm({ banner }: BannerFormProps) {
           Vị trí hiển thị
           <select
             name="position"
-            defaultValue={
-              values?.position ??
-              banner?.position ??
-              BANNER_POSITIONS[0].value
-            }
+            defaultValue={banner?.position ?? BANNER_POSITIONS[0].value}
             disabled={isPending}
             className={inputClassName}
           >
@@ -105,7 +102,7 @@ export function BannerForm({ banner }: BannerFormProps) {
           label="Thứ tự (số nhỏ hiển thị trước)"
           name="sortOrder"
           type="number"
-          defaultValue={values?.sortOrder ?? String(banner?.sortOrder ?? 0)}
+          defaultValue={String(banner?.sortOrder ?? 0)}
           error={state.fieldErrors.sortOrder}
           disabled={isPending}
         />
@@ -113,7 +110,7 @@ export function BannerForm({ banner }: BannerFormProps) {
           <input
             type="checkbox"
             name="isActive"
-            defaultChecked={values?.isActive ?? banner?.isActive ?? true}
+            defaultChecked={banner?.isActive ?? true}
             disabled={isPending}
             className="h-4 w-4 rounded border-[#E5E7EB] accent-[#0EA5E9]"
           />

@@ -4,6 +4,7 @@ import { useActionState } from "react";
 
 import { loginAction } from "@/src/features/auth/actions/auth.actions";
 import type { LoginActionState } from "@/src/features/auth/types/auth.types";
+import { usePreservedFormAction } from "@/src/hooks/use-preserved-form-action";
 
 const initialState: LoginActionState = {
   success: false,
@@ -16,9 +17,10 @@ export function LoginForm() {
     loginAction,
     initialState,
   );
+  const handleSubmit = usePreservedFormAction(formAction);
 
   return (
-    <form action={formAction} className="space-y-4" noValidate>
+    <form onSubmit={handleSubmit} className="space-y-4" noValidate>
       <div className="space-y-2">
         <label
           htmlFor="email"

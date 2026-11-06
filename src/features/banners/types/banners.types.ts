@@ -50,7 +50,6 @@ export type BannerFormValues = {
 export type BannerActionState = {
   success: boolean;
   message: string;
-  values?: BannerFormValues;
   fieldErrors: {
     title?: string;
     imageUrl?: string;
