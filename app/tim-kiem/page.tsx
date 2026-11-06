@@ -1,5 +1,6 @@
 import { Phone, Search } from "lucide-react";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 
 import { Container } from "@/src/components/shared/container";
 import { Section } from "@/src/components/shared/section";
@@ -14,6 +15,11 @@ import {
 } from "@/src/features/search/services/search.service";
 import { ServiceCard } from "@/src/features/services/components/service-card";
 import { getStoreContactLinks } from "@/src/features/settings/services/settings.service";
+import {
+  consumeRateLimit,
+  getClientIp,
+  RATE_LIMIT_RULES,
+} from "@/src/lib/rate-limit";
 import { buildMetadata } from "@/src/lib/seo";
 
 type SearchPageProps = {
@@ -32,6 +38,15 @@ export const metadata: Metadata = {
 };
 
 async function getSafeResults(query: string): Promise<SearchResults | null> {
+  const limit = await consumeRateLimit(
+    RATE_LIMIT_RULES.searchByIp,
+    getClientIp(await headers()),
+  );
+
+  if (!limit.allowed) {
+    return null;
+  }
+
   try {
     return await searchSite(query);
   } catch (error) {

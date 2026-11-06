@@ -21,6 +21,7 @@ import {
   consumeRateLimit,
   formatRetryAfter,
   getClientIp,
+  normalizePhoneIdentifier,
   RATE_LIMIT_RULES,
 } from "@/src/lib/rate-limit";
 
@@ -84,7 +85,7 @@ export async function createLeadAction(
   const phoneLimit = ipLimit.allowed
     ? await consumeRateLimit(
         RATE_LIMIT_RULES.leadByPhone,
-        parsedInput.data.phone,
+        normalizePhoneIdentifier(parsedInput.data.phone),
       )
     : ipLimit;
 

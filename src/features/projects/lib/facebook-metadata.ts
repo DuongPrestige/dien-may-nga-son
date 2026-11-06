@@ -147,6 +147,13 @@ function normalizeMultiline(value: string): string {
     .trim();
 }
 
+/** og:image must come from Facebook's own CDN before it is re-hosted on Cloudinary. */
+const IMAGE_HOST_SUFFIXES = [".fbcdn.net", ".facebook.com", ".fbsbx.com"] as const;
+
+function isFacebookImageHost(hostname: string): boolean {
+  return IMAGE_HOST_SUFFIXES.some((suffix) => hostname.endsWith(suffix));
+}
+
 function normalizeImageUrl(value: string | undefined): string | null {
   if (!value) {
     return null;
@@ -154,7 +161,11 @@ function normalizeImageUrl(value: string | undefined): string | null {
 
   try {
     const url = new URL(value.trim());
-    if (url.protocol !== "https:" || url.href.length > MAX_IMAGE_URL_LENGTH) {
+    if (
+      url.protocol !== "https:" ||
+      url.href.length > MAX_IMAGE_URL_LENGTH ||
+      !isFacebookImageHost(url.hostname)
+    ) {
       return null;
     }
     return url.href;

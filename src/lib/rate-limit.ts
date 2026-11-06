@@ -19,7 +19,11 @@ export const RATE_LIMIT_RULES = {
   leadByIp: { name: "lead:ip", limit: 5, windowSeconds: 10 * 60 },
   leadByPhone: { name: "lead:phone", limit: 3, windowSeconds: 60 * 60 },
   loginByIp: { name: "login:ip", limit: 10, windowSeconds: 15 * 60 },
-  loginByEmail: { name: "login:email", limit: 5, windowSeconds: 15 * 60 },
+  // Keyed on IP + email so a third party cannot lock the admin out by
+  // spamming bad passwords for the admin email from another network.
+  loginByIpEmail: { name: "login:ip-email", limit: 5, windowSeconds: 15 * 60 },
+  searchByIp: { name: "search:ip", limit: 60, windowSeconds: 60 },
+  aiSeoByUser: { name: "ai-seo:user", limit: 30, windowSeconds: 60 * 60 },
 } as const satisfies Record<string, RateLimitRule>;
 
 const CLEANUP_PROBABILITY = 0.02;
@@ -43,14 +47,33 @@ function buildKey(rule: RateLimitRule, identifier: string): string {
   return `${rule.name}:${digest}`;
 }
 
+/**
+ * Client IP as set by Vercel's edge (which overwrites these headers). Behind
+ * any other proxy, make sure it strips client-supplied forwarding headers.
+ */
 export function getClientIp(headers: HeaderReader): string {
-  const forwardedFor = headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  const candidates = [
+    headers.get("x-vercel-forwarded-for"),
+    headers.get("x-real-ip"),
+    headers.get("x-forwarded-for"),
+  ];
 
-  if (forwardedFor) {
-    return forwardedFor;
+  for (const candidate of candidates) {
+    const ip = candidate?.split(",")[0]?.trim();
+
+    if (ip) {
+      return ip;
+    }
   }
 
-  return headers.get("x-real-ip")?.trim() || UNKNOWN_CLIENT;
+  return UNKNOWN_CLIENT;
+}
+
+/** "+84 912 345 678" and "0912345678" share one bucket. */
+export function normalizePhoneIdentifier(phone: string): string {
+  const digits = phone.replace(/\D/g, "");
+
+  return digits.startsWith("84") ? `0${digits.slice(2)}` : digits;
 }
 
 async function deleteExpiredBuckets(): Promise<void> {

@@ -442,16 +442,27 @@ Database
 
 Supabase Backups (Pro plan: daily, 7 days)
 
-GitHub Actions: `.github/workflows/db-backup.yml` runs `pg_dump` every day at 02:00 (Vietnam time) and keeps an encrypted copy as a workflow artifact for 30 days. The repository is public, so the dump is always encrypted with AES-256 before upload.
+GitHub Actions: `.github/workflows/db-backup.yml` runs `pg_dump` every day at 02:00 (Vietnam time) and keeps an encrypted copy as a workflow artifact for 30 days. The repository is public (anyone signed in to GitHub can download artifacts), so every dump is encrypted to an OpenPGP **public key**; only the offline private key can decrypt it.
 
-Repository secrets (Settings > Secrets and variables > Actions):
+One-time setup on the owner's computer:
 
-* `BACKUP_DATABASE_URL`: Supabase direct/session connection string (port 5432, not the pgbouncer pooler)
-* `BACKUP_PASSPHRASE`: long random passphrase, stored in a password manager. Without it the backup cannot be restored.
+```bash
+gpg --quick-generate-key "Dien May Nga Son Backup" rsa4096 encrypt never
+gpg --armor --export "Dien May Nga Son Backup" > backup-public.asc
+gpg --armor --export-secret-keys "Dien May Nga Son Backup" > backup-private.asc
+```
+
+Store `backup-private.asc` and its passphrase offline (password manager + USB). Never commit it.
+
+GitHub settings (Settings > Secrets and variables > Actions):
+
+* Secret `BACKUP_DATABASE_URL`: Supabase direct/session connection string (port 5432, not the pgbouncer pooler)
+* Variable `BACKUP_GPG_PUBLIC_KEY`: full contents of `backup-public.asc`
 
 Restore:
 
 ```bash
+gpg --import backup-private.asc
 gpg --decrypt dien-may-nga-son-YYYYMMDD-HHMM.dump.gpg > backup.dump
 pg_restore --no-owner --no-privileges --clean --if-exists -d "$TARGET_DATABASE_URL" backup.dump
 ```

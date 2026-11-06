@@ -82,15 +82,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
         // Counted inside authorize so both the login form and direct POSTs
         // to the NextAuth callback endpoint are throttled.
+        const clientIp = getClientIp(request.headers);
+        const ipEmailKey = `${clientIp}|${parsedCredentials.data.email}`;
         const [ipLimit, emailLimit] = await Promise.all([
-          consumeRateLimit(
-            RATE_LIMIT_RULES.loginByIp,
-            getClientIp(request.headers),
-          ),
-          consumeRateLimit(
-            RATE_LIMIT_RULES.loginByEmail,
-            parsedCredentials.data.email,
-          ),
+          consumeRateLimit(RATE_LIMIT_RULES.loginByIp, clientIp),
+          consumeRateLimit(RATE_LIMIT_RULES.loginByIpEmail, ipEmailKey),
         ]);
 
         if (!ipLimit.allowed || !emailLimit.allowed) {
@@ -103,10 +99,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         );
 
         if (user) {
-          await resetRateLimit(
-            RATE_LIMIT_RULES.loginByEmail,
-            parsedCredentials.data.email,
-          );
+          await resetRateLimit(RATE_LIMIT_RULES.loginByIpEmail, ipEmailKey);
         }
 
         return user;

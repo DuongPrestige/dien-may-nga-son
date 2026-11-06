@@ -1,8 +1,9 @@
 name: Database backup
 
 # Daily encrypted pg_dump of the production database.
-# The repository is public, so the dump is encrypted with a passphrase before
-# it is stored as a workflow artifact. Never upload an unencrypted dump.
+# The repository is public and anyone signed in to GitHub can download its
+# artifacts, so the dump is encrypted to an OpenPGP public key before upload.
+# Only the offline private key can decrypt it. Never upload an unencrypted dump.
 
 on:
   schedule:
@@ -21,13 +22,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: Check required secrets
+      - name: Check required configuration
         env:
           BACKUP_DATABASE_URL: ${{ secrets.BACKUP_DATABASE_URL }}
-          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+          BACKUP_GPG_PUBLIC_KEY: ${{ vars.BACKUP_GPG_PUBLIC_KEY }}
         run: |
-          if [ -z "$BACKUP_DATABASE_URL" ] || [ -z "$BACKUP_PASSPHRASE" ]; then
-            echo "::error::Set BACKUP_DATABASE_URL and BACKUP_PASSPHRASE repository secrets."
+          if [ -z "$BACKUP_DATABASE_URL" ] || [ -z "$BACKUP_GPG_PUBLIC_KEY" ]; then
+            echo "::error::Set the BACKUP_DATABASE_URL secret and the BACKUP_GPG_PUBLIC_KEY variable."
             exit 1
           fi
 
@@ -42,14 +43,21 @@ jobs:
       - name: Dump and encrypt
         env:
           BACKUP_DATABASE_URL: ${{ secrets.BACKUP_DATABASE_URL }}
-          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+          BACKUP_GPG_PUBLIC_KEY: ${{ vars.BACKUP_GPG_PUBLIC_KEY }}
         run: |
           set -euo pipefail
+          export GNUPGHOME="$(mktemp -d)"
+          printf '%s\n' "$BACKUP_GPG_PUBLIC_KEY" | gpg --batch --import
+          RECIPIENT="$(gpg --batch --with-colons --list-keys | awk -F: '$1 == "fpr" { print $10; exit }')"
+          if [ -z "$RECIPIENT" ]; then
+            echo "::error::BACKUP_GPG_PUBLIC_KEY is not a valid OpenPGP public key."
+            exit 1
+          fi
           FILE="dien-may-nga-son-$(date -u +%Y%m%d-%H%M).dump"
           /usr/lib/postgresql/17/bin/pg_dump --format=custom --no-owner --no-privileges \
             --schema=public "$BACKUP_DATABASE_URL" --file="$FILE"
-          gpg --batch --yes --pinentry-mode loopback --symmetric --cipher-algo AES256 \
-            --passphrase-fd 3 --output "$FILE.gpg" "$FILE" 3<<<"$BACKUP_PASSPHRASE"
+          gpg --batch --yes --trust-model always --encrypt --recipient "$RECIPIENT" \
+            --output "$FILE.gpg" "$FILE"
           shred -u "$FILE"
           echo "BACKUP_FILE=$FILE.gpg" >> "$GITHUB_ENV"
           ls -lh "$FILE.gpg"
